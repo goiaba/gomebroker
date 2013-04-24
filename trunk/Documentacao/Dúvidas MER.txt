@@ -1,0 +1,28 @@
+Entidade ativo:
+	- ultimoValor, ultimoValorData: Será que vale a pena termos isso aqui? Cada insert em ativoCotacoes gera um update nesses campos, é isso? Não ficaria muito custoso, pensando que, no futuro, pretendemos armazenar cada negócio executado (tick)?
+
+Entidade ativoOfertas: 
+	- Não entendi bem essa tabela. Me explica? Sobre a chave primária (desconsiderando surrogate), acho que valor não precisa fazer parte. O par <ativo_codigo,data> já define unicamente uma tupla, não?
+
+Entidade relPortfolioAtivo:
+	- O que significa o atributo participacao?
+
+Entidade historico:
+	- O que significam os atributos tipoEntidade e codigoEntidade?
+
+Entidade usuario: 
+	- Estava com o atributo nome como unique. Imaginando que esse seja o nome da pessoa, criei o atributo tipoDocumento (RG, CPF, Passaporte, ...) que, com o documento, gera a chave única e not null. Concorda? Ou estava pensando outra coisa?
+
+Entidade movimento:
+	- Existe o atributo codigoCorretora. Ele está em camelCase. Fiquei na dúvida. Era para existir um relacionamento entre movimento e corretora? Ou o atributo codigoCorretora deverá ser alimentado manualmente (trigger, update, etc)?
+
+- Atributo codigo como chave estrangeira (usuario_codigo, perfil_codigo, etc) é o único a não utilizar camelCase?
+
+==============================
+
+Sobre a maneira de armazenarmos as datas: 
+	- Estou com dúvida de qual seria a melhor forma de armazenarmos as datas na entidade ativoCotacoes. Imagino que será à partir dela que pegaremos os dados para as análises, certo? Pois bem, esses dias tentei dar uma lida sobre como trabalhar com séries temporais. Vi implementações que utilizavam as datas como long (aquele esquema do número de segundos desde 1 de janeiro de 1970, ou alguma data do tipo). Dai ficava fácil converter entre as "unidades de tempo" (us, ms, s, min, hr, dia). Mas ainda não cheguei a nenhuma conclusão... É um negócio que a gente tem que pensar. Você já pensou nisso?
+
+Sobre surrogates:
+	- Vou criar surrogates nas entidades que não possuem, ok!? Quando você vier aqui, ou quando já tivermos algo mais elaborado (em código), vai entender melhor o motivo.
+
