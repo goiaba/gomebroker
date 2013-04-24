@@ -1,0 +1,3 @@
+Sobre o ambiente de desenvolvimento:
+	- Estou pensando como seria melhor desenvolvermos (a parte java): Criando nossa própria estrutura, escolhendo, um a um, frameworks e bibliotecas que achemos interessantes e úteis ou escolhendo um "framework integrador", que já embarca um monte de tecnologias/padrões que ficam disponíveis para usarmos. Um exemplo desse é o Demoiselle, desenvolvido pelo serpro. Parece interessante.
+
