@@ -5,7 +5,7 @@
  <project-data-sources>
   <data-source id="DS0">
    <property key="Connection Type" value="PostgreSQL" />
-   <property key="Logical" value="PlayPen Database" />
+   <property key="Logical" value="(Target Database)" />
    <property key="JDBC URL" value="jdbc:postgresql://localhost:5432/gomebroker" />
    <property key="UID" value="gomebroker" />
    <property key="PWD" value="gomebroker" />
@@ -896,7 +896,7 @@
     <column id="COL293" populated="true" UUID="189d8136-72e5-48f2-a3ab-a87a699c2d5d" autoIncrement="false" defaultValue="" name="ativo_id" nullable="0" physicalName="ativo_id" precision="0" primaryKeySeq="0" referenceCount="2" scale="0" source-column-ref="COL22" sourceDataTypeName="int4" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks>Codigo do Ativo</remarks>
     </column>
-    <column id="COL294" populated="true" UUID="ceda1a54-f668-49f5-a20b-091908ff342f" autoIncrement="false" defaultValue="" name="data" nullable="0" physicalName="data" precision="0" primaryKeySeq="1" referenceCount="1" scale="0" source-column-ref="COL23" sourceDataTypeName="timestamp" type="-5" userDefinedTypeUUID="433cc8af-284d-4abb-8ef7-08ebcb34dbf1" >
+    <column id="COL294" populated="true" UUID="ceda1a54-f668-49f5-a20b-091908ff342f" autoIncrement="false" defaultValue="" name="data" nullable="0" physicalName="data" precision="0" primaryKeySeq="1" referenceCount="1" scale="0" source-column-ref="COL23" sourceDataTypeName="timestamp" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks>Data da Cotação com precisão de millisegundos</remarks>
     </column>
     <column id="COL295" populated="true" UUID="0df68f3b-6bda-407e-b115-3589679d09ce" autoIncrement="false" autoIncrementSequenceName="ativoCotacoes_intraDiario_seq" defaultValue="&apos;1&apos;" name="intraDiario" nullable="0" physicalName="intraDiario" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="-7" userDefinedTypeUUID="936cd049-d1df-44fc-ab05-b47cabe09060" >
@@ -953,7 +953,7 @@
     <column id="COL311" populated="true" UUID="d4d8e30d-0d6d-4031-b9cf-f56fca5376bd" autoIncrement="false" defaultValue="" name="ativo_id" nullable="0" physicalName="ativo_id" precision="0" primaryKeySeq="0" referenceCount="2" scale="0" source-column-ref="COL39" sourceDataTypeName="int4" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks>Codigo do Ativo</remarks>
     </column>
-    <column id="COL312" populated="true" UUID="34027176-c80a-4e7d-9553-36ef5df8a174" autoIncrement="false" defaultValue="" name="data" nullable="0" physicalName="data" precision="0" primaryKeySeq="1" referenceCount="1" scale="0" source-column-ref="COL40" sourceDataTypeName="timestamp" type="-5" userDefinedTypeUUID="433cc8af-284d-4abb-8ef7-08ebcb34dbf1" >
+    <column id="COL312" populated="true" UUID="34027176-c80a-4e7d-9553-36ef5df8a174" autoIncrement="false" defaultValue="" name="data" nullable="0" physicalName="data" precision="0" primaryKeySeq="1" referenceCount="1" scale="0" source-column-ref="COL40" sourceDataTypeName="timestamp" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks>Data da Cotação com precisão de millisegundos</remarks>
     </column>
     <column id="COL313" populated="true" UUID="60d2d434-596e-472d-a827-e94af2e47b95" autoIncrement="false" defaultValue="0" name="valor" nullable="0" physicalName="valor" precision="0" primaryKeySeq="2" referenceCount="1" scale="0" source-column-ref="COL41" sourceDataTypeName="float8" type="8" userDefinedTypeUUID="4fc90970-b2e5-41dd-911c-cc605d87e7a8" >
@@ -1341,7 +1341,7 @@
     <column id="COL432" populated="true" UUID="f8b2b083-c2b7-431a-abd4-7a72705b8632" autoIncrement="false" defaultValue="" name="usuario_id" nullable="0" physicalName="usuario_id" precision="0" referenceCount="2" scale="0" source-column-ref="COL160" sourceDataTypeName="int4" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks>Código do Usuário da Solicitação (pode não ser o mesmo operador)</remarks>
     </column>
-    <column id="COL433" populated="true" UUID="c1b94692-bfe7-4966-960a-b14afd6abc63" autoIncrement="false" defaultValue="" name="data" nullable="0" physicalName="data" precision="0" referenceCount="1" scale="0" source-column-ref="COL161" sourceDataTypeName="timestamp" type="-5" userDefinedTypeUUID="433cc8af-284d-4abb-8ef7-08ebcb34dbf1" >
+    <column id="COL433" populated="true" UUID="c1b94692-bfe7-4966-960a-b14afd6abc63" autoIncrement="false" defaultValue="" name="data" nullable="0" physicalName="data" precision="0" referenceCount="1" scale="0" source-column-ref="COL161" sourceDataTypeName="timestamp" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks>Data da Solicitacao</remarks>
     </column>
     <column id="COL434" populated="true" UUID="1952e4a4-a0f7-4cbc-b908-1b56101c2c66" autoIncrement="false" defaultValue="" name="tipoSolicitacao" nullable="0" physicalName="tipoSolicitacao" precision="50" referenceCount="1" scale="0" source-column-ref="COL162" sourceDataTypeName="varchar" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -1362,7 +1362,7 @@
     <index id="IDX437" populated="true" UUID="e5ee3c05-13cb-4098-84b6-148b49bc52b6" clustered="false" index-type="BTREE" name="ordemSolicitacoes_pk" physicalName="ordemsolicitacoes_pk" primaryKeyIndex="true" unique="true" >
      <index-column id="IDC438" populated="true" UUID="69f48808-9855-47d1-b428-0431fe469f38" ascendingOrDescending="UNSPECIFIED" column-ref="COL430" name="id" physicalName="id" />
     </index>
-    <index id="IDX439" populated="true" UUID="9473ff4e-509c-4fb3-b7cf-2b0f3fc3fb0b" clustered="false" name="ordemSolicitacoes_idx" physicalName="ordemSolicitacoes_idx" primaryKeyIndex="false" unique="true" >
+    <index id="IDX439" populated="true" UUID="9473ff4e-509c-4fb3-b7cf-2b0f3fc3fb0b" clustered="false" name="ordemSolicitacoes_idx" physicalName="ordemsolicitacoes_idx" primaryKeyIndex="false" unique="true" >
      <index-column id="IDC440" populated="true" UUID="b22f05df-92ad-4d5f-916f-476a6819811b" ascendingOrDescending="UNSPECIFIED" column-ref="COL431" name="ordem_id" physicalName="ordem_id" />
      <index-column id="IDC441" populated="true" UUID="fb4f8149-2237-4ff6-ba1f-c30a61055807" ascendingOrDescending="UNSPECIFIED" column-ref="COL433" name="data" physicalName="data" />
     </index>
@@ -1475,7 +1475,7 @@
     <index id="IDX473" populated="true" UUID="2ac15636-f588-4a62-b67c-4d5bd67e42f2" clustered="false" index-type="BTREE" name="relPortifolioAtivo_pk" physicalName="relportifolioativo_pk" primaryKeyIndex="true" unique="true" >
      <index-column id="IDC474" populated="true" UUID="b04ea9cb-76dd-4f3b-a3c1-3897591c69d9" ascendingOrDescending="UNSPECIFIED" column-ref="COL465" name="id" physicalName="id" />
     </index>
-    <index id="IDX475" populated="true" UUID="217a6d6e-211c-493b-a5ad-666e7e1778f6" clustered="false" name="relPortifolioAtivo_idx" physicalName="relPortifolioAtivo_idx" primaryKeyIndex="false" unique="true" >
+    <index id="IDX475" populated="true" UUID="217a6d6e-211c-493b-a5ad-666e7e1778f6" clustered="false" name="relPortifolioAtivo_idx" physicalName="relportifolioativo_idx" primaryKeyIndex="false" unique="true" >
      <index-column id="IDC476" populated="true" UUID="fdc71c40-cd02-4bb8-981a-7882725e5235" ascendingOrDescending="UNSPECIFIED" column-ref="COL466" name="porifolio_id" physicalName="porifolio_id" />
      <index-column id="IDC477" populated="true" UUID="ec0d7543-dabe-4814-9f5d-9749a824521e" ascendingOrDescending="UNSPECIFIED" column-ref="COL467" name="ativo_id" physicalName="ativo_id" />
     </index>
@@ -1511,7 +1511,7 @@
     <index id="IDX485" populated="true" UUID="cfa6bd04-daa4-470e-bd37-ad30ce212fdc" clustered="false" index-type="BTREE" name="relUsuarioPerfil_pk" physicalName="relusuarioperfil_pk" primaryKeyIndex="true" unique="true" >
      <index-column id="IDC486" populated="true" UUID="fc478426-d4b5-48ad-86e5-8cac6f0c49b2" ascendingOrDescending="UNSPECIFIED" column-ref="COL479" name="id" physicalName="id" />
     </index>
-    <index id="IDX487" populated="true" UUID="343f5f21-2152-44cd-a12a-4171cad15474" clustered="false" name="relUsuarioPerfil_idx" physicalName="relUsuarioPerfil_idx" primaryKeyIndex="false" unique="true" >
+    <index id="IDX487" populated="true" UUID="343f5f21-2152-44cd-a12a-4171cad15474" clustered="false" name="relUsuarioPerfil_idx" physicalName="relusuarioperfil_idx" primaryKeyIndex="false" unique="true" >
      <index-column id="IDC488" populated="true" UUID="7f61d13f-bf5c-4a2e-b315-5028f11cfef3" ascendingOrDescending="UNSPECIFIED" column-ref="COL480" name="usuario_id" physicalName="usuario_id" />
      <index-column id="IDC489" populated="true" UUID="4454915c-5cb2-4642-b02c-7a89b72d2c2d" ascendingOrDescending="UNSPECIFIED" column-ref="COL481" name="perfil_id" physicalName="perfil_id" />
     </index>
