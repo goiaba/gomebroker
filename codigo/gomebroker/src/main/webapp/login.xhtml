@@ -1,0 +1,49 @@
+<html xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:view contentType="text/html" locale="#currentLocale" />
+
+<h:head>
+	<title>#{messages['main.app.login.title']}</title>
+	<link type="text/css" rel="stylesheet" href="css/styles.css" />
+</h:head>
+
+<h:body style="background-color:#f1f1f1">
+
+	<p:dialog id="loginDialog" header="#{messages['main.app.login.panel.title']}" widgetVar="dlgLogin" visible="true" closable="false" draggable="false" resizable="false" closeOnEscape="false">
+
+		<h:form id="formLogin" style="text-align: center;">
+		
+			<h:panelGrid columns="2">
+	
+				<h:outputLabel for="usuario" value="#{messages['main.app.login.field.usuario']}" />
+				<p:inputText id="usuario" value="#{credencial.username}"></p:inputText>
+	
+				<h:outputLabel for="senha" value="#{messages['main.app.login.field.senha']}" />
+				<p:password id="senha" value="#{credencial.password}" />
+	
+			</h:panelGrid>
+			
+			<p:commandButton value="#{messages['main.app.login.button']}" action="#{securityContext.login()}" onstart="if (!requireLogin()) return false;" />			
+			
+		</h:form>
+		
+	</p:dialog>
+
+	<p:growl id="messages" globalOnly="true" />
+
+	<p:ajaxStatus style="width:16px;height:16px;">
+		<f:facet name="start">
+		</f:facet>
+
+		<f:facet name="complete">
+			<h:outputText value="" />
+		</f:facet>
+	</p:ajaxStatus>
+	<link type="text/css" rel="stylesheet" href="css/aristo/skin.css" />
+
+</h:body>
+
+</html>
