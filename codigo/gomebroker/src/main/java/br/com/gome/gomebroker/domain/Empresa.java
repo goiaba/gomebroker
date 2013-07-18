@@ -1,15 +1,12 @@
 package br.com.gome.gomebroker.domain;
 
+import java.io.Serializable;
+import javax.persistence.*;
+
+import org.hibernate.envers.Audited;
+
 import java.sql.Timestamp;
 import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 
 
 /**
@@ -17,23 +14,25 @@ import javax.persistence.SequenceGenerator;
  * 
  */
 @Entity
-public class Empresa implements BaseEntity {
+@Audited
+public class Empresa implements Serializable, BaseEntity<Long> {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="EMPRESA_ID_GENERATOR", sequenceName="EMPRESA_ID_SEQ")
+	@SequenceGenerator(name="EMPRESA_ID_GENERATOR", sequenceName="EMPRESA_ID_SEQ", allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="EMPRESA_ID_GENERATOR")
-	private Integer id;
+	private Long id;
 
 	private String cnpj;
 
-	private Timestamp datacadastro;
+	@Column(updatable=false)
+	private Timestamp dataCadastro;
 
-	private Timestamp datadesativacao;
+	private Timestamp dataDesativacao;
 
 	private String nome;
 
-	private String nomecompleto;
+	private String nomeCompleto;
 
 	private String obs;
 
@@ -46,11 +45,11 @@ public class Empresa implements BaseEntity {
     public Empresa() {
     }
 
-	public Integer getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -62,20 +61,20 @@ public class Empresa implements BaseEntity {
 		this.cnpj = cnpj;
 	}
 
-	public Timestamp getDatacadastro() {
-		return this.datacadastro;
+	public Timestamp getDataCadastro() {
+		return this.dataCadastro;
 	}
 
-	public void setDatacadastro(Timestamp datacadastro) {
-		this.datacadastro = datacadastro;
+	public void setDataCadastro(Timestamp dataCadastro) {
+		this.dataCadastro = dataCadastro;
 	}
 
-	public Timestamp getDatadesativacao() {
-		return this.datadesativacao;
+	public Timestamp getDataDesativacao() {
+		return this.dataDesativacao;
 	}
 
-	public void setDatadesativacao(Timestamp datadesativacao) {
-		this.datadesativacao = datadesativacao;
+	public void setDataDesativacao(Timestamp dataDesativacao) {
+		this.dataDesativacao = dataDesativacao;
 	}
 
 	public String getNome() {
@@ -86,12 +85,12 @@ public class Empresa implements BaseEntity {
 		this.nome = nome;
 	}
 
-	public String getNomecompleto() {
-		return this.nomecompleto;
+	public String getNomeCompleto() {
+		return this.nomeCompleto;
 	}
 
-	public void setNomecompleto(String nomecompleto) {
-		this.nomecompleto = nomecompleto;
+	public void setNomeCompleto(String nomeCompleto) {
+		this.nomeCompleto = nomeCompleto;
 	}
 
 	public String getObs() {

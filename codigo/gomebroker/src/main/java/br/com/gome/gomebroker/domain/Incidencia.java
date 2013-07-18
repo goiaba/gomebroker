@@ -2,11 +2,14 @@ package br.com.gome.gomebroker.domain;
 
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+
+import org.hibernate.envers.Audited;
 
 
 /**
@@ -14,19 +17,21 @@ import javax.persistence.SequenceGenerator;
  * 
  */
 @Entity
-public class Incidencia implements BaseEntity {
+@Audited
+public class Incidencia implements BaseEntity<Long> {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="INCIDENCIA_ID_GENERATOR", sequenceName="INCIDENCIA_ID_SEQ")
+	@SequenceGenerator(name="INCIDENCIA_ID_GENERATOR", sequenceName="INCIDENCIA_ID_SEQ", allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="INCIDENCIA_ID_GENERATOR")
-	private Integer id;
+	private Long id;
 
-	private Timestamp datacadastro;
+	@Column(updatable=false)
+	private Timestamp dataCadastro;
 
-	private Timestamp datavalidade;
+	private Timestamp dataValidade;
 
-	private Timestamp datavigencia;
+	private Timestamp dataVigencia;
 
 	private String nome;
 
@@ -41,36 +46,36 @@ public class Incidencia implements BaseEntity {
     public Incidencia() {
     }
 
-	public Integer getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public Timestamp getDatacadastro() {
-		return this.datacadastro;
+	public Timestamp getDataCadastro() {
+		return this.dataCadastro;
 	}
 
-	public void setDatacadastro(Timestamp datacadastro) {
-		this.datacadastro = datacadastro;
+	public void setDataCadastro(Timestamp dataCadastro) {
+		this.dataCadastro = dataCadastro;
 	}
 
-	public Timestamp getDatavalidade() {
-		return this.datavalidade;
+	public Timestamp getDataValidade() {
+		return this.dataValidade;
 	}
 
-	public void setDatavalidade(Timestamp datavalidade) {
-		this.datavalidade = datavalidade;
+	public void setDataValidade(Timestamp dataValidade) {
+		this.dataValidade = dataValidade;
 	}
 
-	public Timestamp getDatavigencia() {
-		return this.datavigencia;
+	public Timestamp getDataVigencia() {
+		return this.dataVigencia;
 	}
 
-	public void setDatavigencia(Timestamp datavigencia) {
-		this.datavigencia = datavigencia;
+	public void setDataVigencia(Timestamp dataVigencia) {
+		this.dataVigencia = dataVigencia;
 	}
 
 	public String getNome() {

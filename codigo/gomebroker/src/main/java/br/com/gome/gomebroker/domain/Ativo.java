@@ -1,11 +1,12 @@
 package br.com.gome.gomebroker.domain;
 
 import java.sql.Timestamp;
-import java.util.Collections;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,23 +14,28 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
+
 
 /**
  * The persistent class for the ativo database table.
  * 
  */
 @Entity
-public class Ativo implements BaseEntity {
-	
+@Audited
+public class Ativo implements BaseEntity<Long> {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="ATIVO_ID_GENERATOR", sequenceName="ATIVO_ID_SEQ")
+	@SequenceGenerator(name="ATIVO_ID_GENERATOR", sequenceName="ATIVO_ID_SEQ", allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="ATIVO_ID_GENERATOR")
-	private Integer id;
+	@Column(updatable=false)
+	private Long id;
 
 	private String codigo;
 
+	@Column(updatable=false)
 	private Timestamp dataCadastro;
 
 	private Timestamp dataDesativacao;
@@ -38,34 +44,31 @@ public class Ativo implements BaseEntity {
 
 	private String obs;
 
-	//bi-directional many-to-one association to Empresa
-	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch=FetchType.LAZY)
 	private Empresa empresa;
 
-	//bi-directional many-to-one association to Ativocotacoe
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	@OneToMany(mappedBy="ativo")
-	private Set<AtivoCotacao> ativoCotacoes;
+	private Set<AtivoCotacoes> ativoCotacoes;
 
-	//bi-directional many-to-one association to Ativooferta
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	@OneToMany(mappedBy="ativo")
-	private Set<AtivoOferta> ativoOfertas;
+	private Set<AtivoOfertas> ativoOfertas;
 
-	//bi-directional many-to-one association to Ordem
 	@OneToMany(mappedBy="ativo")
 	private Set<Ordem> ordens;
 
-	//bi-directional many-to-one association to Relportifolioativo
 	@OneToMany(mappedBy="ativo")
-	private Set<PortfolioAtivo> portifolioAtivos;
+	private Set<PortifolioAtivo> portifolioAtivos;
 
     public Ativo() {
     }
 
-	public Integer getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -117,83 +120,36 @@ public class Ativo implements BaseEntity {
 		this.empresa = empresa;
 	}
 	
-	public Set<AtivoCotacao> getAtivoCotacoes() {
-		return Collections.unmodifiableSet(this.ativoCotacoes);
-	}
-	
-	public void addAtivoCotacao(AtivoCotacao ativoCotacao) {
-		ativoCotacao.setAtivo(this);
-	}
-	
-	public void removeAtivoCotacao(AtivoCotacao ativoCotacao) {
-		ativoCotacao.setAtivo(null);
-	}
-	
-	public void internalAddAtivoCotacao(AtivoCotacao ativoCotacao) {
-		this.ativoCotacoes.add(ativoCotacao);
-	}
-	
-	public void internalRemoveAtivoCotacao(AtivoCotacao ativoCotacao) {
-		this.ativoCotacoes.remove(ativoCotacao);
+	public Set<AtivoCotacoes> getAtivoCotacoes() {
+		return this.ativoCotacoes;
 	}
 
-	public Set<AtivoOferta> getAtivoOfertas() {
-		return Collections.unmodifiableSet(this.ativoOfertas);
+	public void setAtivoCotacoes(Set<AtivoCotacoes> ativoCotacoes) {
+		this.ativoCotacoes = ativoCotacoes;
 	}
 	
-	public void addAtivoOferta(AtivoOferta ativoOferta) {
-		ativoOferta.setAtivo(this);
-	}
-	
-	public void removeAtivoOferta(AtivoOferta ativoOferta) {
-		ativoOferta.setAtivo(null);
-	}
-	
-	public void internalAddAtivoOferta(AtivoOferta ativoOferta) {
-		this.ativoOfertas.add(ativoOferta);
-	}
-	
-	public void internalRemoveAtivoOferta(AtivoOferta ativoOferta) {
-		this.ativoOfertas.remove(ativoOfertas);
+	public Set<AtivoOfertas> getAtivoOfertas() {
+		return this.ativoOfertas;
 	}
 
+	public void setAtivoOfertas(Set<AtivoOfertas> ativoOfertas) {
+		this.ativoOfertas = ativoOfertas;
+	}
+	
 	public Set<Ordem> getOrdens() {
-		return Collections.unmodifiableSet(this.ordens);
-	}
-	
-	public void addOrdem(Ordem ordem) {
-		ordem.setAtivo(this);
-	}
-	
-	public void removeOrdem(Ordem ordem) {
-		ordem.setAtivo(null);
-	}
-	
-	public void internalAddOrdem(Ordem ordem) {
-		this.ordens.add(ordem);
-	}
-	
-	public void internalRemoveOrdem(Ordem ordem) {
-		this.ordens.remove(ordem);
+		return this.ordens;
 	}
 
-	public Set<PortfolioAtivo> getPortifolioAtivos() {
-		return Collections.unmodifiableSet(this.portifolioAtivos);
+	public void setOrdens(Set<Ordem> ordens) {
+		this.ordens = ordens;
 	}
 	
-	public void addPortfolioAtivo(PortfolioAtivo portfolioAtivo) {
-		portfolioAtivo.setAtivo(this);
+	public Set<PortifolioAtivo> getPortifolioAtivos() {
+		return this.portifolioAtivos;
 	}
 
-	public void removePortfolioAtivo(PortfolioAtivo portfolioAtivo) {
-		portfolioAtivo.setAtivo(null);
+	public void setPortifolioAtivos(Set<PortifolioAtivo> portifolioAtivos) {
+		this.portifolioAtivos = portifolioAtivos;
 	}
 	
-	public void internalAddPortfolioAtivo(PortfolioAtivo portfolioAtivo) {
-		this.portifolioAtivos.add(portfolioAtivo);
-	}
-	
-	public void internalRemovePortfolioAtivo(PortfolioAtivo portfolioAtivo) {
-		this.portifolioAtivos.remove(portfolioAtivo);
-	}
 }

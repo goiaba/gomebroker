@@ -5,30 +5,32 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import br.com.gome.gomebroker.business.IncidenciaBC;
+import br.com.gome.gomebroker.domain.Incidencia;
 import br.gov.frameworkdemoiselle.annotation.NextView;
 import br.gov.frameworkdemoiselle.annotation.PreviousView;
 import br.gov.frameworkdemoiselle.stereotype.ViewController;
 import br.gov.frameworkdemoiselle.template.AbstractListPageBean;
 import br.gov.frameworkdemoiselle.transaction.Transactional;
 
-import br.com.gome.gomebroker.business.BookmarkBC;
-import br.com.gome.gomebroker.domain.Bookmark;
-
 @ViewController
 @NextView("./bookmark_edit.xhtml")
 @PreviousView("./bookmark_list.xhtml")
-public class BookmarkListMB extends AbstractListPageBean<Bookmark, Long> {
+public class BookmarkListMB extends AbstractListPageBean<Incidencia, Long> {
 
 	private static final long serialVersionUID = 1L;
 
 	@Inject
-	private BookmarkBC bc;
+	private IncidenciaBC bc;
 
 	@Override
-	protected List<Bookmark> handleResultList() {
+	@Transactional
+	protected List<Incidencia> handleResultList() {
+		
 		return this.bc.findAll();
+		
 	}
-
+	
 	@Transactional
 	public String deleteSelection() {
 		boolean delete;
@@ -37,7 +39,7 @@ public class BookmarkListMB extends AbstractListPageBean<Bookmark, Long> {
 			delete = getSelection().get(id);
 
 			if (delete) {
-				bc.delete(id);
+				bc.remove(id);
 				iter.remove();
 			}
 		}

@@ -3,7 +3,9 @@ package br.com.gome.gomebroker.domain;
 import java.sql.Timestamp;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,25 +13,29 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
+import org.hibernate.envers.Audited;
+
 
 /**
  * The persistent class for the titular database table.
  * 
  */
 @Entity
-public class Titular implements BaseEntity {
+@Audited
+public class Titular implements BaseEntity<Long> {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="TITULAR_ID_GENERATOR", sequenceName="TITULAR_ID_SEQ")
+	@SequenceGenerator(name="TITULAR_ID_GENERATOR", sequenceName="TITULAR_ID_SEQ", allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="TITULAR_ID_GENERATOR")
-	private Integer id;
+	private Long id;
 
 	private String assinatura;
 
-	private Timestamp datacadastro;
+	@Column(updatable=false)
+	private Timestamp dataCadastro;
 
-	private Timestamp datadesativacao;
+	private Timestamp dataDesativacao;
 
 	private String login;
 
@@ -44,21 +50,21 @@ public class Titular implements BaseEntity {
 	private Set<Conta> contas;
 
 	//bi-directional many-to-one association to Corretora
-    @ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	private Corretora corretora;
 
 	//bi-directional many-to-one association to Usuario
-    @ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	private Usuario usuario;
 
     public Titular() {
     }
 
-	public Integer getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -70,20 +76,20 @@ public class Titular implements BaseEntity {
 		this.assinatura = assinatura;
 	}
 
-	public Timestamp getDatacadastro() {
-		return this.datacadastro;
+	public Timestamp getDataCadastro() {
+		return this.dataCadastro;
 	}
 
-	public void setDatacadastro(Timestamp datacadastro) {
-		this.datacadastro = datacadastro;
+	public void setDataCadastro(Timestamp dataCadastro) {
+		this.dataCadastro = dataCadastro;
 	}
 
-	public Timestamp getDatadesativacao() {
-		return this.datadesativacao;
+	public Timestamp getDataDesativacao() {
+		return this.dataDesativacao;
 	}
 
-	public void setDatadesativacao(Timestamp datadesativacao) {
-		this.datadesativacao = datadesativacao;
+	public void setDataDesativacao(Timestamp dataDesativacao) {
+		this.dataDesativacao = dataDesativacao;
 	}
 
 	public String getLogin() {

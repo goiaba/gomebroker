@@ -1,13 +1,11 @@
 package br.com.gome.gomebroker.domain;
 
-import java.sql.Timestamp;
+import java.io.Serializable;
+import javax.persistence.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
+import org.hibernate.envers.Audited;
+
+import java.sql.Timestamp;
 
 
 /**
@@ -15,21 +13,22 @@ import javax.persistence.SequenceGenerator;
  * 
  */
 @Entity
-public class Movimento implements BaseEntity {
+@Audited
+public class Movimento implements Serializable, BaseEntity<Long> {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="MOVIMENTO_ID_GENERATOR", sequenceName="MOVIMENTO_ID_SEQ")
+	@SequenceGenerator(name="MOVIMENTO_ID_GENERATOR", sequenceName="MOVIMENTO_ID_SEQ", allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="MOVIMENTO_ID_GENERATOR")
-	private Integer id;
+	private Long id;
 
 	private Timestamp data;
 
-	private Timestamp dataexecucao;
+	private Timestamp dataExecucao;
 
 	private String descricao;
 
-	private String idexecucaoordemcorretora;
+	private String idExecucaoOrdemCorretora;
 
 	private String obs;
 
@@ -39,24 +38,24 @@ public class Movimento implements BaseEntity {
 
 	private double valor;
 
-	private double valorincidencia;
+	private double valorIncidencia;
 
 	//bi-directional many-to-one association to Operador
-    @ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	private Operador operador;
 
 	//bi-directional many-to-one association to Ordem
-    @ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	private Ordem ordem;
 
     public Movimento() {
     }
 
-	public Integer getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -68,12 +67,12 @@ public class Movimento implements BaseEntity {
 		this.data = data;
 	}
 
-	public Timestamp getDataexecucao() {
-		return this.dataexecucao;
+	public Timestamp getDataExecucao() {
+		return this.dataExecucao;
 	}
 
-	public void setDataexecucao(Timestamp dataexecucao) {
-		this.dataexecucao = dataexecucao;
+	public void setDataExecucao(Timestamp dataExecucao) {
+		this.dataExecucao = dataExecucao;
 	}
 
 	public String getDescricao() {
@@ -84,12 +83,12 @@ public class Movimento implements BaseEntity {
 		this.descricao = descricao;
 	}
 
-	public String getIdexecucaoordemcorretora() {
-		return this.idexecucaoordemcorretora;
+	public String getIdExecucaoOrdemCorretora() {
+		return this.idExecucaoOrdemCorretora;
 	}
 
-	public void setIdexecucaoordemcorretora(String idexecucaoordemcorretora) {
-		this.idexecucaoordemcorretora = idexecucaoordemcorretora;
+	public void setIdExecucaoOrdemCorretora(String idExecucaoOrdemCorretora) {
+		this.idExecucaoOrdemCorretora = idExecucaoOrdemCorretora;
 	}
 
 	public String getObs() {
@@ -124,12 +123,12 @@ public class Movimento implements BaseEntity {
 		this.valor = valor;
 	}
 
-	public double getValorincidencia() {
-		return this.valorincidencia;
+	public double getValorIncidencia() {
+		return this.valorIncidencia;
 	}
 
-	public void setValorincidencia(double valorincidencia) {
-		this.valorincidencia = valorincidencia;
+	public void setValorIncidencia(double valorIncidencia) {
+		this.valorIncidencia = valorIncidencia;
 	}
 
 	public Operador getOperador() {

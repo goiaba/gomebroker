@@ -2,47 +2,46 @@ package br.com.gome.gomebroker.view;
 
 import javax.inject.Inject;
 
+import br.com.gome.gomebroker.business.IncidenciaBC;
+import br.com.gome.gomebroker.domain.Incidencia;
 import br.gov.frameworkdemoiselle.annotation.PreviousView;
 import br.gov.frameworkdemoiselle.stereotype.ViewController;
 import br.gov.frameworkdemoiselle.template.AbstractEditPageBean;
 import br.gov.frameworkdemoiselle.transaction.Transactional;
 
-import br.com.gome.gomebroker.business.BookmarkBC;
-import br.com.gome.gomebroker.domain.Bookmark;
-
 @ViewController
 @PreviousView("./bookmark_list.xhtml")
-public class BookmarkEditMB extends AbstractEditPageBean<Bookmark, Long> {
+public class BookmarkEditMB extends AbstractEditPageBean<Incidencia, Long> {
 
 	private static final long serialVersionUID = 1L;
 
 	@Inject
-	private BookmarkBC bookmarkBC;
+	private IncidenciaBC bc;
 
 	@Override
 	@Transactional
 	public String delete() {
-		this.bookmarkBC.delete(getId());
+		this.bc.remove(getId());
 		return getPreviousView();
 	}
 
 	@Override
 	@Transactional
 	public String insert() {
-		this.bookmarkBC.insert(getBean());
+		this.bc.persist(getBean());
 		return getPreviousView();
 	}
 
 	@Override
 	@Transactional
 	public String update() {
-		this.bookmarkBC.update(getBean());
+		this.bc.merge(getBean());
 		return getPreviousView();
 	}
 
 	@Override
 	protected void handleLoad() {
-		setBean(this.bookmarkBC.load(getId()));
+		setBean(this.bc.find(getId()));
 	}
 
 }
