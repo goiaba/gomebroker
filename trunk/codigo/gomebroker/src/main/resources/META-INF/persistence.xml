@@ -1,116 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<persistence version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	
+	<persistence-unit name="gomebroker-ds"
+		transaction-type="JTA">
 
-	<!-- If you are using JBoss AS7 with non JTA transaction then use this persistence-unit -->
-	<!--
-	-->
-	<persistence-unit name="bookmark-ds" transaction-type="RESOURCE_LOCAL">
-		<non-jta-data-source>java:jboss/datasources/ExampleDS</non-jta-data-source>
-
-		<class>br.com.gome.gomebroker.domain.Bookmark</class>
-
-		<properties>
-			<property name="hibernate.show_sql" value="true" />
-			<property name="hibernate.format_sql" value="false" />
-			<property name="hibernate.hbm2ddl.auto" value="create-drop" />
-		</properties>
-	</persistence-unit>
-
-	<!-- If you are using JBoss AS7 with JTA transaction then use this persistence-unit -->
-	<!--
-	<persistence-unit name="bookmark-ds" transaction-type="JTA">
-		<jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>
+		<jta-data-source>java:/jboss/datasources/gomebrokerDS</jta-data-source>
 		
-		<class>br.com.gome.gomebroker.domain.Bookmark</class>
-
+		<class>br.com.gome.gomebroker.domain.Ativo</class>
+		<class>br.com.gome.gomebroker.domain.AtivoCotacoes</class>
+		<class>br.com.gome.gomebroker.domain.AtivoCotacoesPK</class>
+		<class>br.com.gome.gomebroker.domain.AtivoOfertas</class>
+		<class>br.com.gome.gomebroker.domain.AtivoOfertasPK</class>
+		<class>br.com.gome.gomebroker.domain.Conta</class>
+		<class>br.com.gome.gomebroker.domain.Corretora</class>
+		<class>br.com.gome.gomebroker.domain.Empresa</class>
+		<class>br.com.gome.gomebroker.domain.Incidencia</class>
+		<class>br.com.gome.gomebroker.domain.Movimento</class>
+		<class>br.com.gome.gomebroker.domain.Operador</class>
+		<class>br.com.gome.gomebroker.domain.Ordem</class>
+		<class>br.com.gome.gomebroker.domain.OrdemSolicitacoes</class>
+		<class>br.com.gome.gomebroker.domain.Perfil</class>
+		<class>br.com.gome.gomebroker.domain.Portfolio</class>
+		<class>br.com.gome.gomebroker.domain.PortifolioAtivo</class>
+		<class>br.com.gome.gomebroker.domain.UsuarioPerfil</class>
+		<class>br.com.gome.gomebroker.domain.Titular</class>
+		<class>br.com.gome.gomebroker.domain.Usuario</class>
+		<class>br.com.gome.gomebroker.util.envers.entity.CustomEntity</class>
+		<class>br.com.gome.gomebroker.domain.Papel</class>
+		<class>br.com.gome.gomebroker.domain.PerfilPapel</class>
+		<class>br.com.gome.gomebroker.domain.Recurso</class>
+		<class>br.com.gome.gomebroker.domain.PapelRecurso</class>
+		
 		<properties>
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.format_sql" value="false" />
-			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.hbm2ddl.auto" value="none"/>
+			<property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform" />
+
+			<!-- inicio envers config -->
+			<property name="org.hibernate.envers.versionsTableSuffix"
+				value="Audit" />
+			<property name="org.hibernate.envers.revisionFieldName"
+				value="verrev" />
+			<property name="org.hibernate.envers.default_schema"
+				value="audit" />
+			<property name="org.hibernate.envers.store_data_at_delete"
+				value="true" />
+			<!-- fim envers config -->
+
+		</properties>
+
+	</persistence-unit>
+	
+	<!-- 
+	<persistence-unit name="gomebroker-security-ds"
+		transaction-type="JTA">
+	
+		<jta-data-source>java:/jboss/datasources/gomebrokersecurityDS</jta-data-source>
+
+		<mapping-file>security-orm.xml</mapping-file>
+
+		<class>br.gov.frameworkdemoiselle.fuselage.domain.SecurityUser</class>
+		<class>br.gov.frameworkdemoiselle.fuselage.domain.SecurityProfile</class>
+		<class>br.gov.frameworkdemoiselle.fuselage.domain.SecurityProfileByRule</class>
+		<class>br.gov.frameworkdemoiselle.fuselage.domain.SecurityRole</class>
+		<class>br.gov.frameworkdemoiselle.fuselage.domain.SecurityResource</class>
+		
+		<properties>
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.hbm2ddl.auto" value="create"/>
 			<property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform" />
 		</properties>
-	</persistence-unit>
-	-->
-
-	<!-- If you are using JBoss AS6 with non JTA transaction then use this persistence-unit -->
-	<!--
-	<persistence-unit name="bookmark-ds" transaction-type="RESOURCE_LOCAL">
-		<non-jta-data-source>java:/DefaultDS</non-jta-data-source>
 		
-		<class>br.com.gome.gomebroker.domain.Bookmark</class>
-
-		<properties>
-			<property name="hibernate.show_sql" value="true" />
-			<property name="hibernate.format_sql" value="false" />
-			<property name="hibernate.hbm2ddl.auto" value="create-drop" />
-		</properties>
-	</persistence-unit>
-	-->
-
-	<!-- If you are using JBoss AS6 with JTA transaction then use this persistence-unit -->
-	<!--
-	<persistence-unit name="bookmark-ds" transaction-type="JTA">
-		<jta-data-source>java:/DefaultDS</jta-data-source>
-		
-		<class>br.com.gome.gomebroker.domain.Bookmark</class>
-
-		<properties>
-			<property name="hibernate.show_sql" value="true" />
-			<property name="hibernate.format_sql" value="false" />
-			<property name="hibernate.hbm2ddl.auto" value="update" />
-			<property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.JBossTransactionManagerLookup" />
-		</properties>
-	</persistence-unit>
-	-->
-
-	<!-- If you are using GlassFish 3 with non JTA transaction then use this persistence-unit -->
-	<!--
-	<persistence-unit name="bookmark-ds" transaction-type="RESOURCE_LOCAL">
-		<non-jta-data-source>jdbc/__default</non-jta-data-source>
-
-		<class>br.com.gome.gomebroker.domain.Bookmark</class>
-
-		<properties>
-			<property name="eclipselink.logging.level" value="FINE" />
-			<property name="eclipselink.ddl-generation" value="create-tables" />
-			<property name="eclipselink.ddl-generation.output-mode" value="database" />
-		</properties>
-	</persistence-unit>
-	-->
-
-	<!-- If you are using GlassFish 3 with JTA transaction then use this persistence-unit -->
-	<!--
-	<persistence-unit name="bookmark-ds" transaction-type="JTA">
-		<jta-data-source>jdbc/__TimerPool</jta-data-source>
-
-		<class>br.com.gome.gomebroker.domain.Bookmark</class>
-
-		<properties>
-			<property name="eclipselink.logging.level" value="FINE" />
-			<property name="eclipselink.ddl-generation" value="create-tables" />
-			<property name="eclipselink.ddl-generation.output-mode" value="database" />
-		</properties>
-	</persistence-unit>
-	-->
 	
-	<!-- If you are using Tomcat 6 / Tomcat 7 / JUnit then use this persistence-unit -->
-	<!--
-	<persistence-unit name="bookmark-ds" transaction-type="RESOURCE_LOCAL">
-
-		<class>br.com.gome.gomebroker.domain.Bookmark</class>
-		
-		<properties>
-			<property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver" />
-			<property name="javax.persistence.jdbc.user" value="sa" />
-			<property name="javax.persistence.jdbc.password" value="" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:hsql:." />
-
-			<property name="eclipselink.logging.level" value="FINE" />
-			<property name="eclipselink.ddl-generation" value="create-tables" />
-			<property name="eclipselink.ddl-generation.output-mode" value="database" />
-		</properties>
 	</persistence-unit>
-	-->
+	 -->
 
 </persistence>

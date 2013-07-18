@@ -1,15 +1,12 @@
 package br.com.gome.gomebroker.domain;
 
+import java.io.Serializable;
+import javax.persistence.*;
+
+import org.hibernate.envers.Audited;
+
 import java.sql.Timestamp;
 import java.util.Set;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 
 
 /**
@@ -17,21 +14,22 @@ import javax.persistence.SequenceGenerator;
  * 
  */
 @Entity
-public class Ordem implements BaseEntity {
+@Audited
+public class Ordem implements Serializable, BaseEntity<Long> {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="ORDEM_ID_GENERATOR", sequenceName="ORDEM_ID_SEQ")
+	@SequenceGenerator(name="ORDEM_ID_GENERATOR", sequenceName="ORDEM_ID_SEQ", allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="ORDEM_ID_GENERATOR")
-	private Integer id;
+	private Long id;
 
 	private Timestamp data;
 
-	private Timestamp datacorretora;
+	private Timestamp dataCorretora;
 
-	private Timestamp datavalidade;
+	private Timestamp dataValidade;
 
-	private String idcorretora;
+	private String idCorretora;
 
 	private String mercado;
 
@@ -47,7 +45,7 @@ public class Ordem implements BaseEntity {
 
 	private String tipo;
 
-	private String ultimamensagemcorretora;
+	private String ultimaMensagemCorretora;
 
 	private double valor;
 
@@ -56,29 +54,29 @@ public class Ordem implements BaseEntity {
 	private Set<Movimento> movimentos;
 
 	//bi-directional many-to-one association to Ativo
-    @ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	private Ativo ativo;
 
 	//bi-directional many-to-one association to Operador
-    @ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	private Operador operador;
 
 	//bi-directional many-to-one association to Portfolio
-    @ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	private Portfolio portfolio;
 
-	//bi-directional many-to-one association to Ordemsolicitacoe
+	//bi-directional many-to-one association to OrdemSolicitacoes
 	@OneToMany(mappedBy="ordem")
-	private Set<OrdemSolicitacao> solicitacoes;
+	private Set<OrdemSolicitacoes> ordemSolicitacoes;
 
     public Ordem() {
     }
 
-	public Integer getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -90,28 +88,28 @@ public class Ordem implements BaseEntity {
 		this.data = data;
 	}
 
-	public Timestamp getDatacorretora() {
-		return this.datacorretora;
+	public Timestamp getDataCorretora() {
+		return this.dataCorretora;
 	}
 
-	public void setDatacorretora(Timestamp datacorretora) {
-		this.datacorretora = datacorretora;
+	public void setDataCorretora(Timestamp dataCorretora) {
+		this.dataCorretora = dataCorretora;
 	}
 
-	public Timestamp getDatavalidade() {
-		return this.datavalidade;
+	public Timestamp getDataValidade() {
+		return this.dataValidade;
 	}
 
-	public void setDatavalidade(Timestamp datavalidade) {
-		this.datavalidade = datavalidade;
+	public void setDataValidade(Timestamp dataValidade) {
+		this.dataValidade = dataValidade;
 	}
 
-	public String getIdcorretora() {
-		return this.idcorretora;
+	public String getIdCorretora() {
+		return this.idCorretora;
 	}
 
-	public void setIdcorretora(String idcorretora) {
-		this.idcorretora = idcorretora;
+	public void setIdCorretora(String idCorretora) {
+		this.idCorretora = idCorretora;
 	}
 
 	public String getMercado() {
@@ -170,12 +168,12 @@ public class Ordem implements BaseEntity {
 		this.tipo = tipo;
 	}
 
-	public String getUltimamensagemcorretora() {
-		return this.ultimamensagemcorretora;
+	public String getUltimaMensagemCorretora() {
+		return this.ultimaMensagemCorretora;
 	}
 
-	public void setUltimamensagemcorretora(String ultimamensagemcorretora) {
-		this.ultimamensagemcorretora = ultimamensagemcorretora;
+	public void setUltimaMensagemCorretora(String ultimaMensagemCorretora) {
+		this.ultimaMensagemCorretora = ultimaMensagemCorretora;
 	}
 
 	public double getValor() {
@@ -218,12 +216,12 @@ public class Ordem implements BaseEntity {
 		this.portfolio = portfolio;
 	}
 	
-	public Set<OrdemSolicitacao> getSolicitacoes() {
-		return this.solicitacoes;
+	public Set<OrdemSolicitacoes> getOrdemSolicitacoes() {
+		return this.ordemSolicitacoes;
 	}
 
-	public void setSolicitacoes(Set<OrdemSolicitacao> solicitacoes) {
-		this.solicitacoes = solicitacoes;
+	public void setOrdemSolicitacoes(Set<OrdemSolicitacoes> ordemSolicitacoes) {
+		this.ordemSolicitacoes = ordemSolicitacoes;
 	}
 	
 }

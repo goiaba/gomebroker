@@ -29,14 +29,37 @@
 					<h:outputText id="id" value="#{bookmarkEditMB.bean.id}" />
 					<p:message for="id" />
 
-					<h:outputLabel value="#{messages['bookmark.label.description']}: " for="description" styleClass="text-input" />
-					<h:inputText id="description" value="#{bookmarkEditMB.bean.description}"
-						title="#{messages['bookmark.alt.description']}" />
-					<p:message for="description" />
+					<h:outputLabel value="Nome: " for="nome" styleClass="text-input" />
+					<h:inputText id="nome" value="#{bookmarkEditMB.bean.nome}" title="#{messages['bookmark.alt.description']}" />
+					<p:message for="nome" />
 
-					<h:outputLabel value="#{messages['bookmark.label.link']}: " for="link" styleClass="text-input" />
-					<h:inputText id="link" value="#{bookmarkEditMB.bean.link}" title="#{messages['bookmark.alt.link']}" />
-					<p:message for="link" />
+					<h:outputLabel value="Sobre: " for="sobre" styleClass="text-input" />
+					<h:inputText id="sobre" value="#{bookmarkEditMB.bean.sobre}" title="#{messages['bookmark.alt.link']}" />
+					<p:message for="sobre" />
+					
+					<h:outputLabel value="Tipo: " for="tipo" styleClass="text-input" />
+					<h:inputText id="tipo" value="#{bookmarkEditMB.bean.tipo}"
+						title="#{messages['bookmark.alt.description']}" />
+					<p:message for="tipo" />
+
+					<h:outputLabel value="Valor: " for="valor" styleClass="text-input" />
+					<h:inputText id="valor" value="#{bookmarkEditMB.bean.valor}"
+						title="#{messages['bookmark.alt.description']}" />
+					<p:message for="valor" />
+
+					<h:outputLabel value="Observação: " for="obs" styleClass="text-input" />
+					<h:inputText id="obs" value="#{bookmarkEditMB.bean.obs}"
+						title="#{messages['bookmark.alt.description']}" />
+					<p:message for="obs" />
+					
+					<h:outputLabel value="Data Validade: " for="dataValidade" styleClass="text-input" />
+					<p:calendar id="dataValidade" pattern="dd/mm/yyyy" converter="timestampConverter" value="#{bookmarkEditMB.bean.dataValidade}" title="#{messages['bookmark.alt.description']}" />
+					<p:message for="dataValidade" />
+					
+					<h:outputLabel value="Data Vigência: " for="dataVigencia" styleClass="text-input" />
+					<p:calendar id="dataVigencia" pattern="dd/mm/yyyy" converter="timestampConverter" value="#{bookmarkEditMB.bean.dataVigencia}" title="#{messages['bookmark.alt.description']}" />
+					<p:message for="dataVigencia" />
+
 				</h:panelGrid>
 			</p:fieldset>
 		</h:form>

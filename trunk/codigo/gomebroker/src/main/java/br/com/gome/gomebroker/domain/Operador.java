@@ -1,15 +1,12 @@
 package br.com.gome.gomebroker.domain;
 
+import java.io.Serializable;
+import javax.persistence.*;
+
+import org.hibernate.envers.Audited;
+
 import java.sql.Timestamp;
 import java.util.Set;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 
 
 /**
@@ -17,19 +14,21 @@ import javax.persistence.SequenceGenerator;
  * 
  */
 @Entity
-public class Operador implements BaseEntity {
+@Audited
+public class Operador implements Serializable, BaseEntity<Long> {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="OPERADOR_ID_GENERATOR", sequenceName="OPERADOR_ID_SEQ")
+	@SequenceGenerator(name="OPERADOR_ID_GENERATOR", sequenceName="OPERADOR_ID_SEQ", allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="OPERADOR_ID_GENERATOR")
-	private Integer id;
+	private Long id;
 
 	private String cota;
 
-	private Timestamp datacadastro;
+	@Column(updatable=false)
+	private Timestamp dataCadastro;
 
-	private Timestamp datadesativacao;
+	private Timestamp dataDesativacao;
 
 	private String nome;
 
@@ -40,11 +39,11 @@ public class Operador implements BaseEntity {
 	private Set<Movimento> movimentos;
 
 	//bi-directional many-to-one association to Conta
-    @ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	private Conta conta;
 
 	//bi-directional many-to-one association to Usuario
-    @ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	private Usuario usuario;
 
 	//bi-directional many-to-one association to Ordem
@@ -58,11 +57,11 @@ public class Operador implements BaseEntity {
     public Operador() {
     }
 
-	public Integer getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -74,20 +73,20 @@ public class Operador implements BaseEntity {
 		this.cota = cota;
 	}
 
-	public Timestamp getDatacadastro() {
-		return this.datacadastro;
+	public Timestamp getDataCadastro() {
+		return this.dataCadastro;
 	}
 
-	public void setDatacadastro(Timestamp datacadastro) {
-		this.datacadastro = datacadastro;
+	public void setDataCadastro(Timestamp dataCadastro) {
+		this.dataCadastro = dataCadastro;
 	}
 
-	public Timestamp getDatadesativacao() {
-		return this.datadesativacao;
+	public Timestamp getDataDesativacao() {
+		return this.dataDesativacao;
 	}
 
-	public void setDatadesativacao(Timestamp datadesativacao) {
-		this.datadesativacao = datadesativacao;
+	public void setDataDesativacao(Timestamp dataDesativacao) {
+		this.dataDesativacao = dataDesativacao;
 	}
 
 	public String getNome() {

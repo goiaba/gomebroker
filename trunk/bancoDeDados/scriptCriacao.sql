@@ -1,4 +1,68 @@
 
+CREATE SEQUENCE core.recurso_id_seq;
+
+CREATE TABLE core.Recurso (
+                id INTEGER NOT NULL DEFAULT nextval('core.recurso_id_seq'),
+                nome VARCHAR(255) NOT NULL,
+                descricao VARCHAR(255) DEFAULT ''::character varying NOT NULL,
+                valor VARCHAR(1000) NOT NULL,
+                dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
+                dataDesativacao TIMESTAMP DEFAULT NULL::timestamp without time zone NOT NULL,
+                CONSTRAINT recurso_pk PRIMARY KEY (id)
+);
+COMMENT ON COLUMN core.Recurso.nome IS 'Nome do Recurso';
+COMMENT ON COLUMN core.Recurso.descricao IS 'Descrição do Recurso';
+COMMENT ON COLUMN core.Recurso.valor IS 'Valor do recurso (url)';
+COMMENT ON COLUMN core.Recurso.dataCadastro IS 'Data de cadastro do Recurso';
+COMMENT ON COLUMN core.Recurso.dataDesativacao IS 'Data de desativação do Recurso';
+
+
+ALTER SEQUENCE core.recurso_id_seq OWNED BY core.Recurso.id;
+
+CREATE UNIQUE INDEX recurso_idx
+ ON core.Recurso
+ ( nome );
+
+CREATE TABLE core.papel (
+                id INTEGER NOT NULL,
+                nome VARCHAR(255) NOT NULL,
+                descricao VARCHAR(255) DEFAULT ''::character varying NOT NULL,
+                obs TEXT DEFAULT ''::text NOT NULL,
+                dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
+                dataDesativacao TIMESTAMP DEFAULT NULL::timestamp without time zone NOT NULL,
+                CONSTRAINT papel_pk PRIMARY KEY (id)
+);
+COMMENT ON COLUMN core.papel.id IS 'Código do papel';
+COMMENT ON COLUMN core.papel.nome IS 'Nome do Papel';
+COMMENT ON COLUMN core.papel.descricao IS 'Descrição do Papel';
+COMMENT ON COLUMN core.papel.obs IS 'Observação para o Papel';
+COMMENT ON COLUMN core.papel.dataCadastro IS 'Data de cadastro do Papel';
+COMMENT ON COLUMN core.papel.dataDesativacao IS 'Data de desativação do Papel';
+
+
+CREATE UNIQUE INDEX papel_idx
+ ON core.papel
+ ( nome );
+
+CREATE SEQUENCE core.relpapelrecurso_id_seq;
+
+CREATE TABLE core.relPapelRecurso (
+                id INTEGER NOT NULL DEFAULT nextval('core.relpapelrecurso_id_seq'),
+                papel_id INTEGER NOT NULL,
+                recurso_id INTEGER NOT NULL,
+                CONSTRAINT relpapelrecurso_pk PRIMARY KEY (id)
+);
+COMMENT ON COLUMN core.relPapelRecurso.id IS 'Código da relação entre papel e seus recursos';
+COMMENT ON COLUMN core.relPapelRecurso.papel_id IS 'Código do papel';
+COMMENT ON COLUMN core.relPapelRecurso.recurso_id IS 'Código do recurso';
+
+
+ALTER SEQUENCE core.relpapelrecurso_id_seq OWNED BY core.relPapelRecurso.id;
+
+CREATE UNIQUE INDEX relpapelrecurso_idx
+ ON core.relPapelRecurso
+ ( papel_id, recurso_id );
+
 CREATE SEQUENCE core.usuario_id_seq;
 
 CREATE TABLE core.usuario (
@@ -8,8 +72,8 @@ CREATE TABLE core.usuario (
                 nomeCompleto VARCHAR(255) DEFAULT ''::character varying,
                 email VARCHAR(255) DEFAULT ''::character varying,
                 obs TEXT DEFAULT ''::text,
-                dataCadastro TIMESTAMP WITHOUT TIME ZONE DEFAULT now() NOT NULL,
-                dataDesativacao TIMESTAMP WITHOUT TIME ZONE DEFAULT NULL::timestamp without time zone,
+                dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
+                dataDesativacao TIMESTAMP DEFAULT NULL::timestamp without time zone,
                 CONSTRAINT usuario_pk PRIMARY KEY (id)
 );
 COMMENT ON TABLE core.usuario IS 'Usuário do sistema';
@@ -31,17 +95,15 @@ CREATE TABLE core.perfil (
                 id INTEGER NOT NULL DEFAULT nextval('core.perfil_id_seq'),
                 nome VARCHAR(255) NOT NULL,
                 descricao VARCHAR(255) DEFAULT ''::character varying,
-                definicoes TEXT DEFAULT ''::text,
                 obs TEXT DEFAULT ''::text,
-                dataCadastro TIMESTAMP WITHOUT TIME ZONE DEFAULT now() NOT NULL,
-                dataDesativacao TIMESTAMP WITHOUT TIME ZONE DEFAULT NULL::timestamp without time zone,
+                dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
+                dataDesativacao TIMESTAMP DEFAULT NULL::timestamp without time zone,
                 CONSTRAINT perfil_pk PRIMARY KEY (id)
 );
 COMMENT ON TABLE core.perfil IS 'Perfis para Usuários';
 COMMENT ON COLUMN core.perfil.id IS 'Código do Perfil';
 COMMENT ON COLUMN core.perfil.nome IS 'Nome do Perfil';
 COMMENT ON COLUMN core.perfil.descricao IS 'Descrição do Perfil';
-COMMENT ON COLUMN core.perfil.definicoes IS 'Definições para o Perfil';
 COMMENT ON COLUMN core.perfil.obs IS 'Observação para o Perfil';
 COMMENT ON COLUMN core.perfil.dataCadastro IS 'Data de cadastro do Perfil';
 COMMENT ON COLUMN core.perfil.dataDesativacao IS 'Data de desativação do Perfil';
@@ -49,15 +111,33 @@ COMMENT ON COLUMN core.perfil.dataDesativacao IS 'Data de desativação do Perfi
 
 ALTER SEQUENCE core.perfil_id_seq OWNED BY core.perfil.id;
 
+CREATE UNIQUE INDEX perfil_idx
+ ON core.perfil
+ ( nome );
+
+CREATE TABLE core.relPerfilPapel (
+                id INTEGER NOT NULL,
+                papel_id INTEGER NOT NULL,
+                perfil_id INTEGER NOT NULL,
+                CONSTRAINT relperfilpapel_pk PRIMARY KEY (id)
+);
+COMMENT ON COLUMN core.relPerfilPapel.papel_id IS 'Código do papel';
+COMMENT ON COLUMN core.relPerfilPapel.perfil_id IS 'Código do Perfil';
+
+
+CREATE UNIQUE INDEX relperfilpapel_idx
+ ON core.relPerfilPapel
+ ( papel_id, perfil_id );
+
 CREATE SEQUENCE core.relusuarioperfil_id_seq;
 
 CREATE TABLE core.relUsuarioPerfil (
                 id INTEGER NOT NULL DEFAULT nextval('core.relusuarioperfil_id_seq'),
                 usuario_id INTEGER NOT NULL,
                 perfil_id INTEGER NOT NULL,
-                dataVigencia TIMESTAMP WITHOUT TIME ZONE DEFAULT now() NOT NULL,
-                dataValidade TIMESTAMP WITHOUT TIME ZONE DEFAULT '9999-01-01 00:00:00'::timestamp without time zone NOT NULL,
-                dataCadastro TIMESTAMP WITHOUT TIME ZONE DEFAULT now() NOT NULL,
+                dataVigencia TIMESTAMP DEFAULT now() NOT NULL,
+                dataValidade TIMESTAMP DEFAULT '9999-01-01 00:00:00'::timestamp without time zone NOT NULL,
+                dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
                 CONSTRAINT relusuarioperfil_pk PRIMARY KEY (id)
 );
 COMMENT ON TABLE core.relUsuarioPerfil IS 'Perfil do Usuário para utilização do sismtema.';
@@ -79,13 +159,13 @@ CREATE SEQUENCE core.incidencia_id_seq;
 CREATE TABLE core.incidencia (
                 id INTEGER NOT NULL DEFAULT nextval('core.incidencia_id_seq'),
                 nome VARCHAR(255) NOT NULL,
-                dataVigencia TIMESTAMP WITHOUT TIME ZONE DEFAULT now() NOT NULL,
-                dataValidade TIMESTAMP WITHOUT TIME ZONE DEFAULT '9999-01-01 00:00:00'::timestamp without time zone NOT NULL,
+                dataVigencia TIMESTAMP DEFAULT now() NOT NULL,
+                dataValidade TIMESTAMP DEFAULT '9999-01-01 00:00:00'::timestamp without time zone NOT NULL,
                 sobre VARCHAR(255) NOT NULL,
                 tipo VARCHAR(255) NOT NULL,
                 valor DOUBLE PRECISION DEFAULT 0 NOT NULL,
                 obs TEXT DEFAULT ''::text,
-                dataCadastro TIMESTAMP WITHOUT TIME ZONE DEFAULT now() NOT NULL,
+                dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
                 CONSTRAINT incidencia_pk PRIMARY KEY (id)
 );
 COMMENT ON TABLE core.incidencia IS 'Incidentes sobre as operações (Impostos, Emolumentos, etc)';
@@ -102,30 +182,6 @@ COMMENT ON COLUMN core.incidencia.dataCadastro IS 'Data de Cadastro da Incidênc
 
 ALTER SEQUENCE core.incidencia_id_seq OWNED BY core.incidencia.id;
 
-CREATE SEQUENCE core.historico_id_seq;
-
-CREATE TABLE core.historico (
-                id INTEGER NOT NULL DEFAULT nextval('core.historico_id_seq'),
-                data TIMESTAMP WITHOUT TIME ZONE DEFAULT now() NOT NULL,
-                usuario_id INTEGER NOT NULL,
-                tipoEntidade VARCHAR(50) NOT NULL,
-                idEntidade INTEGER NOT NULL,
-                tipoHistorico VARCHAR(255) NOT NULL,
-                alteracoes TEXT NOT NULL,
-                CONSTRAINT historico_pk PRIMARY KEY (id)
-);
-COMMENT ON TABLE core.historico IS 'Histórico de alterações dos cadastros (Usuário, Titular, Corretora, Conta, Operador, Perfil, etc)';
-COMMENT ON COLUMN core.historico.id IS 'Código do Histórico';
-COMMENT ON COLUMN core.historico.data IS 'Data do Histórico';
-COMMENT ON COLUMN core.historico.usuario_id IS 'Código do Usuário que fez o cadastro/alteração';
-COMMENT ON COLUMN core.historico.tipoEntidade IS 'Tipo da Entidade (Usuário, Titular, Conta, Corretora, Operador, Empresa, Ativo, Portfolio)';
-COMMENT ON COLUMN core.historico.idEntidade IS 'Código da Entidade cadastrada/alterada';
-COMMENT ON COLUMN core.historico.tipoHistorico IS 'Tipo de Histórico (Cadastro/Alteração)';
-COMMENT ON COLUMN core.historico.alteracoes IS 'Cadastro/Alterações realizadas';
-
-
-ALTER SEQUENCE core.historico_id_seq OWNED BY core.historico.id;
-
 CREATE SEQUENCE core.empresa_id_seq;
 
 CREATE TABLE core.empresa (
@@ -135,8 +191,8 @@ CREATE TABLE core.empresa (
                 cnpj VARCHAR(255) DEFAULT ''::character varying,
                 url VARCHAR(255) DEFAULT ''::character varying,
                 obs TEXT DEFAULT ''::text,
-                dataCadastro TIMESTAMP WITHOUT TIME ZONE DEFAULT now() NOT NULL,
-                dataDesativacao TIMESTAMP WITHOUT TIME ZONE DEFAULT NULL::timestamp without time zone,
+                dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
+                dataDesativacao TIMESTAMP DEFAULT NULL::timestamp without time zone,
                 CONSTRAINT empresa_pk PRIMARY KEY (id)
 );
 COMMENT ON TABLE core.empresa IS 'Empresas dos Ativos';
@@ -165,8 +221,8 @@ CREATE TABLE core.corretora (
                 obs TEXT DEFAULT ''::text,
                 moduloConexao VARCHAR(255) DEFAULT ''::character varying,
                 parametrosConexao TEXT DEFAULT ''::text,
-                dataCadastro TIMESTAMP WITHOUT TIME ZONE DEFAULT now() NOT NULL,
-                dataDesativacao TIMESTAMP WITHOUT TIME ZONE DEFAULT NULL::timestamp without time zone,
+                dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
+                dataDesativacao TIMESTAMP DEFAULT NULL::timestamp without time zone,
                 CONSTRAINT corretora_pk PRIMARY KEY (id)
 );
 COMMENT ON TABLE core.corretora IS 'Corretoras';
@@ -197,8 +253,8 @@ CREATE TABLE core.titular (
                 assinatura VARCHAR(255) DEFAULT ''::character varying,
                 parametros VARCHAR(255) DEFAULT ''::character varying,
                 obs TEXT DEFAULT ''::text,
-                dataCadastro TIMESTAMP WITHOUT TIME ZONE DEFAULT now() NOT NULL,
-                dataDesativacao TIMESTAMP WITHOUT TIME ZONE DEFAULT NULL::timestamp without time zone,
+                dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
+                dataDesativacao TIMESTAMP DEFAULT NULL::timestamp without time zone,
                 CONSTRAINT titular_pk PRIMARY KEY (id)
 );
 COMMENT ON TABLE core.titular IS 'Usuário Titular numa Corretora';
@@ -228,8 +284,8 @@ CREATE TABLE core.conta (
                 nome VARCHAR(255) NOT NULL,
                 conta VARCHAR(255) NOT NULL,
                 obs TEXT DEFAULT ''::text,
-                dataCadastro TIMESTAMP WITHOUT TIME ZONE DEFAULT now() NOT NULL,
-                dataDesativacao TIMESTAMP WITHOUT TIME ZONE DEFAULT NULL::timestamp without time zone,
+                dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
+                dataDesativacao TIMESTAMP DEFAULT NULL::timestamp without time zone,
                 CONSTRAINT conta_pk PRIMARY KEY (id)
 );
 COMMENT ON TABLE core.conta IS 'Conta do Titular na Corretora';
@@ -257,8 +313,8 @@ CREATE TABLE core.operador (
                 nome VARCHAR(255) NOT NULL,
                 obs TEXT DEFAULT ''::text,
                 cota VARCHAR(255) DEFAULT ''::character varying,
-                dataCadastro TIMESTAMP WITHOUT TIME ZONE DEFAULT now() NOT NULL,
-                dataDesativacao TIMESTAMP WITHOUT TIME ZONE DEFAULT NULL::timestamp without time zone,
+                dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
+                dataDesativacao TIMESTAMP DEFAULT NULL::timestamp without time zone,
                 CONSTRAINT operador_pk PRIMARY KEY (id)
 );
 COMMENT ON TABLE core.operador IS 'Usuário designado como Operador de uma Conta de um Titular';
@@ -285,8 +341,8 @@ CREATE TABLE core.portfolio (
                 operador_id INTEGER NOT NULL,
                 nome VARCHAR(255) NOT NULL,
                 obs TEXT DEFAULT ''::text,
-                dataCadastro TIMESTAMP WITHOUT TIME ZONE DEFAULT now() NOT NULL,
-                dataDesativacao TIMESTAMP WITHOUT TIME ZONE DEFAULT NULL::timestamp without time zone,
+                dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
+                dataDesativacao TIMESTAMP DEFAULT NULL::timestamp without time zone,
                 CONSTRAINT portfolio_pk PRIMARY KEY (id)
 );
 COMMENT ON TABLE core.portfolio IS 'Portfólios de Ativos para acompanhamento pelos Operadores (pode ser utilizado como Carteira)';
@@ -312,8 +368,8 @@ CREATE TABLE core.ativo (
                 codigo VARCHAR(15) NOT NULL,
                 descricao VARCHAR(255) DEFAULT ''::character varying,
                 obs TEXT DEFAULT ''::text,
-                dataCadastro TIMESTAMP WITHOUT TIME ZONE DEFAULT now() NOT NULL,
-                dataDesativacao TIMESTAMP WITHOUT TIME ZONE DEFAULT NULL::timestamp without time zone,
+                dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
+                dataDesativacao TIMESTAMP DEFAULT NULL::timestamp without time zone,
                 CONSTRAINT ativo_pk PRIMARY KEY (id)
 );
 COMMENT ON TABLE core.ativo IS 'Ativos a serem movimentados';
@@ -337,8 +393,8 @@ CREATE TABLE core.relPortifolioAtivo (
                 descricao VARCHAR(255) DEFAULT ''::character varying,
                 participacao VARCHAR(255) DEFAULT ''::character varying,
                 obs TEXT DEFAULT ''::text,
-                dataCadastro TIMESTAMP WITHOUT TIME ZONE DEFAULT now() NOT NULL,
-                dataDesativacao TIMESTAMP WITHOUT TIME ZONE DEFAULT NULL::timestamp without time zone,
+                dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
+                dataDesativacao TIMESTAMP DEFAULT NULL::timestamp without time zone,
                 CONSTRAINT relportifolioativo_pk PRIMARY KEY (id)
 );
 COMMENT ON TABLE core.relPortifolioAtivo IS 'Ativos dos Portfólios.';
@@ -362,7 +418,7 @@ CREATE SEQUENCE core.ordem_id_seq;
 CREATE TABLE core.ordem (
                 id INTEGER NOT NULL DEFAULT nextval('core.ordem_id_seq'),
                 operador_id INTEGER NOT NULL,
-                data TIMESTAMP WITHOUT TIME ZONE DEFAULT now() NOT NULL,
+                data TIMESTAMP DEFAULT now() NOT NULL,
                 ativo_id INTEGER NOT NULL,
                 portfolio_id INTEGER NOT NULL,
                 tipo VARCHAR(2) NOT NULL,
@@ -370,9 +426,9 @@ CREATE TABLE core.ordem (
                 operacao VARCHAR(2) NOT NULL,
                 quantidade DOUBLE PRECISION DEFAULT 0 NOT NULL,
                 valor DOUBLE PRECISION DEFAULT 0 NOT NULL,
-                dataValidade TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+                dataValidade TIMESTAMP NOT NULL,
                 parametros TEXT DEFAULT ''::text,
-                dataCorretora TIMESTAMP WITHOUT TIME ZONE DEFAULT NULL::timestamp without time zone,
+                dataCorretora TIMESTAMP DEFAULT NULL::timestamp without time zone,
                 idCorretora VARCHAR(255) DEFAULT ''::character varying,
                 obs TEXT DEFAULT ''::text,
                 situacao VARCHAR(3) DEFAULT 'INS'::character varying NOT NULL,
@@ -407,7 +463,7 @@ CREATE TABLE core.ordemSolicitacoes (
                 id INTEGER NOT NULL DEFAULT nextval('core.ordemsolicitacoes_id_seq'),
                 ordem_id INTEGER NOT NULL,
                 usuario_id INTEGER NOT NULL,
-                data TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+                data TIMESTAMP NOT NULL,
                 tipoSolicitacao VARCHAR(50) NOT NULL,
                 resposta VARCHAR(255) DEFAULT ''::character varying,
                 mensagemCorretora VARCHAR(255) DEFAULT ''::character varying,
@@ -434,12 +490,12 @@ CREATE TABLE core.movimento (
                 id INTEGER NOT NULL DEFAULT nextval('core.movimento_id_seq'),
                 operador_id INTEGER NOT NULL,
                 ordem_id INTEGER NOT NULL,
-                data TIMESTAMP WITHOUT TIME ZONE DEFAULT now() NOT NULL,
+                data TIMESTAMP DEFAULT now() NOT NULL,
                 tipo VARCHAR(10) NOT NULL,
                 descricao VARCHAR(255) NOT NULL,
                 quantidade DOUBLE PRECISION DEFAULT 0 NOT NULL,
                 valor DOUBLE PRECISION DEFAULT 0 NOT NULL,
-                dataExecucao TIMESTAMP WITHOUT TIME ZONE DEFAULT now(),
+                dataExecucao TIMESTAMP DEFAULT now(),
                 valorIncidencia DOUBLE PRECISION DEFAULT 0,
                 obs TEXT DEFAULT ''::text,
                 idExecucaoOrdemCorretora VARCHAR(255) DEFAULT ''::character varying,
@@ -464,7 +520,7 @@ ALTER SEQUENCE core.movimento_id_seq OWNED BY core.movimento.id;
 
 CREATE TABLE core.ativoOfertas (
                 ativo_id INTEGER NOT NULL,
-                data TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+                data TIMESTAMP NOT NULL,
                 valor DOUBLE PRECISION DEFAULT 0 NOT NULL,
                 quantidade INTEGER DEFAULT 0 NOT NULL,
                 CONSTRAINT ativoofertas_pk PRIMARY KEY (ativo_id, data, valor)
@@ -478,7 +534,7 @@ COMMENT ON COLUMN core.ativoOfertas.quantidade IS 'Quantidade da Oferta';
 
 CREATE TABLE core.ativoCotacoes (
                 ativo_id INTEGER NOT NULL,
-                data TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+                data TIMESTAMP NOT NULL,
                 intraDiario BIT DEFAULT '1' NOT NULL,
                 abertura DOUBLE PRECISION DEFAULT 0,
                 maximo DOUBLE PRECISION DEFAULT 0,
@@ -509,11 +565,25 @@ COMMENT ON COLUMN core.ativoCotacoes.qtdPapeis IS 'Qtd de papeis movimentados';
 COMMENT ON COLUMN core.ativoCotacoes.volume IS 'Volume das negociacoes';
 
 
-ALTER TABLE core.historico ADD CONSTRAINT historico_usuario_fk
-FOREIGN KEY (usuario_id)
-REFERENCES core.usuario (id)
-ON DELETE CASCADE
-ON UPDATE CASCADE
+ALTER TABLE core.relPapelRecurso ADD CONSTRAINT recurso_relpapelrecurso_fk
+FOREIGN KEY (recurso_id)
+REFERENCES core.Recurso (id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE core.relPerfilPapel ADD CONSTRAINT ppel_relperfilpapel_fk
+FOREIGN KEY (papel_id)
+REFERENCES core.papel (id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE core.relPapelRecurso ADD CONSTRAINT papel_relpapelrecurso_fk
+FOREIGN KEY (papel_id)
+REFERENCES core.papel (id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE core.operador ADD CONSTRAINT operador_usuario_fk
@@ -549,6 +619,13 @@ FOREIGN KEY (perfil_id)
 REFERENCES core.perfil (id)
 ON DELETE CASCADE
 ON UPDATE CASCADE
+NOT DEFERRABLE;
+
+ALTER TABLE core.relPerfilPapel ADD CONSTRAINT perfil_relperfilpapel_fk
+FOREIGN KEY (perfil_id)
+REFERENCES core.perfil (id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE core.ativo ADD CONSTRAINT ativo_empresa_fk

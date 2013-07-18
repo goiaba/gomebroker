@@ -11,26 +11,33 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.hibernate.envers.Audited;
+
 
 /**
  * The persistent class for the usuario database table.
  * 
  */
 @Entity
-public class Usuario implements BaseEntity {
+@Audited
+public class Usuario implements BaseEntity<Long> {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="USUARIO_ID_GENERATOR", sequenceName="USUARIO_ID_SEQ")
+	@SequenceGenerator(name="USUARIO_ID_GENERATOR", sequenceName="USUARIO_ID_SEQ", allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="USUARIO_ID_GENERATOR")
-	private Integer id;
+	private Long id;
 
+	@Column(updatable=false)
 	private Timestamp dataCadastro;
 
 	private Timestamp dataDesativacao;
 
 	private String email;
 
+	@Column
 	private String nome;
 
 	private String nomeCompleto;
@@ -39,34 +46,26 @@ public class Usuario implements BaseEntity {
 
 	private String senha;
 
-	//bi-directional many-to-one association to Historico
-	@OneToMany(mappedBy="usuario")
-	private Set<Historico> historico;
-
-	//bi-directional many-to-one association to Operador
 	@OneToMany(mappedBy="usuario")
 	private Set<Operador> operadores;
 
-	//bi-directional many-to-one association to Ordemsolicitacoe
 	@OneToMany(mappedBy="usuario")
-	private Set<OrdemSolicitacao> solicitacoes;
+	private Set<OrdemSolicitacoes> ordemSolicitacoes;
 
-	//bi-directional many-to-one association to Relusuarioperfil
 	@OneToMany(mappedBy="usuario")
-	private Set<UsuariopPerfil> usuarioPerfis;
+	private Set<UsuarioPerfil> usuarioPerfil;
 
-	//bi-directional many-to-one association to Titular
 	@OneToMany(mappedBy="usuario")
 	private Set<Titular> titulares;
 
     public Usuario() {
     }
 
-	public Integer getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -126,14 +125,6 @@ public class Usuario implements BaseEntity {
 		this.senha = senha;
 	}
 
-	public Set<Historico> getHistorico() {
-		return this.historico;
-	}
-
-	public void setHistorico(Set<Historico> historico) {
-		this.historico = historico;
-	}
-	
 	public Set<Operador> getOperadores() {
 		return this.operadores;
 	}
@@ -142,20 +133,20 @@ public class Usuario implements BaseEntity {
 		this.operadores = operadores;
 	}
 	
-	public Set<OrdemSolicitacao> getSolicitacoes() {
-		return this.solicitacoes;
+	public Set<OrdemSolicitacoes> getOrdemSolicitacoes() {
+		return this.ordemSolicitacoes;
 	}
 
-	public void setSolicitacoes(Set<OrdemSolicitacao> solicitacoes) {
-		this.solicitacoes = solicitacoes;
+	public void setOrdemSolicitacoes(Set<OrdemSolicitacoes> ordemSolicitacoes) {
+		this.ordemSolicitacoes = ordemSolicitacoes;
 	}
 	
-	public Set<UsuariopPerfil> getUsuarioPerfis() {
-		return this.usuarioPerfis;
+	public Set<UsuarioPerfil> getUsuarioPerfil() {
+		return this.usuarioPerfil;
 	}
 
-	public void setUsuarioPerfis(Set<UsuariopPerfil> usuarioPerfis) {
-		this.usuarioPerfis = usuarioPerfis;
+	public void setUsuarioPerfil(Set<UsuarioPerfil> usuarioPerfil) {
+		this.usuarioPerfil = usuarioPerfil;
 	}
 	
 	public Set<Titular> getTitulares() {
@@ -164,6 +155,46 @@ public class Usuario implements BaseEntity {
 
 	public void setTitulares(Set<Titular> titulares) {
 		this.titulares = titulares;
+	}
+	
+	public boolean equals(Object o) {
+
+		if ((null == o) || (o.getClass() != this.getClass())) {
+            return false;
+        }
+
+        if (o == this) {
+            return true;
+        }
+
+        Usuario that = (Usuario) o;
+
+        return new EqualsBuilder()
+                    .append(this.id, that.id)
+                    .append(this.nome, that.nome)
+                    .append(this.dataCadastro, that.dataCadastro)
+                    .append(this.dataDesativacao, that.dataDesativacao)
+                    .append(this.email, that.email)
+                    .append(this.nomeCompleto, that.nomeCompleto)
+                    .append(this.obs, that.obs)
+                    .append(this.senha, that.senha)
+                    .isEquals();
+	    
+	}
+
+	public int hashCode() {
+		
+		return new HashCodeBuilder(17,31)
+					.append(this.id)
+			        .append(this.nome)
+			        .append(this.dataCadastro)
+			        .append(this.dataDesativacao)
+			        .append(this.email)
+			        .append(this.nomeCompleto)
+			        .append(this.obs)
+			        .append(this.senha)
+        			.toHashCode();
+	    
 	}
 	
 }

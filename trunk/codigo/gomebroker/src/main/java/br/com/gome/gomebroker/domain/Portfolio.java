@@ -1,15 +1,12 @@
 package br.com.gome.gomebroker.domain;
 
+import java.io.Serializable;
+import javax.persistence.*;
+
+import org.hibernate.envers.Audited;
+
 import java.sql.Timestamp;
 import java.util.Set;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 
 
 /**
@@ -17,17 +14,19 @@ import javax.persistence.SequenceGenerator;
  * 
  */
 @Entity
-public class Portfolio implements BaseEntity {
+@Audited
+public class Portfolio implements Serializable, BaseEntity<Long> {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="PORTFOLIO_ID_GENERATOR", sequenceName="PORTFOLIO_ID_SEQ")
+	@SequenceGenerator(name="PORTFOLIO_ID_GENERATOR", sequenceName="PORTFOLIO_ID_SEQ", allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="PORTFOLIO_ID_GENERATOR")
-	private Integer id;
+	private Long id;
 
-	private Timestamp datacadastro;
+	@Column(updatable=false)
+	private Timestamp dataCadastro;
 
-	private Timestamp datadesativacao;
+	private Timestamp dataDesativacao;
 
 	private String nome;
 
@@ -38,38 +37,38 @@ public class Portfolio implements BaseEntity {
 	private Set<Ordem> ordens;
 
 	//bi-directional many-to-one association to Operador
-    @ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	private Operador operador;
 
-	//bi-directional many-to-one association to Relportifolioativo
+	//bi-directional many-to-one association to PortifolioAtivo
 	@OneToMany(mappedBy="portfolio")
-	private Set<PortfolioAtivo> portifolioAtivos;
+	private Set<PortifolioAtivo> portifolioAtivos;
 
     public Portfolio() {
     }
 
-	public Integer getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public Timestamp getDatacadastro() {
-		return this.datacadastro;
+	public Timestamp getDataCadastro() {
+		return this.dataCadastro;
 	}
 
-	public void setDatacadastro(Timestamp datacadastro) {
-		this.datacadastro = datacadastro;
+	public void setDataCadastro(Timestamp dataCadastro) {
+		this.dataCadastro = dataCadastro;
 	}
 
-	public Timestamp getDatadesativacao() {
-		return this.datadesativacao;
+	public Timestamp getDataDesativacao() {
+		return this.dataDesativacao;
 	}
 
-	public void setDatadesativacao(Timestamp datadesativacao) {
-		this.datadesativacao = datadesativacao;
+	public void setDataDesativacao(Timestamp dataDesativacao) {
+		this.dataDesativacao = dataDesativacao;
 	}
 
 	public String getNome() {
@@ -104,11 +103,11 @@ public class Portfolio implements BaseEntity {
 		this.operador = operador;
 	}
 	
-	public Set<PortfolioAtivo> getPortifolioAtivos() {
+	public Set<PortifolioAtivo> getPortifolioAtivos() {
 		return this.portifolioAtivos;
 	}
 
-	public void setPortifolioAtivos(Set<PortfolioAtivo> portifolioAtivos) {
+	public void setPortifolioAtivos(Set<PortifolioAtivo> portifolioAtivos) {
 		this.portifolioAtivos = portifolioAtivos;
 	}
 	
