@@ -22,7 +22,7 @@
 
 	<dependencies>
 		<!-- If you are using a JTA transaction then use this extension -->
-		<!-- -->
+		<!-- test -->
 		<dependency>
 			<groupId>br.gov.frameworkdemoiselle</groupId>
 			<artifactId>demoiselle-jta</artifactId>
