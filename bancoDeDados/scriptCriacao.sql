@@ -1,4 +1,31 @@
 
+CREATE SEQUENCE core.itemmenu_id_seq;
+
+CREATE TABLE core.itemMenu (
+                id INTEGER NOT NULL DEFAULT nextval('core.itemmenu_id_seq'),
+                itemMenu_id_pai INTEGER NOT NULL,
+                descricaoKey VARCHAR NOT NULL,
+                url VARCHAR NOT NULL,
+                separador BOOLEAN NOT NULL,
+                submenu BOOLEAN NOT NULL,
+                ordem INTEGER NOT NULL,
+                dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
+                dataDesativacao TIMESTAMP DEFAULT NULL::timestamp without time zone NOT NULL,
+                CONSTRAINT itemmenu_pk PRIMARY KEY (id)
+);
+COMMENT ON COLUMN core.itemMenu.id IS 'Código do item de menu';
+COMMENT ON COLUMN core.itemMenu.itemMenu_id_pai IS 'Código do item de menu pai';
+COMMENT ON COLUMN core.itemMenu.descricaoKey IS 'Chave de internacionalização da descrição do item de menu (será usada no código java para retonar a descrição na linguagem escolhida pelo usuário).';
+COMMENT ON COLUMN core.itemMenu.url IS 'URL para a qual o item de menu apontará.';
+COMMENT ON COLUMN core.itemMenu.separador IS 'Indicador de separador (ao invés de item de menu)';
+COMMENT ON COLUMN core.itemMenu.submenu IS 'Indicador de submenu (ao invés de item de menu).';
+COMMENT ON COLUMN core.itemMenu.ordem IS 'Ordenador dos itens pai de menu. Ou seja, será utilizado para ordenar, horizontalmente, os submenus pais que serão exibidos para o usuário, de acordo com o perfil em uso.';
+COMMENT ON COLUMN core.itemMenu.dataCadastro IS 'Data de cadastro do item de menu';
+COMMENT ON COLUMN core.itemMenu.dataDesativacao IS 'Data de desativação do item de menu';
+
+
+ALTER SEQUENCE core.itemmenu_id_seq OWNED BY core.itemMenu.id;
+
 CREATE SEQUENCE core.recurso_id_seq;
 
 CREATE TABLE core.Recurso (
@@ -138,6 +165,7 @@ CREATE TABLE core.relUsuarioPerfil (
                 dataVigencia TIMESTAMP DEFAULT now() NOT NULL,
                 dataValidade TIMESTAMP DEFAULT '9999-01-01 00:00:00'::timestamp without time zone NOT NULL,
                 dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
+                padrao BOOLEAN DEFAULT false NOT NULL,
                 CONSTRAINT relusuarioperfil_pk PRIMARY KEY (id)
 );
 COMMENT ON TABLE core.relUsuarioPerfil IS 'Perfil do Usuário para utilização do sismtema.';
@@ -146,6 +174,7 @@ COMMENT ON COLUMN core.relUsuarioPerfil.perfil_id IS 'Código do Perfil';
 COMMENT ON COLUMN core.relUsuarioPerfil.dataVigencia IS 'Data do início da vigência do Perfil';
 COMMENT ON COLUMN core.relUsuarioPerfil.dataValidade IS 'Data do fim da vigência do Perfil';
 COMMENT ON COLUMN core.relUsuarioPerfil.dataCadastro IS 'Data de Cadastro do Perfil para o Usuário';
+COMMENT ON COLUMN core.relUsuarioPerfil.padrao IS 'Marcador de perfil padrão do usuário';
 
 
 ALTER SEQUENCE core.relusuarioperfil_id_seq OWNED BY core.relUsuarioPerfil.id;
@@ -564,6 +593,13 @@ COMMENT ON COLUMN core.ativoCotacoes.qtdNegocios IS 'Qtd de negocios';
 COMMENT ON COLUMN core.ativoCotacoes.qtdPapeis IS 'Qtd de papeis movimentados';
 COMMENT ON COLUMN core.ativoCotacoes.volume IS 'Volume das negociacoes';
 
+
+ALTER TABLE core.itemMenu ADD CONSTRAINT itemmenu_itemmenu_fk
+FOREIGN KEY (itemMenu_id_pai)
+REFERENCES core.itemMenu (id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
 
 ALTER TABLE core.relPapelRecurso ADD CONSTRAINT recurso_relpapelrecurso_fk
 FOREIGN KEY (recurso_id)
