@@ -1,6 +1,5 @@
 package br.com.gome.gomebroker.business.impl;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +26,7 @@ public abstract class BaseBCImpl<E extends BaseEntity<I>, I, D extends BaseDAO<E
 	public void persist(E bean) {
 
 		try {
-			bean.getClass().getMethod("setDataCadastro", Timestamp.class).invoke(bean, new Timestamp(new Date().getTime()));
+			bean.getClass().getMethod("setDataCadastro", Date.class).invoke(bean, new Date());
 			logger.info(bundle.getString("core.metodo-datacadastro-executado", bean.getClass().getName()));
 		} catch (NoSuchMethodException e) {
 			logger.info(bundle.getString("core.metodo-datacadastro-nao-existe", bean.getClass().getName()));

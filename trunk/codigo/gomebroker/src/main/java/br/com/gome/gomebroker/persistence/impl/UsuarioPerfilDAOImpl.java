@@ -1,16 +1,18 @@
 package br.com.gome.gomebroker.persistence.impl;
 
 import br.com.gome.gomebroker.domain.Usuario;
-import br.com.gome.gomebroker.domain.UsuarioPerfil;
+import br.com.gome.gomebroker.domain.security.UsuarioPapel;
 import br.com.gome.gomebroker.persistence.UsuarioPerfilDAO;
+import br.gov.frameworkdemoiselle.stereotype.PersistenceController;
 import br.gov.frameworkdemoiselle.transaction.Transactional;
 
-public class UsuarioPerfilDAOImpl extends BaseDAOImpl<UsuarioPerfil, Long> implements UsuarioPerfilDAO {
+@PersistenceController
+public class UsuarioPerfilDAOImpl extends BaseDAOImpl<UsuarioPapel, Long> implements UsuarioPerfilDAO {
 
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public UsuarioPerfil findUsuarioPerfilPadrao(Usuario usuario) {
+	public UsuarioPapel findUsuarioPerfilPadrao(Usuario usuario) {
 
 		/*
 		 * SELECT u.*
@@ -24,7 +26,7 @@ public class UsuarioPerfilDAOImpl extends BaseDAOImpl<UsuarioPerfil, Long> imple
 					   " AND up.padrao = true";
 		
 		return getEntityManager()
-					.createQuery(query, UsuarioPerfil.class)
+					.createQuery(query, UsuarioPapel.class)
 					.setParameter("usuario", usuario)
 					.getSingleResult();
 		
@@ -32,19 +34,19 @@ public class UsuarioPerfilDAOImpl extends BaseDAOImpl<UsuarioPerfil, Long> imple
 
 	@Override
 	@Transactional
-	public void setUsuarioPerfilPadrao(UsuarioPerfil usuarioPerfil) {
+	public void setUsuarioPerfilPadrao(UsuarioPapel usuarioPapel) {
 
-		Usuario usuario = usuarioPerfil.getUsuario();
+		Usuario usuario = usuarioPapel.getUsuario();
 		
-		for (UsuarioPerfil up : usuario.getUsuarioPerfil()) {
+		for (UsuarioPapel up : usuario.getUsuarioPerfil()) {
 
 			up.setPadrao(false);
 			this.merge(up);
 			
 		}
 		
-		usuarioPerfil.setPadrao(true);
-		this.merge(usuarioPerfil);
+		usuarioPapel.setPadrao(true);
+		this.merge(usuarioPapel);
 		
 	}
 

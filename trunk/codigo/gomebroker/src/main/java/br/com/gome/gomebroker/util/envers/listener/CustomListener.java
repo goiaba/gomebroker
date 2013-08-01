@@ -5,7 +5,7 @@ import javax.servlet.http.HttpSession;
 
 import org.hibernate.envers.RevisionListener;
 
-import br.com.gome.gomebroker.constant.ViewConstants;
+import br.com.gome.gomebroker.constant.SecurityConstants;
 import br.com.gome.gomebroker.domain.Usuario;
 import br.com.gome.gomebroker.util.envers.entity.CustomEntity;
 
@@ -28,7 +28,7 @@ public class CustomListener implements RevisionListener {
 		
 		HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 		
-		return (Usuario) httpSession.getAttribute(ViewConstants.USUARIO_LOGADO);
+		return (Usuario) httpSession.getAttribute(SecurityConstants.USUARIO_SESSAO_KEY);
 		
 	}
 	

@@ -1,6 +1,6 @@
 package br.com.gome.gomebroker.domain;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,29 +12,32 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.envers.Audited;
-
 
 /**
  * The persistent class for the relportifolioativo database table.
  * 
  */
 @Entity
-@Table(name="relportifolioativo")
+@Table(name = "relportifolioativo")
 @Audited
 public class PortifolioAtivo implements BaseEntity<Long> {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="RELPORTIFOLIOATIVO_ID_GENERATOR", sequenceName="RELPORTIFOLIOATIVO_ID_SEQ", allocationSize=1)
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="RELPORTIFOLIOATIVO_ID_GENERATOR")
+	@SequenceGenerator(name = "RELPORTIFOLIOATIVO_ID_GENERATOR", sequenceName = "RELPORTIFOLIOATIVO_ID_SEQ", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RELPORTIFOLIOATIVO_ID_GENERATOR")
 	private Long id;
 
-	@Column(updatable=false)
-	private Timestamp dataCadastro;
+	@Column(updatable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataCadastro;
 
-	private Timestamp dataDesativacao;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataDesativacao;
 
 	private String descricao;
 
@@ -42,17 +45,17 @@ public class PortifolioAtivo implements BaseEntity<Long> {
 
 	private String participacao;
 
-	//bi-directional many-to-one association to Ativo
-	@ManyToOne(fetch=FetchType.LAZY)
+	// bi-directional many-to-one association to Ativo
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Ativo ativo;
 
-	//bi-directional many-to-one association to Portfolio
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="porifolio_id")
+	// bi-directional many-to-one association to Portfolio
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "porifolio_id")
 	private Portfolio portfolio;
 
-    public PortifolioAtivo() {
-    }
+	public PortifolioAtivo() {
+	}
 
 	public Long getId() {
 		return this.id;
@@ -62,19 +65,19 @@ public class PortifolioAtivo implements BaseEntity<Long> {
 		this.id = id;
 	}
 
-	public Timestamp getDataCadastro() {
+	public Date getDataCadastro() {
 		return this.dataCadastro;
 	}
 
-	public void setDataCadastro(Timestamp dataCadastro) {
+	public void setDataCadastro(Date dataCadastro) {
 		this.dataCadastro = dataCadastro;
 	}
 
-	public Timestamp getDataDesativacao() {
+	public Date getDataDesativacao() {
 		return this.dataDesativacao;
 	}
 
-	public void setDataDesativacao(Timestamp dataDesativacao) {
+	public void setDataDesativacao(Date dataDesativacao) {
 		this.dataDesativacao = dataDesativacao;
 	}
 
@@ -109,7 +112,7 @@ public class PortifolioAtivo implements BaseEntity<Long> {
 	public void setAtivo(Ativo ativo) {
 		this.ativo = ativo;
 	}
-	
+
 	public Portfolio getPortfolio() {
 		return this.portfolio;
 	}
@@ -117,5 +120,5 @@ public class PortifolioAtivo implements BaseEntity<Long> {
 	public void setPortfolio(Portfolio portfolio) {
 		this.portfolio = portfolio;
 	}
-	
+
 }

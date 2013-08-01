@@ -1,12 +1,22 @@
 package br.com.gome.gomebroker.domain;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.util.Date;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.envers.Audited;
-
-import java.sql.Timestamp;
-import java.util.Set;
 
 
 /**
@@ -26,9 +36,11 @@ public class Conta implements Serializable, BaseEntity<Long> {
 	private String conta;
 
 	@Column(updatable=false)
-	private Timestamp dataCadastro;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataCadastro;
 
-	private Timestamp dataDesativacao;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataDesativacao;
 
 	private String nome;
 
@@ -61,19 +73,19 @@ public class Conta implements Serializable, BaseEntity<Long> {
 		this.conta = conta;
 	}
 
-	public Timestamp getDataCadastro() {
+	public Date getDataCadastro() {
 		return this.dataCadastro;
 	}
 
-	public void setDataCadastro(Timestamp dataCadastro) {
+	public void setDataCadastro(Date dataCadastro) {
 		this.dataCadastro = dataCadastro;
 	}
 
-	public Timestamp getDataDesativacao() {
+	public Date getDataDesativacao() {
 		return this.dataDesativacao;
 	}
 
-	public void setDataDesativacao(Timestamp dataDesativacao) {
+	public void setDataDesativacao(Date dataDesativacao) {
 		this.dataDesativacao = dataDesativacao;
 	}
 

@@ -1,6 +1,6 @@
 package br.com.gome.gomebroker.domain;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,9 +8,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.envers.Audited;
-
 
 /**
  * The persistent class for the incidencia database table.
@@ -22,16 +23,19 @@ public class Incidencia implements BaseEntity<Long> {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="INCIDENCIA_ID_GENERATOR", sequenceName="INCIDENCIA_ID_SEQ", allocationSize=1)
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="INCIDENCIA_ID_GENERATOR")
+	@SequenceGenerator(name = "INCIDENCIA_ID_GENERATOR", sequenceName = "INCIDENCIA_ID_SEQ", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "INCIDENCIA_ID_GENERATOR")
 	private Long id;
 
-	@Column(updatable=false)
-	private Timestamp dataCadastro;
+	@Column(updatable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataCadastro;
 
-	private Timestamp dataValidade;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataValidade;
 
-	private Timestamp dataVigencia;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataVigencia;
 
 	private String nome;
 
@@ -43,8 +47,8 @@ public class Incidencia implements BaseEntity<Long> {
 
 	private double valor;
 
-    public Incidencia() {
-    }
+	public Incidencia() {
+	}
 
 	public Long getId() {
 		return this.id;
@@ -54,27 +58,27 @@ public class Incidencia implements BaseEntity<Long> {
 		this.id = id;
 	}
 
-	public Timestamp getDataCadastro() {
+	public Date getDataCadastro() {
 		return this.dataCadastro;
 	}
 
-	public void setDataCadastro(Timestamp dataCadastro) {
+	public void setDataCadastro(Date dataCadastro) {
 		this.dataCadastro = dataCadastro;
 	}
 
-	public Timestamp getDataValidade() {
+	public Date getDataValidade() {
 		return this.dataValidade;
 	}
 
-	public void setDataValidade(Timestamp dataValidade) {
+	public void setDataValidade(Date dataValidade) {
 		this.dataValidade = dataValidade;
 	}
 
-	public Timestamp getDataVigencia() {
+	public Date getDataVigencia() {
 		return this.dataVigencia;
 	}
 
-	public void setDataVigencia(Timestamp dataVigencia) {
+	public void setDataVigencia(Date dataVigencia) {
 		this.dataVigencia = dataVigencia;
 	}
 
