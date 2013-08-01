@@ -21,19 +21,20 @@
 		<class>br.com.gome.gomebroker.domain.Operador</class>
 		<class>br.com.gome.gomebroker.domain.Ordem</class>
 		<class>br.com.gome.gomebroker.domain.OrdemSolicitacoes</class>
-		<class>br.com.gome.gomebroker.domain.Perfil</class>
 		<class>br.com.gome.gomebroker.domain.Portfolio</class>
 		<class>br.com.gome.gomebroker.domain.PortifolioAtivo</class>
-		<class>br.com.gome.gomebroker.domain.UsuarioPerfil</class>
 		<class>br.com.gome.gomebroker.domain.Titular</class>
 		<class>br.com.gome.gomebroker.domain.Usuario</class>
+		<class>br.com.gome.gomebroker.domain.security.UsuarioPapel</class>
+		<class>br.com.gome.gomebroker.domain.security.Papel</class>
+		<class>br.com.gome.gomebroker.domain.security.Recurso</class>
+		<class>br.com.gome.gomebroker.domain.security.PapelRecurso</class>
+		<class>br.com.gome.gomebroker.domain.security.ItemMenu</class>
+
 		<class>br.com.gome.gomebroker.util.envers.entity.CustomEntity</class>
-		<class>br.com.gome.gomebroker.domain.Papel</class>
-		<class>br.com.gome.gomebroker.domain.PerfilPapel</class>
-		<class>br.com.gome.gomebroker.domain.Recurso</class>
-		<class>br.com.gome.gomebroker.domain.PapelRecurso</class>
 		
 		<properties>
+		
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.format_sql" value="false" />
 			<property name="hibernate.hbm2ddl.auto" value="none"/>
@@ -55,6 +56,30 @@
 	</persistence-unit>
 	
 	<!-- 
+	<persistence-unit name="gomebroker-client-ds"
+		transaction-type="JTA">
+	
+		<jta-data-source>java:/jboss/datasources/gomebrokerclientDS</jta-data-source>
+
+		<mapping-file>client-orm.xml</mapping-file>
+
+		<class>br.com.gome.gomebroker.domain.Papel</class>
+		<class>br.com.gome.gomebroker.domain.PerfilPapel</class>
+		<class>br.com.gome.gomebroker.domain.Recurso</class>
+		<class>br.com.gome.gomebroker.domain.PapelRecurso</class>
+		<class>br.com.gome.gomebroker.domain.UsuarioPerfil</class>
+		<class>br.com.gome.gomebroker.domain.Perfil</class>
+		<class>br.com.gome.gomebroker.domain.Menu</class>
+		
+		<properties>
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.hbm2ddl.auto" value="none"/>
+			<property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform" />
+		</properties>
+	
+	</persistence-unit>
+	
 	<persistence-unit name="gomebroker-security-ds"
 		transaction-type="JTA">
 	
