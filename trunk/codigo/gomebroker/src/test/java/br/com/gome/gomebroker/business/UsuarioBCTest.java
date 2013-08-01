@@ -1,6 +1,5 @@
 package br.com.gome.gomebroker.business;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
 import org.junit.Test;
@@ -19,7 +18,7 @@ public class UsuarioBCTest {
 	public void insert() {
 
 		Usuario usuario = new Usuario();
-		usuario.setDataCadastro(new Timestamp(new Date().getTime()));
+		usuario.setDataCadastro(new Date());
 		usuario.setDataDesativacao(null);
 		usuario.setEmail("brunogmc@gmail.com");
 		usuario.setNome("brunocorrea");
