@@ -1,8 +1,8 @@
 package br.com.gome.gomebroker.view.converter;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -14,8 +14,8 @@ import org.slf4j.Logger;
 import br.gov.frameworkdemoiselle.util.Beans;
 import br.gov.frameworkdemoiselle.util.ResourceBundle;
 
-@FacesConverter("timestampConverter")
-public class TimestampConverter implements Converter {
+@FacesConverter("dateConverter")
+public class DateConverter implements Converter {
 
 	private static final String DATE_PATTERN = "dd/MM/yyyy";
 	
@@ -35,7 +35,7 @@ public class TimestampConverter implements Converter {
 		try {
 			
 			SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN);
-			return new Timestamp(sdf.parse(value).getTime());
+			return sdf.parse(value);
 			
 		} catch (ParseException e) {
 			
@@ -49,7 +49,7 @@ public class TimestampConverter implements Converter {
 	@Override
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
 
-		if (value instanceof Timestamp) {
+		if (value instanceof Date) {
 			
 			SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN);
 			return sdf.format(value);
