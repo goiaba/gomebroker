@@ -5,7 +5,7 @@ import javax.persistence.*;
 
 import org.hibernate.envers.Audited;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Set;
 
 
@@ -24,9 +24,11 @@ public class Portfolio implements Serializable, BaseEntity<Long> {
 	private Long id;
 
 	@Column(updatable=false)
-	private Timestamp dataCadastro;
+	@Temporal(TemporalType.TIMESTAMP)
+private Date dataCadastro;
 
-	private Timestamp dataDesativacao;
+	@Temporal(TemporalType.TIMESTAMP)
+private Date dataDesativacao;
 
 	private String nome;
 
@@ -55,19 +57,19 @@ public class Portfolio implements Serializable, BaseEntity<Long> {
 		this.id = id;
 	}
 
-	public Timestamp getDataCadastro() {
+	public Date getDataCadastro() {
 		return this.dataCadastro;
 	}
 
-	public void setDataCadastro(Timestamp dataCadastro) {
+	public void setDataCadastro(Date dataCadastro) {
 		this.dataCadastro = dataCadastro;
 	}
 
-	public Timestamp getDataDesativacao() {
+	public Date getDataDesativacao() {
 		return this.dataDesativacao;
 	}
 
-	public void setDataDesativacao(Timestamp dataDesativacao) {
+	public void setDataDesativacao(Date dataDesativacao) {
 		this.dataDesativacao = dataDesativacao;
 	}
 

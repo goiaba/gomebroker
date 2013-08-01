@@ -1,11 +1,11 @@
 package br.com.gome.gomebroker.business;
 
 import br.com.gome.gomebroker.domain.Usuario;
-import br.com.gome.gomebroker.domain.UsuarioPerfil;
+import br.com.gome.gomebroker.domain.security.UsuarioPapel;
 import br.com.gome.gomebroker.persistence.UsuarioPerfilDAO;
 
-public interface UsuarioPerfilBC extends BaseBC<UsuarioPerfil, Long, UsuarioPerfilDAO> {
+public interface UsuarioPerfilBC extends BaseBC<UsuarioPapel, Long, UsuarioPerfilDAO> {
 
-	UsuarioPerfil getUsuarioPerfilPadrao(Usuario usuario);
+	UsuarioPapel getUsuarioPerfilPadrao(Usuario usuario);
 
 }

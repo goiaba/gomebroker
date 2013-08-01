@@ -1,6 +1,6 @@
 package br.com.gome.gomebroker.domain;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -12,9 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.envers.Audited;
-
 
 /**
  * The persistent class for the titular database table.
@@ -26,16 +27,18 @@ public class Titular implements BaseEntity<Long> {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="TITULAR_ID_GENERATOR", sequenceName="TITULAR_ID_SEQ", allocationSize=1)
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="TITULAR_ID_GENERATOR")
+	@SequenceGenerator(name = "TITULAR_ID_GENERATOR", sequenceName = "TITULAR_ID_SEQ", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TITULAR_ID_GENERATOR")
 	private Long id;
 
 	private String assinatura;
 
-	@Column(updatable=false)
-	private Timestamp dataCadastro;
+	@Column(updatable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataCadastro;
 
-	private Timestamp dataDesativacao;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataDesativacao;
 
 	private String login;
 
@@ -45,20 +48,20 @@ public class Titular implements BaseEntity<Long> {
 
 	private String senha;
 
-	//bi-directional many-to-one association to Conta
-	@OneToMany(mappedBy="titular")
+	// bi-directional many-to-one association to Conta
+	@OneToMany(mappedBy = "titular")
 	private Set<Conta> contas;
 
-	//bi-directional many-to-one association to Corretora
-	@ManyToOne(fetch=FetchType.LAZY)
+	// bi-directional many-to-one association to Corretora
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Corretora corretora;
 
-	//bi-directional many-to-one association to Usuario
-	@ManyToOne(fetch=FetchType.LAZY)
+	// bi-directional many-to-one association to Usuario
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Usuario usuario;
 
-    public Titular() {
-    }
+	public Titular() {
+	}
 
 	public Long getId() {
 		return this.id;
@@ -76,19 +79,19 @@ public class Titular implements BaseEntity<Long> {
 		this.assinatura = assinatura;
 	}
 
-	public Timestamp getDataCadastro() {
+	public Date getDataCadastro() {
 		return this.dataCadastro;
 	}
 
-	public void setDataCadastro(Timestamp dataCadastro) {
+	public void setDataCadastro(Date dataCadastro) {
 		this.dataCadastro = dataCadastro;
 	}
 
-	public Timestamp getDataDesativacao() {
+	public Date getDataDesativacao() {
 		return this.dataDesativacao;
 	}
 
-	public void setDataDesativacao(Timestamp dataDesativacao) {
+	public void setDataDesativacao(Date dataDesativacao) {
 		this.dataDesativacao = dataDesativacao;
 	}
 
@@ -131,7 +134,7 @@ public class Titular implements BaseEntity<Long> {
 	public void setContas(Set<Conta> contas) {
 		this.contas = contas;
 	}
-	
+
 	public Corretora getCorretora() {
 		return this.corretora;
 	}
@@ -139,7 +142,7 @@ public class Titular implements BaseEntity<Long> {
 	public void setCorretora(Corretora corretora) {
 		this.corretora = corretora;
 	}
-	
+
 	public Usuario getUsuario() {
 		return this.usuario;
 	}
@@ -147,5 +150,5 @@ public class Titular implements BaseEntity<Long> {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-	
+
 }

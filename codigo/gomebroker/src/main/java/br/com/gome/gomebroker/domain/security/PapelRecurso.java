@@ -1,9 +1,11 @@
-package br.com.gome.gomebroker.domain;
+package br.com.gome.gomebroker.domain.security;
 
 import java.io.Serializable;
 import javax.persistence.*;
 
 import org.hibernate.envers.Audited;
+
+import br.com.gome.gomebroker.domain.BaseEntity;
 
 
 /**
@@ -11,14 +13,14 @@ import org.hibernate.envers.Audited;
  * 
  */
 @Entity
-@Table(name="relpapelrecurso")
 @Audited
+@Table(name="sec_relPapelRecurso")
 public class PapelRecurso implements Serializable, BaseEntity<Long> {
 	
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="RELPAPELRECURSO_ID_GENERATOR", sequenceName="RELPAPELRECURSO_ID_SEQ", allocationSize=1)
+	@SequenceGenerator(name="RELPAPELRECURSO_ID_GENERATOR", sequenceName="SEC_RELPAPELRECURSO_ID_SEQ", allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="RELPAPELRECURSO_ID_GENERATOR")
 	private Long id;
 

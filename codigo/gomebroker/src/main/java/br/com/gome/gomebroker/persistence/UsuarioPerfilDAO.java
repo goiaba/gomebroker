@@ -1,12 +1,12 @@
 package br.com.gome.gomebroker.persistence;
 
 import br.com.gome.gomebroker.domain.Usuario;
-import br.com.gome.gomebroker.domain.UsuarioPerfil;
+import br.com.gome.gomebroker.domain.security.UsuarioPapel;
 
-public interface UsuarioPerfilDAO extends BaseDAO<UsuarioPerfil, Long> {
+public interface UsuarioPerfilDAO extends BaseDAO<UsuarioPapel, Long> {
 
-	UsuarioPerfil findUsuarioPerfilPadrao(Usuario usuario);
+	UsuarioPapel findUsuarioPerfilPadrao(Usuario usuario);
 	
-	void setUsuarioPerfilPadrao(UsuarioPerfil usuarioPerfil);
+	void setUsuarioPerfilPadrao(UsuarioPapel usuarioPapel);
 
 }

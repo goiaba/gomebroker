@@ -5,7 +5,7 @@ import javax.persistence.*;
 
 import org.hibernate.envers.Audited;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Set;
 
 
@@ -23,11 +23,14 @@ public class Ordem implements Serializable, BaseEntity<Long> {
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="ORDEM_ID_GENERATOR")
 	private Long id;
 
-	private Timestamp data;
+	@Temporal(TemporalType.TIMESTAMP)
+private Date data;
 
-	private Timestamp dataCorretora;
+	@Temporal(TemporalType.TIMESTAMP)
+private Date dataCorretora;
 
-	private Timestamp dataValidade;
+	@Temporal(TemporalType.TIMESTAMP)
+private Date dataValidade;
 
 	private String idCorretora;
 
@@ -80,27 +83,27 @@ public class Ordem implements Serializable, BaseEntity<Long> {
 		this.id = id;
 	}
 
-	public Timestamp getData() {
+	public Date getData() {
 		return this.data;
 	}
 
-	public void setData(Timestamp data) {
+	public void setData(Date data) {
 		this.data = data;
 	}
 
-	public Timestamp getDataCorretora() {
+	public Date getDataCorretora() {
 		return this.dataCorretora;
 	}
 
-	public void setDataCorretora(Timestamp dataCorretora) {
+	public void setDataCorretora(Date dataCorretora) {
 		this.dataCorretora = dataCorretora;
 	}
 
-	public Timestamp getDataValidade() {
+	public Date getDataValidade() {
 		return this.dataValidade;
 	}
 
-	public void setDataValidade(Timestamp dataValidade) {
+	public void setDataValidade(Date dataValidade) {
 		this.dataValidade = dataValidade;
 	}
 

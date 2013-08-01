@@ -5,7 +5,7 @@ import javax.persistence.*;
 
 import org.hibernate.envers.Audited;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 
 /**
@@ -22,9 +22,11 @@ public class Movimento implements Serializable, BaseEntity<Long> {
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="MOVIMENTO_ID_GENERATOR")
 	private Long id;
 
-	private Timestamp data;
+	@Temporal(TemporalType.TIMESTAMP)
+private Date data;
 
-	private Timestamp dataExecucao;
+	@Temporal(TemporalType.TIMESTAMP)
+private Date dataExecucao;
 
 	private String descricao;
 
@@ -59,19 +61,19 @@ public class Movimento implements Serializable, BaseEntity<Long> {
 		this.id = id;
 	}
 
-	public Timestamp getData() {
+	public Date getData() {
 		return this.data;
 	}
 
-	public void setData(Timestamp data) {
+	public void setData(Date data) {
 		this.data = data;
 	}
 
-	public Timestamp getDataExecucao() {
+	public Date getDataExecucao() {
 		return this.dataExecucao;
 	}
 
-	public void setDataExecucao(Timestamp dataExecucao) {
+	public void setDataExecucao(Date dataExecucao) {
 		this.dataExecucao = dataExecucao;
 	}
 
