@@ -55,11 +55,7 @@ public class Autorizador implements Authorizer {
 				
 				return true;
 			
-		} catch (Exception e) {
-			
-			// Ignore
-			
-		}
+		} catch (Exception e) {}
 		
 		return false;
 		

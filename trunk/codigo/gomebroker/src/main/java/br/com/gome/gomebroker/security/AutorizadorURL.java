@@ -18,12 +18,14 @@ import org.slf4j.Logger;
 
 import br.com.gome.gomebroker.constant.SecurityConstants;
 import br.com.gome.gomebroker.constant.ViewConstants;
+import br.gov.frameworkdemoiselle.internal.configuration.SecurityConfig;
 import br.gov.frameworkdemoiselle.security.SecurityContext;
 
 @WebFilter(urlPatterns = {"/*"}, dispatcherTypes = {DispatcherType.FORWARD, DispatcherType.REQUEST})
 public class AutorizadorURL implements Filter {
 
 	@Inject	private SecurityContext securityContext;
+	@Inject private SecurityConfig securityConfig;
 	
 	@Inject private RecursosPublicos recursosPublicos;
 	
@@ -42,6 +44,11 @@ public class AutorizadorURL implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
+		if (!securityConfig.isEnabled()) {
+			chain.doFilter(request, response);
+			return;
+		}
+		
 		this.request = (HttpServletRequest) request;
 		String url = this.request.getRequestURI().replaceAll("^/.+?/", "/");
 
