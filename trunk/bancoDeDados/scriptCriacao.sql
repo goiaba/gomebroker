@@ -1,8 +1,8 @@
 
-CREATE SEQUENCE core.itemmenu_id_seq;
+CREATE SEQUENCE core.sec_itemmenu_id_seq;
 
-CREATE TABLE core.itemMenu (
-                id INTEGER NOT NULL DEFAULT nextval('core.itemmenu_id_seq'),
+CREATE TABLE core.sec_itemMenu (
+                id INTEGER NOT NULL DEFAULT nextval('core.sec_itemmenu_id_seq'),
                 itemMenu_id_pai INTEGER NOT NULL,
                 descricaoKey VARCHAR NOT NULL,
                 url VARCHAR NOT NULL,
@@ -10,84 +10,108 @@ CREATE TABLE core.itemMenu (
                 submenu BOOLEAN NOT NULL,
                 ordem INTEGER NOT NULL,
                 dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
-                dataDesativacao TIMESTAMP DEFAULT NULL::timestamp without time zone NOT NULL,
-                CONSTRAINT itemmenu_pk PRIMARY KEY (id)
+                dataDesativacao TIMESTAMP DEFAULT NULL::timestamp without time zone,
+                CONSTRAINT sec_itemmenu_pk PRIMARY KEY (id)
 );
-COMMENT ON COLUMN core.itemMenu.id IS 'Código do item de menu';
-COMMENT ON COLUMN core.itemMenu.itemMenu_id_pai IS 'Código do item de menu pai';
-COMMENT ON COLUMN core.itemMenu.descricaoKey IS 'Chave de internacionalização da descrição do item de menu (será usada no código java para retonar a descrição na linguagem escolhida pelo usuário).';
-COMMENT ON COLUMN core.itemMenu.url IS 'URL para a qual o item de menu apontará.';
-COMMENT ON COLUMN core.itemMenu.separador IS 'Indicador de separador (ao invés de item de menu)';
-COMMENT ON COLUMN core.itemMenu.submenu IS 'Indicador de submenu (ao invés de item de menu).';
-COMMENT ON COLUMN core.itemMenu.ordem IS 'Ordenador dos itens pai de menu. Ou seja, será utilizado para ordenar, horizontalmente, os submenus pais que serão exibidos para o usuário, de acordo com o perfil em uso.';
-COMMENT ON COLUMN core.itemMenu.dataCadastro IS 'Data de cadastro do item de menu';
-COMMENT ON COLUMN core.itemMenu.dataDesativacao IS 'Data de desativação do item de menu';
+COMMENT ON COLUMN core.sec_itemMenu.id IS 'Código do item de menu';
+COMMENT ON COLUMN core.sec_itemMenu.itemMenu_id_pai IS 'Código do item de menu pai';
+COMMENT ON COLUMN core.sec_itemMenu.descricaoKey IS 'Chave de internacionalização da descrição do item de menu (será usada no código java para retonar a descrição na linguagem escolhida pelo usuário).';
+COMMENT ON COLUMN core.sec_itemMenu.url IS 'URL para a qual o item de menu apontará.';
+COMMENT ON COLUMN core.sec_itemMenu.separador IS 'Indicador de separador (ao invés de item de menu)';
+COMMENT ON COLUMN core.sec_itemMenu.submenu IS 'Indicador de submenu (ao invés de item de menu).';
+COMMENT ON COLUMN core.sec_itemMenu.ordem IS 'Ordenador dos itens pai de menu. Ou seja, será utilizado para ordenar, horizontalmente, os submenus pais que serão exibidos para o usuário, de acordo com o perfil em uso.';
+COMMENT ON COLUMN core.sec_itemMenu.dataCadastro IS 'Data de cadastro do item de menu';
+COMMENT ON COLUMN core.sec_itemMenu.dataDesativacao IS 'Data de desativação do item de menu';
 
 
-ALTER SEQUENCE core.itemmenu_id_seq OWNED BY core.itemMenu.id;
+ALTER SEQUENCE core.sec_itemmenu_id_seq OWNED BY core.sec_itemMenu.id;
 
-CREATE SEQUENCE core.recurso_id_seq;
+CREATE SEQUENCE core.sec_recurso_id_seq;
 
-CREATE TABLE core.Recurso (
-                id INTEGER NOT NULL DEFAULT nextval('core.recurso_id_seq'),
+CREATE TABLE core.sec_Recurso (
+                id INTEGER NOT NULL DEFAULT nextval('core.sec_recurso_id_seq'),
                 nome VARCHAR(255) NOT NULL,
                 descricao VARCHAR(255) DEFAULT ''::character varying NOT NULL,
+                tipo VARCHAR NOT NULL,
                 valor VARCHAR(1000) NOT NULL,
                 dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
-                dataDesativacao TIMESTAMP DEFAULT NULL::timestamp without time zone NOT NULL,
-                CONSTRAINT recurso_pk PRIMARY KEY (id)
+                dataDesativacao TIMESTAMP DEFAULT NULL::timestamp without time zone,
+                CONSTRAINT sec_recurso_pk PRIMARY KEY (id)
 );
-COMMENT ON COLUMN core.Recurso.nome IS 'Nome do Recurso';
-COMMENT ON COLUMN core.Recurso.descricao IS 'Descrição do Recurso';
-COMMENT ON COLUMN core.Recurso.valor IS 'Valor do recurso (url)';
-COMMENT ON COLUMN core.Recurso.dataCadastro IS 'Data de cadastro do Recurso';
-COMMENT ON COLUMN core.Recurso.dataDesativacao IS 'Data de desativação do Recurso';
+COMMENT ON TABLE core.sec_Recurso IS 'Recursos (páginas) disponíveis no sistema.';
+COMMENT ON COLUMN core.sec_Recurso.nome IS 'Nome do Recurso';
+COMMENT ON COLUMN core.sec_Recurso.descricao IS 'Descrição do Recurso';
+COMMENT ON COLUMN core.sec_Recurso.tipo IS 'Tipo do recurso: botão, página, item de menu, etc. Deve ser um enum.';
+COMMENT ON COLUMN core.sec_Recurso.valor IS 'Valor do recurso (url)';
+COMMENT ON COLUMN core.sec_Recurso.dataCadastro IS 'Data de cadastro do Recurso';
+COMMENT ON COLUMN core.sec_Recurso.dataDesativacao IS 'Data de desativação do Recurso';
 
 
-ALTER SEQUENCE core.recurso_id_seq OWNED BY core.Recurso.id;
+ALTER SEQUENCE core.sec_recurso_id_seq OWNED BY core.sec_Recurso.id;
 
 CREATE UNIQUE INDEX recurso_idx
- ON core.Recurso
+ ON core.sec_Recurso
  ( nome );
 
-CREATE TABLE core.papel (
-                id INTEGER NOT NULL,
+CREATE SEQUENCE core.sec_papel_id_seq;
+
+CREATE TABLE core.sec_papel (
+                id INTEGER NOT NULL DEFAULT nextval('core.sec_papel_id_seq'),
                 nome VARCHAR(255) NOT NULL,
                 descricao VARCHAR(255) DEFAULT ''::character varying NOT NULL,
                 obs TEXT DEFAULT ''::text NOT NULL,
                 dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
-                dataDesativacao TIMESTAMP DEFAULT NULL::timestamp without time zone NOT NULL,
-                CONSTRAINT papel_pk PRIMARY KEY (id)
+                dataDesativacao TIMESTAMP DEFAULT NULL::timestamp without time zone,
+                CONSTRAINT sec_papel_pk PRIMARY KEY (id)
 );
-COMMENT ON COLUMN core.papel.id IS 'Código do papel';
-COMMENT ON COLUMN core.papel.nome IS 'Nome do Papel';
-COMMENT ON COLUMN core.papel.descricao IS 'Descrição do Papel';
-COMMENT ON COLUMN core.papel.obs IS 'Observação para o Papel';
-COMMENT ON COLUMN core.papel.dataCadastro IS 'Data de cadastro do Papel';
-COMMENT ON COLUMN core.papel.dataDesativacao IS 'Data de desativação do Papel';
+COMMENT ON TABLE core.sec_papel IS 'Papel do usuário na utilização do sistema.';
+COMMENT ON COLUMN core.sec_papel.id IS 'Código do papel';
+COMMENT ON COLUMN core.sec_papel.nome IS 'Nome do Papel';
+COMMENT ON COLUMN core.sec_papel.descricao IS 'Descrição do Papel';
+COMMENT ON COLUMN core.sec_papel.obs IS 'Observação para o Papel';
+COMMENT ON COLUMN core.sec_papel.dataCadastro IS 'Data de cadastro do Papel';
+COMMENT ON COLUMN core.sec_papel.dataDesativacao IS 'Data de desativação do Papel';
 
+
+ALTER SEQUENCE core.sec_papel_id_seq OWNED BY core.sec_papel.id;
 
 CREATE UNIQUE INDEX papel_idx
- ON core.papel
+ ON core.sec_papel
  ( nome );
 
-CREATE SEQUENCE core.relpapelrecurso_id_seq;
+CREATE SEQUENCE core.sec_relpapelitemmenu_id_seq;
 
-CREATE TABLE core.relPapelRecurso (
-                id INTEGER NOT NULL DEFAULT nextval('core.relpapelrecurso_id_seq'),
+CREATE TABLE core.sec_relPapelItemMenu (
+                id INTEGER NOT NULL DEFAULT nextval('core.sec_relpapelitemmenu_id_seq'),
+                itemMenu_id INTEGER NOT NULL,
+                papel_id INTEGER NOT NULL,
+                CONSTRAINT sec_relpapelitemmenu_pk PRIMARY KEY (id)
+);
+COMMENT ON TABLE core.sec_relPapelItemMenu IS 'Relação entre os papeis disponiveis no sistema e os itens de menu que deve ser exibidos na interface com o usuário.';
+COMMENT ON COLUMN core.sec_relPapelItemMenu.itemMenu_id IS 'Código do item de menu';
+COMMENT ON COLUMN core.sec_relPapelItemMenu.papel_id IS 'Código do papel';
+
+
+ALTER SEQUENCE core.sec_relpapelitemmenu_id_seq OWNED BY core.sec_relPapelItemMenu.id;
+
+CREATE SEQUENCE core.sec_relpapelrecurso_id_seq;
+
+CREATE TABLE core.sec_relPapelRecurso (
+                id INTEGER NOT NULL DEFAULT nextval('core.sec_relpapelrecurso_id_seq'),
                 papel_id INTEGER NOT NULL,
                 recurso_id INTEGER NOT NULL,
-                CONSTRAINT relpapelrecurso_pk PRIMARY KEY (id)
+                CONSTRAINT sec_relpapelrecurso_pk PRIMARY KEY (id)
 );
-COMMENT ON COLUMN core.relPapelRecurso.id IS 'Código da relação entre papel e seus recursos';
-COMMENT ON COLUMN core.relPapelRecurso.papel_id IS 'Código do papel';
-COMMENT ON COLUMN core.relPapelRecurso.recurso_id IS 'Código do recurso';
+COMMENT ON TABLE core.sec_relPapelRecurso IS 'Relacionamento entre os papeis disponiveis no sistema e os recursos (páginas).';
+COMMENT ON COLUMN core.sec_relPapelRecurso.id IS 'Código da relação entre papel e seus recursos';
+COMMENT ON COLUMN core.sec_relPapelRecurso.papel_id IS 'Código do papel';
+COMMENT ON COLUMN core.sec_relPapelRecurso.recurso_id IS 'Código do recurso';
 
 
-ALTER SEQUENCE core.relpapelrecurso_id_seq OWNED BY core.relPapelRecurso.id;
+ALTER SEQUENCE core.sec_relpapelrecurso_id_seq OWNED BY core.sec_relPapelRecurso.id;
 
 CREATE UNIQUE INDEX relpapelrecurso_idx
- ON core.relPapelRecurso
+ ON core.sec_relPapelRecurso
  ( papel_id, recurso_id );
 
 CREATE SEQUENCE core.usuario_id_seq;
@@ -116,97 +140,55 @@ COMMENT ON COLUMN core.usuario.dataDesativacao IS 'Data de desativação do Usu�
 
 ALTER SEQUENCE core.usuario_id_seq OWNED BY core.usuario.id;
 
-CREATE SEQUENCE core.perfil_id_seq;
+CREATE SEQUENCE core.sec_relusuariopapel_id_seq;
 
-CREATE TABLE core.perfil (
-                id INTEGER NOT NULL DEFAULT nextval('core.perfil_id_seq'),
-                nome VARCHAR(255) NOT NULL,
-                descricao VARCHAR(255) DEFAULT ''::character varying,
-                obs TEXT DEFAULT ''::text,
+CREATE TABLE core.sec_relUsuarioPapel (
+                id INTEGER NOT NULL DEFAULT nextval('core.sec_relusuariopapel_id_seq'),
+                papel_id INTEGER NOT NULL,
+                usuario_id INTEGER NOT NULL,
+                padrao BOOLEAN DEFAULT false NOT NULL,
                 dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
                 dataDesativacao TIMESTAMP DEFAULT NULL::timestamp without time zone,
-                CONSTRAINT perfil_pk PRIMARY KEY (id)
+                CONSTRAINT sec_relusuariopapel_pk PRIMARY KEY (id)
 );
-COMMENT ON TABLE core.perfil IS 'Perfis para Usuários';
-COMMENT ON COLUMN core.perfil.id IS 'Código do Perfil';
-COMMENT ON COLUMN core.perfil.nome IS 'Nome do Perfil';
-COMMENT ON COLUMN core.perfil.descricao IS 'Descrição do Perfil';
-COMMENT ON COLUMN core.perfil.obs IS 'Observação para o Perfil';
-COMMENT ON COLUMN core.perfil.dataCadastro IS 'Data de cadastro do Perfil';
-COMMENT ON COLUMN core.perfil.dataDesativacao IS 'Data de desativação do Perfil';
+COMMENT ON TABLE core.sec_relUsuarioPapel IS 'Relacionamento entre o usuário e seus papeis no sistema.';
+COMMENT ON COLUMN core.sec_relUsuarioPapel.papel_id IS 'Código do papel';
+COMMENT ON COLUMN core.sec_relUsuarioPapel.usuario_id IS 'Código do Usuário';
+COMMENT ON COLUMN core.sec_relUsuarioPapel.padrao IS 'Marcador de perfil padrão do usuário';
+COMMENT ON COLUMN core.sec_relUsuarioPapel.dataCadastro IS 'Data de cadastro da relação entre usuário e papel';
+COMMENT ON COLUMN core.sec_relUsuarioPapel.dataDesativacao IS 'Data de desativação da relação entre usuário e papel';
 
 
-ALTER SEQUENCE core.perfil_id_seq OWNED BY core.perfil.id;
+ALTER SEQUENCE core.sec_relusuariopapel_id_seq OWNED BY core.sec_relUsuarioPapel.id;
 
-CREATE UNIQUE INDEX perfil_idx
- ON core.perfil
- ( nome );
-
-CREATE TABLE core.relPerfilPapel (
-                id INTEGER NOT NULL,
-                papel_id INTEGER NOT NULL,
-                perfil_id INTEGER NOT NULL,
-                CONSTRAINT relperfilpapel_pk PRIMARY KEY (id)
-);
-COMMENT ON COLUMN core.relPerfilPapel.papel_id IS 'Código do papel';
-COMMENT ON COLUMN core.relPerfilPapel.perfil_id IS 'Código do Perfil';
-
-
-CREATE UNIQUE INDEX relperfilpapel_idx
- ON core.relPerfilPapel
- ( papel_id, perfil_id );
-
-CREATE SEQUENCE core.relusuarioperfil_id_seq;
-
-CREATE TABLE core.relUsuarioPerfil (
-                id INTEGER NOT NULL DEFAULT nextval('core.relusuarioperfil_id_seq'),
-                usuario_id INTEGER NOT NULL,
-                perfil_id INTEGER NOT NULL,
-                dataVigencia TIMESTAMP DEFAULT now() NOT NULL,
-                dataValidade TIMESTAMP DEFAULT '9999-01-01 00:00:00'::timestamp without time zone NOT NULL,
-                dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
-                padrao BOOLEAN DEFAULT false NOT NULL,
-                CONSTRAINT relusuarioperfil_pk PRIMARY KEY (id)
-);
-COMMENT ON TABLE core.relUsuarioPerfil IS 'Perfil do Usuário para utilização do sismtema.';
-COMMENT ON COLUMN core.relUsuarioPerfil.usuario_id IS 'Código do Usuário';
-COMMENT ON COLUMN core.relUsuarioPerfil.perfil_id IS 'Código do Perfil';
-COMMENT ON COLUMN core.relUsuarioPerfil.dataVigencia IS 'Data do início da vigência do Perfil';
-COMMENT ON COLUMN core.relUsuarioPerfil.dataValidade IS 'Data do fim da vigência do Perfil';
-COMMENT ON COLUMN core.relUsuarioPerfil.dataCadastro IS 'Data de Cadastro do Perfil para o Usuário';
-COMMENT ON COLUMN core.relUsuarioPerfil.padrao IS 'Marcador de perfil padrão do usuário';
-
-
-ALTER SEQUENCE core.relusuarioperfil_id_seq OWNED BY core.relUsuarioPerfil.id;
-
-CREATE UNIQUE INDEX relusuarioperfil_idx
- ON core.relUsuarioPerfil
- ( usuario_id, perfil_id );
+CREATE UNIQUE INDEX relusuariopapel_idx
+ ON core.sec_relUsuarioPapel
+ ( papel_id, usuario_id );
 
 CREATE SEQUENCE core.incidencia_id_seq;
 
 CREATE TABLE core.incidencia (
                 id INTEGER NOT NULL DEFAULT nextval('core.incidencia_id_seq'),
                 nome VARCHAR(255) NOT NULL,
-                dataVigencia TIMESTAMP DEFAULT now() NOT NULL,
-                dataValidade TIMESTAMP DEFAULT '9999-01-01 00:00:00'::timestamp without time zone NOT NULL,
                 sobre VARCHAR(255) NOT NULL,
                 tipo VARCHAR(255) NOT NULL,
                 valor DOUBLE PRECISION DEFAULT 0 NOT NULL,
                 obs TEXT DEFAULT ''::text,
                 dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
+                dataVigencia TIMESTAMP DEFAULT now() NOT NULL,
+                dataValidade TIMESTAMP DEFAULT '9999-01-01 00:00:00'::timestamp without time zone NOT NULL,
                 CONSTRAINT incidencia_pk PRIMARY KEY (id)
 );
 COMMENT ON TABLE core.incidencia IS 'Incidentes sobre as operações (Impostos, Emolumentos, etc)';
 COMMENT ON COLUMN core.incidencia.id IS 'Código da Incidencia';
 COMMENT ON COLUMN core.incidencia.nome IS 'Nome da Incidência';
-COMMENT ON COLUMN core.incidencia.dataVigencia IS 'Data do início da vigência da Incidência';
-COMMENT ON COLUMN core.incidencia.dataValidade IS 'Data do fim da vigência da Incidência';
 COMMENT ON COLUMN core.incidencia.sobre IS 'Sobre o quê a Incidência é aplicada (execução de ordem, etc)';
 COMMENT ON COLUMN core.incidencia.tipo IS 'Tipo de Incidência (percentual ou absoluta)';
 COMMENT ON COLUMN core.incidencia.valor IS 'Valor da Incidência';
 COMMENT ON COLUMN core.incidencia.obs IS 'Observação para a Incidência';
 COMMENT ON COLUMN core.incidencia.dataCadastro IS 'Data de Cadastro da Incidência';
+COMMENT ON COLUMN core.incidencia.dataVigencia IS 'Data do início da vigência da Incidência';
+COMMENT ON COLUMN core.incidencia.dataValidade IS 'Data do fim da vigência da Incidência';
 
 
 ALTER SEQUENCE core.incidencia_id_seq OWNED BY core.incidencia.id;
@@ -594,30 +576,44 @@ COMMENT ON COLUMN core.ativoCotacoes.qtdPapeis IS 'Qtd de papeis movimentados';
 COMMENT ON COLUMN core.ativoCotacoes.volume IS 'Volume das negociacoes';
 
 
-ALTER TABLE core.itemMenu ADD CONSTRAINT itemmenu_itemmenu_fk
+ALTER TABLE core.sec_itemMenu ADD CONSTRAINT itemmenu_itemmenu_fk
 FOREIGN KEY (itemMenu_id_pai)
-REFERENCES core.itemMenu (id)
+REFERENCES core.sec_itemMenu (id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE core.relPapelRecurso ADD CONSTRAINT recurso_relpapelrecurso_fk
+ALTER TABLE core.sec_relPapelItemMenu ADD CONSTRAINT itemmenu_relpapelitemmenu_fk
+FOREIGN KEY (itemMenu_id)
+REFERENCES core.sec_itemMenu (id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE core.sec_relPapelRecurso ADD CONSTRAINT recurso_relpapelrecurso_fk
 FOREIGN KEY (recurso_id)
-REFERENCES core.Recurso (id)
+REFERENCES core.sec_Recurso (id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE core.relPerfilPapel ADD CONSTRAINT ppel_relperfilpapel_fk
+ALTER TABLE core.sec_relPapelRecurso ADD CONSTRAINT papel_relpapelrecurso_fk
 FOREIGN KEY (papel_id)
-REFERENCES core.papel (id)
+REFERENCES core.sec_papel (id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE core.relPapelRecurso ADD CONSTRAINT papel_relpapelrecurso_fk
+ALTER TABLE core.sec_relUsuarioPapel ADD CONSTRAINT papel_relusuariopapel_fk
 FOREIGN KEY (papel_id)
-REFERENCES core.papel (id)
+REFERENCES core.sec_papel (id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE core.sec_relPapelItemMenu ADD CONSTRAINT papel_relpapelitemmenu_fk
+FOREIGN KEY (papel_id)
+REFERENCES core.sec_papel (id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -636,7 +632,7 @@ ON DELETE CASCADE
 ON UPDATE CASCADE
 NOT DEFERRABLE;
 
-ALTER TABLE core.relUsuarioPerfil ADD CONSTRAINT relusuarioperfil_usuario_fk
+ALTER TABLE core.sec_relUsuarioPapel ADD CONSTRAINT relusuarioperfil_usuario_fk
 FOREIGN KEY (usuario_id)
 REFERENCES core.usuario (id)
 ON DELETE CASCADE
@@ -648,20 +644,6 @@ FOREIGN KEY (usuario_id)
 REFERENCES core.usuario (id)
 ON DELETE CASCADE
 ON UPDATE CASCADE
-NOT DEFERRABLE;
-
-ALTER TABLE core.relUsuarioPerfil ADD CONSTRAINT relusuarioperfil_perfil_fk
-FOREIGN KEY (perfil_id)
-REFERENCES core.perfil (id)
-ON DELETE CASCADE
-ON UPDATE CASCADE
-NOT DEFERRABLE;
-
-ALTER TABLE core.relPerfilPapel ADD CONSTRAINT perfil_relperfilpapel_fk
-FOREIGN KEY (perfil_id)
-REFERENCES core.perfil (id)
-ON DELETE NO ACTION
-ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 ALTER TABLE core.ativo ADD CONSTRAINT ativo_empresa_fk
