@@ -28,9 +28,6 @@ public class RecursosPublicos implements Serializable {
 	
 		recursos = new HashMap<String, List<String>>();
 		
-		recursos.put(SecurityConstants.PUBLIC_URL, new ArrayList<String>());
-		recursos.put(SecurityConstants.PUBLIC_STARTS_WITH_URL, new ArrayList<String>());
-		
 		atualizaMapaDeRecursosPublicos();
 		
 	}
