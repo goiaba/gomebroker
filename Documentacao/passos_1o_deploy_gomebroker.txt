@@ -1,0 +1,118 @@
+#######Instalando driver do postgres no jboss#######
+#Baixar o driver jdbc do postgres (postgresql-9.2-1003.jdbc4.jar) em http://jdbc.postgresql.org/download.html
+#Copiar o arquivo baixado para /opt/demoiselle/server/jboss-7.1/standalone/deployments/
+
+cp ~/Downloads/postgresql-9.2-1003.jdbc4.jar /opt/demoiselle/server/jboss-7.1/standalone/deployments/
+
+#Mudar dono e permissões do arquivo
+
+sudo chown -R 1010.root /opt/demoiselle/server/jboss-7.1/standalone/deployments/postgresql-9.2-1003.jdbc4.jar
+sudo chmod -R 777 /opt/demoiselle/server/jboss-7.1/standalone/deployments/postgresql-9.2-1003.jdbc4.jar
+####################################################
+
+#######Configurando search_path do postgres#######
+sudo gedit /opt/PostgreSQL/9.2/data/postgresql.conf
+#procurar por search_path e inserir uma linha abaixo da encontrada (que deve estar comentada) contendo o seguinte: search_path = '"$user",core'
+#reiniciar o serviço
+/etc/init.d/postgresql-9.2 restart
+####################################################
+
+#######Fazendo checkout do projeto#######
+#instalando cliente subversion
+sudo apt-get install subversion
+#posicionando em home do usuário
+cd ~
+#fazendo checkout
+svn co https://subversion.assembla.com/svn/gomebroker/
+#criando link simbólico para facilitar o import no eclipse
+ln -s ~/gomebroker/trunk/codigo/gomebroker/ ~/workspace/
+####################################################
+
+#######Criando as bases de dados#######
+#Conectar como usuário postgres no pgadmin e escolher o banco de dados postgres, o item de menu da lupinha sql ficará disponível
+#Clicar no item do menu, colar os dois create (role e database) abaixo no campo de texto e pressionar F5
+
+CREATE ROLE gomebroker LOGIN
+  ENCRYPTED PASSWORD 'md59daf4e4c5f5dc68fe74fbb9375fa3831'
+  NOSUPERUSER NOINHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;
+
+CREATE DATABASE gomebroker
+  WITH OWNER = gomebroker
+       ENCODING = 'UTF8'
+       TABLESPACE = pg_default
+       LC_COLLATE = 'en_US.UTF-8'
+       LC_CTYPE = 'en_US.UTF-8'
+       CONNECTION LIMIT = -1;
+
+#Fechar a janela de sql, voltar para a tela principal do pgadmin e atualizar para aparecer o novo database. Selecioná-lo e abrir novamente a tela de sql para executar os comandos abaixo: 
+
+CREATE SCHEMA core
+  AUTHORIZATION gomebroker;
+
+GRANT ALL ON SCHEMA core TO gomebroker;
+GRANT ALL ON SCHEMA core TO public;
+
+DROP SCHEMA public cascade;
+
+#No pgadmin, criar nova conexão ao servidor (localhost), com usuário gomebroker (senha gomebroker, para facilitar). Para isso, selecionar Servers e clicar na tomadinha existente no menu.
+#Rodar os scripts abaixo (<gomebroker>/trunk/bancoDeDados/) através do pgadmin, logado através da conexão criada no passo anterior
+#scriptCriacao.sql
+#scriptCriacaoAudit.sql
+#populaSecurity.sql
+####################################################
+
+#######Configurando o datasource no jboss#######
+#Adicionando usuário de gerenciamento do jboss
+#Default para as duas primeiras perguntas (só dar enter)
+#escolher usuário e passwd
+
+/opt/demoiselle/server/jboss-7.1/bin/add-user.sh 
+
+#Iniciar o servidor
+
+/opt/demoiselle/server/jboss-7.1/bin/standalone.sh
+
+#No navegador, acessar localhost:8080 e logar na interface adminstrativa com usário e senha criados anteriormente.
+#Clicar em "profile" no canto superior da tela e depois em "connector" e "datasources" no menu do lado esquerdo.
+#Clicar em "add"
+
+Name:
+	gomebrokerDS
+JNDI Name:
+	java:jboss/datasources/gomebrokerDS
+Driver:
+	postgresql-9.2-1002.jdbc4.jar
+Connection URL:
+	jdbc:postgresql://localhost:5432/gomebroker
+Username:
+	gomebroker
+Password:
+	gomebroker
+
+#Selecionar o datasource criado e clicar em "enable"
+#Abrir a aba "connection", clicar em editar e selecionar "use JTA?"
+#Clicar em "Test connection"
+####################################################
+
+#######Instalando plugin do svn no eclipse#######
+#Abrir o eclipse
+#Help -> Eclipse Marketplace -> Search
+#Procurar por subclipse
+#Clicar install e seguir os passos indicados
+####################################################
+
+#######Importando projeto no eclipse#######
+#Clicar com o botão direito em "package explorer" -> "import..."
+#"General" -> "Existing projects into workspace" -> "Selec root directory"
+#Escolher gomebroker
+#Finish
+
+#Aguardar o fim do "building workspace"
+#Clicar com o botão direito em gomebroker -> "Run as" -> "Run on server"
+#Escolher JBoss-7.1
+#Finish
+#Abra o navegador e tente acessar localhost:8080/gomebroker
+#o usuário é goiaba e a senha senha.
+####################################################
+
+
