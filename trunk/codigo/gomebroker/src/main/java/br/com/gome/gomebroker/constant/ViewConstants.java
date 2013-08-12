@@ -14,6 +14,8 @@ public interface ViewConstants {
 	 */
 	static final String LOGIN_PAGE_JSF = FS + "login.jsf";
 	
+	static final String INDEX_PAGE_JSF = FS + "index.jsf";
+	
 	/**
 	 * String de comparação com a viewId do FacesContext ao
 	 *  verificar se a página tentando ser acessada por um
@@ -26,5 +28,7 @@ public interface ViewConstants {
      *  de menu que invoca o método de logout da aplicação.
      */
 	static final String METHOD_EXPRESSION_LOGOUT = "#{securityContext.logout()}";
-	
+
+	static final String AUTH_MESSAGE_KEY = "br.com.gome.gomebroker.AuthorizationFailedMessage";
+
 }
