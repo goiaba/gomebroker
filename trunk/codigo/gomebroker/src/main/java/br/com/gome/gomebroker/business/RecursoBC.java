@@ -10,6 +10,8 @@ public interface RecursoBC extends BaseBC<Recurso, Long, RecursoDAO> {
 
 	List<Recurso> getRecursosDisponiveis(Papel papel);
 
-	List<Recurso> getRecursosPorTipo(String... tiposRecursos);
+	List<Recurso> getRecursosPorTipo(boolean apenasRecursosAtivos, String... tiposRecursos);
+
+	List<Recurso> find(String searchString);
 
 }

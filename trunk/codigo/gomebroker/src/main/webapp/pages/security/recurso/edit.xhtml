@@ -1,0 +1,107 @@
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/template/mainTemplate.xhtml">
+
+	<ui:define name="mainContainer">
+
+		<h:form prependId="false">
+
+			<p:toolbar>
+
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{messages['button.save']}"
+						action="#{recursoEditMB.insert}"
+						rendered="#{!recursoEditMB.updateMode}" ajax="false" />
+
+					<p:commandButton value="#{messages['button.save']}"
+						action="#{recursoEditMB.update}"
+						rendered="#{recursoEditMB.updateMode}" ajax="false" />
+
+					<p:commandButton value="#{messages['button.delete']}"
+						onclick="confirmation.show()"
+						rendered="#{recursoEditMB.updateMode}" type="button"
+						immediate="true" ajax="false" />
+
+					<p:commandButton value="#{messages['button.cancel']}"
+						action="#{recursoEditMB.getPreviousView}" immediate="true"
+						ajax="false" />
+
+				</p:toolbarGroup>
+
+			</p:toolbar>
+
+			<br />
+
+			<p:fieldset legend="#{messages['view.security.recurso.label']}"
+				toggleable="false">
+
+				<h:panelGrid id="fields" columns="3">
+
+					<h:outputLabel
+						value="#{messages['view.security.recurso.label.id']}: " for="id"
+						styleClass="text-input" rendered="#{recursoEditMB.updateMode}" />
+					<h:outputText id="id" value="#{recursoEditMB.bean.id}"
+						rendered="#{recursoEditMB.updateMode}" />
+					<p:message for="id" />
+
+					<h:outputLabel
+						value="#{messages['view.security.recurso.label.nome']}: "
+						for="nome" styleClass="text-input" />
+					<h:inputText id="nome" value="#{recursoEditMB.bean.nome}"
+						title="#{messages['view.security.recurso.alt.id']}" />
+					<p:message for="nome" />
+
+					<h:outputLabel
+						value="#{messages['view.security.recurso.label.descricao']}: "
+						for="descricao" styleClass="text-input" />
+					<h:inputText id="descricao" value="#{recursoEditMB.bean.descricao}"
+						title="#{messages['view.security.recurso.alt.descricao']}" />
+					<p:message for="descricao" />
+
+					<h:outputLabel
+						value="#{messages['view.security.recurso.label.tipo']}: "
+						for="tipo" styleClass="text-input" />
+					<h:inputText id="tipo" value="#{recursoEditMB.bean.tipo}"
+						title="#{messages['view.security.recurso.alt.tipo']}" />
+					<p:message for="tipo" />
+
+					<h:outputLabel
+						value="#{messages['view.security.recurso.label.valor']}: "
+						for="valor" styleClass="text-input" />
+					<h:inputText id="valor" value="#{recursoEditMB.bean.valor}"
+						title="#{messages['view.security.recurso.alt.valor']}" />
+					<p:message for="valor" />
+
+					<h:outputLabel
+						value="#{messages['view.security.recurso.label.dataDesativacao']}: "
+						for="dataDesativacao" styleClass="text-input" />
+					<p:calendar id="dataDesativacao" pattern="dd/mm/yyyy"
+						converter="dateConverter"
+						value="#{recursoEditMB.bean.dataDesativacao}"
+						title="#{messages['view.security.recurso.alt.dataDesativacao']}" />
+					<p:message for="dataDesativacao" />
+
+				</h:panelGrid>
+
+			</p:fieldset>
+
+		</h:form>
+
+		<p:confirmDialog message="#{messages['label.confirm.delete']}"
+			header="#{messages['label.dialog.delete']}" severity="alert"
+			widgetVar="confirmation" appendToBody="true">
+
+			<h:form>
+				<h:commandButton value="#{messages['button.dialog.yes']}"
+					action="#{recursoEditMB.delete}" immediate="true" ajax="false" />
+				<h:commandButton value="#{messages['button.dialog.no']}"
+					onclick="confirmation.hide()" type="button" />
+			</h:form>
+
+		</p:confirmDialog>
+
+	</ui:define>
+
+</ui:composition>

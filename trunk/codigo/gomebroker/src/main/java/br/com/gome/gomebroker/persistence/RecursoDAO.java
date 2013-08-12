@@ -9,6 +9,8 @@ public interface RecursoDAO extends BaseDAO<Recurso, Long> {
 
 	List<Recurso> findRecursosDisponiveis(Papel papel);
 
-	List<Recurso> findRecursosPorTipo(String... tipoRecursos);
+	List<Recurso> findRecursosPorTipo(boolean apenasRecursosAtivos, String... tipoRecursos);
+
+	List<Recurso> find(String searchString);
 
 }

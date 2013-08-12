@@ -25,9 +25,16 @@ public class RecursoBCImpl extends BaseBCImpl<Recurso, Long, RecursoDAO> impleme
 	}
 
 	@Override
-	public List<Recurso> getRecursosPorTipo(String... tiposRecurso) {
+	public List<Recurso> getRecursosPorTipo(boolean apenasRecursosAtivos, String... tiposRecurso) {
 
-		return recursoDao.findRecursosPorTipo(tiposRecurso);
+		return recursoDao.findRecursosPorTipo(apenasRecursosAtivos, tiposRecurso);
+		
+	}
+
+	@Override
+	public List<Recurso> find(String searchString) {
+
+		return recursoDao.find(searchString);
 		
 	}
 
