@@ -1,66 +1,75 @@
 <html xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui"
 	xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets">
 
-<f:view contentType="text/html">
+	<f:view contentType="text/html">
+	
+		<h:head>
 
-	<h:head>
+		<script type="text/javascript">
+		    function enableDeleteButton(enable) {
+		        // Get the panel using its ID
+		        var obj = document.getElementById(":j_idt8:button-delete");
+		        
+		        if (enable) {
+		            obj.disabled = "enabled";
+		        } else {
+		            obj.disabled = "disabled";
+		        }
+		    }
+		</script>
 
 		<title>#{messages['main.app.title']}</title>
-		
-		<link type="text/css" rel="stylesheet" href="css/styles.css" />
-		<link type="text/css" rel="stylesheet" href="#{request.contextPath}/css/default.css" />
-		<link type="text/css" rel="stylesheet" href="#{request.contextPath}/css/syntaxhighlighter/syntaxhighlighter.css" />
-
-		<style type="text/css">
-		
-			.ui-layout-north {
-				z-index: 20 !important;
-				overflow: visible !important;;
-			}
 			
-			.ui-layout-north .ui-layout-unit-content {
-				overflow: visible !important;
-			}
-		
-		</style>
-		
-	</h:head>
-
-	<h:body>
-
-		<p:layout fullPage="true">
-
-			<p:layoutUnit id="top" position="north" size="50">
-
-				<ui:include src="/menu.xhtml" />
+			<link type="text/css" rel="stylesheet" href="#{request.contextPath}/css/default.css" />
+			<link type="text/css" rel="stylesheet" href="#{request.contextPath}/css/syntaxhighlighter/syntaxhighlighter.css" />
+	
+			<style type="text/css">
+			
+				.ui-layout-north {
+					z-index: 20 !important;
+					overflow: visible !important;;
+				}
 				
-			</p:layoutUnit>
-
-			<p:layoutUnit id="bottom" position="south" size="60">
+				.ui-layout-north .ui-layout-unit-content {
+					overflow: visible !important;
+				}
 			
-				<ui:insert name="footerContainer" />
+			</style>
+			
+		</h:head>
+	
+		<h:body>
+	
+			<p:layout fullPage="true">
+	
+				<p:layoutUnit id="top" position="north" size="50">
+	
+					<ui:include src="/menu.xhtml" />
+					
+				</p:layoutUnit>
+	
+				<p:layoutUnit id="bottom" position="south" size="60">
 				
-			</p:layoutUnit>
-
-			<p:layoutUnit id="left" position="west" size="300" resizable="true" closable="false" collapsible="true" header="Necessário???" minSize="200">
-			
-				<ui:insert name="leftContainer" />
-								
-			</p:layoutUnit>
-
-			<p:layoutUnit id="center" position="center">
-
-				<h:form>
-
+					<ui:insert name="footerContainer" />
+					
+				</p:layoutUnit>
+	
+				<p:layoutUnit id="left" position="west" resizable="true" closable="false" collapsible="true" header="Necessário???" minSize="200">
+				
+					<ui:insert name="leftContainer" />
+									
+				</p:layoutUnit>
+	
+				<p:layoutUnit id="center" position="center">
+	
 					<ui:insert name="mainContainer" />
+	
+				</p:layoutUnit>
+	
+			</p:layout>
+	
+		</h:body>
+	
+	</f:view>
 
-				</h:form>
-				
-			</p:layoutUnit>
-
-		</p:layout>
-
-	</h:body>
-
-</f:view>
 </html>
