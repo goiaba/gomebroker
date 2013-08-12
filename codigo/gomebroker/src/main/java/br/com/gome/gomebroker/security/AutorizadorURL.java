@@ -20,6 +20,7 @@ import br.com.gome.gomebroker.constant.SecurityConstants;
 import br.com.gome.gomebroker.constant.ViewConstants;
 import br.gov.frameworkdemoiselle.internal.configuration.SecurityConfig;
 import br.gov.frameworkdemoiselle.security.SecurityContext;
+import br.gov.frameworkdemoiselle.util.ResourceBundle;
 
 @WebFilter(urlPatterns = {"/*"}, dispatcherTypes = {DispatcherType.FORWARD, DispatcherType.REQUEST})
 public class AutorizadorURL implements Filter {
@@ -28,7 +29,7 @@ public class AutorizadorURL implements Filter {
 	@Inject private SecurityConfig securityConfig;
 	
 	@Inject private RecursosPublicos recursosPublicos;
-	
+	@Inject private ResourceBundle bundle;
 	@Inject private Logger logger;
 
 	private HttpServletRequest request;
@@ -44,6 +45,8 @@ public class AutorizadorURL implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
+		request.setCharacterEncoding("UTF-8");
+		
 		if (!securityConfig.isEnabled()) {
 			chain.doFilter(request, response);
 			return;
@@ -58,7 +61,17 @@ public class AutorizadorURL implements Filter {
 
 		} else {
 
-			redirect(response, getContext() + ViewConstants.LOGIN_PAGE_JSF);
+			if (securityContext.isLoggedIn()) {
+			
+				String message = bundle.getString("security.autorizador.usuario-sem-autorizacao", url);
+				this.request.getSession().setAttribute(ViewConstants.AUTH_MESSAGE_KEY, message);
+				redirect(response, getContext() + ViewConstants.INDEX_PAGE_JSF);
+				
+			} else {
+			
+				redirect(response, getContext() + ViewConstants.LOGIN_PAGE_JSF);
+				
+			}
 
 		}
 
