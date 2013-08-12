@@ -1,30 +1,23 @@
-<html xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui"
-	xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets">
+<html xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
 
+	<f:event listener="#{sessionHelperMB.getAuthorizationFailedMessage}"
+		type="preRenderView" />
+	
 	<f:view contentType="text/html">
 	
 		<h:head>
-
-		<script type="text/javascript">
-		    function enableDeleteButton(enable) {
-		        // Get the panel using its ID
-		        var obj = document.getElementById(":j_idt8:button-delete");
-		        
-		        if (enable) {
-		            obj.disabled = "enabled";
-		        } else {
-		            obj.disabled = "disabled";
-		        }
-		    }
-		</script>
-
-		<title>#{messages['main.app.title']}</title>
-			
-			<link type="text/css" rel="stylesheet" href="#{request.contextPath}/css/default.css" />
-			<link type="text/css" rel="stylesheet" href="#{request.contextPath}/css/syntaxhighlighter/syntaxhighlighter.css" />
+	
+			<title>#{messages['main.app.title']}</title>
+	
+			<link type="text/css" rel="stylesheet"
+				href="#{request.contextPath}/css/default.css" />
+			<link type="text/css" rel="stylesheet"
+				href="#{request.contextPath}/css/syntaxhighlighter/syntaxhighlighter.css" />
 	
 			<style type="text/css">
-			
 				.ui-layout-north {
 					z-index: 20 !important;
 					overflow: visible !important;;
@@ -33,31 +26,34 @@
 				.ui-layout-north .ui-layout-unit-content {
 					overflow: visible !important;
 				}
-			
 			</style>
-			
+	
 		</h:head>
 	
-		<h:body>
+		<h:body style="background-color:#f1f1f1">
+	
+			<p:growl id="messages" globalOnly="true" />
 	
 			<p:layout fullPage="true">
 	
 				<p:layoutUnit id="top" position="north" size="50">
 	
 					<ui:include src="/menu.xhtml" />
-					
+	
 				</p:layoutUnit>
 	
-				<p:layoutUnit id="bottom" position="south" size="60">
-				
+				<p:layoutUnit id="bottom" position="south" size="20">
+	
 					<ui:insert name="footerContainer" />
-					
+	
 				</p:layoutUnit>
 	
-				<p:layoutUnit id="left" position="west" resizable="true" closable="false" collapsible="true" header="Necessário???" minSize="200">
-				
+				<p:layoutUnit id="left" position="west" resizable="true"
+					closable="false" collapsible="true" header="Necessário???"
+					minSize="200">
+	
 					<ui:insert name="leftContainer" />
-									
+	
 				</p:layoutUnit>
 	
 				<p:layoutUnit id="center" position="center">
