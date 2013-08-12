@@ -34,7 +34,7 @@ public class RecursosPublicos implements Serializable {
 
 	public void atualizaMapaDeRecursosPublicos() {
 		
-		List<Recurso> listaDeRecursos = recursoBC.getRecursosPorTipo(SecurityConstants.PUBLIC_URL, SecurityConstants.PUBLIC_STARTS_WITH_URL);
+		List<Recurso> listaDeRecursos = recursoBC.getRecursosPorTipo(true, SecurityConstants.PUBLIC_URL, SecurityConstants.PUBLIC_STARTS_WITH_URL);
 		
 		recursos.put(SecurityConstants.PUBLIC_URL, new ArrayList<String>());
 		recursos.put(SecurityConstants.PUBLIC_STARTS_WITH_URL, new ArrayList<String>());
