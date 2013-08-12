@@ -1,0 +1,113 @@
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/template/mainTemplate.xhtml">
+
+	<ui:define name="mainContainer">
+		<h:form id="frm">
+			<p:toolbar id="id1">
+				<p:toolbarGroup id="id2" align="left">
+
+					<p:commandButton title="#{messages['button.new']}"
+						icon="ui-icon-document" action="#{recursoListMB.getNextView}"
+						actionListener="#{recursoListMB.clear}" ajax="false" />
+
+					<p:commandButton id="button-delete"
+						title="#{messages['button.delete']}"
+						disabled="#{recursoListMB.containSelection()}"
+						icon="ui-icon-trash" onclick="confirmation.show()" type="button"
+						immediate="true" ajax="false" />
+
+					<p:outputLabel value=" #{messages['label.search']}: "
+						for="pesquisa" />
+					<p:inputText id="pesquisa" value="#{recursoListMB.searchString}" />
+
+					<p:commandButton id="button-search"
+						action="#{recursoListMB.clear()}"
+						title="#{messages['button.search']}" icon="ui-icon-search"
+						update="listRecursos, button-clear-search" />
+
+					<p:commandButton id="button-clear-search"
+						disabled="#{recursoListMB.searchString == null || recursoListMB.searchString.length() == 0}"
+						action="#{recursoListMB.clearSearch()}"
+						title="#{messages['button.clear-search']}"
+						icon="ui-icon-closethick" update="pesquisa, listRecursos, button-clear-search" />
+
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<br />
+
+			<p:dataTable id="listRecursos" var="bean"
+				value="#{recursoListMB.resultList}">
+
+				<f:facet name="header">#{messages['view.security.recurso.list.table.title']}</f:facet>
+
+				<p:column style="width:5%;">
+					<h:selectBooleanCheckbox
+						value="#{recursoListMB.selection[bean.id]}">
+						<f:ajax event="change" render=":frm:button-delete" />
+					</h:selectBooleanCheckbox>
+				</p:column>
+
+				<p:column style="width:5%;" sortBy="#{bean.id}">
+					<f:facet name="header">#{messages['view.security.recurso.label.id']}</f:facet>
+					<h:outputText value="#{bean.id}" />
+				</p:column>
+
+				<p:column sortBy="#{bean.nome}">
+					<f:facet name="header">#{messages['view.security.recurso.label.nome']}</f:facet>
+					<h:commandLink action="#{recursoListMB.getNextView}"
+						actionListener="#{recursoListMB.clear}">
+						<h:outputText value="#{bean.nome}" />
+						<f:param name="id" value="#{bean.id}" />
+					</h:commandLink>
+				</p:column>
+
+				<p:column sortBy="#{bean.descricao}">
+					<f:facet name="header">#{messages['view.security.recurso.label.descricao']}</f:facet>
+					<h:outputText value="#{bean.descricao}" />
+				</p:column>
+
+				<p:column sortBy="#{bean.tipo}">
+					<f:facet name="header">#{messages['view.security.recurso.label.tipo']}</f:facet>
+					<h:outputText value="#{bean.tipo}" />
+				</p:column>
+
+				<p:column sortBy="#{bean.valor}">
+					<f:facet name="header">#{messages['view.security.recurso.label.valor']}</f:facet>
+					<h:outputText value="#{bean.valor}" />
+				</p:column>
+
+				<p:column sortBy="#{bean.dataCadastro}">
+					<f:facet name="header">#{messages['view.security.recurso.label.dataCadastro']}</f:facet>
+					<h:outputText value="#{bean.dataCadastro}" />
+				</p:column>
+
+				<p:column sortBy="#{bean.dataDesativacao}">
+					<f:facet name="header">#{messages['view.security.recurso.label.dataDesativacao']}</f:facet>
+					<h:outputText value="#{bean.dataDesativacao}" />
+				</p:column>
+
+			</p:dataTable>
+		</h:form>
+
+		<p:confirmDialog message="#{messages['label.confirm.delete']}"
+			showEffect="bounce" hideEffect="explode"
+			header="#{messages['label.dialog.alert']}!" severity="alert"
+			widgetVar="confirmation" appendToBody="true">
+
+			<h:form>
+				<h:commandButton value="#{messages['button.dialog.yes']}"
+					action="#{recursoListMB.deleteSelection}"
+					actionListener="#{recursoListMB.clear}" />
+
+				<h:commandButton value="#{messages['button.dialog.no']}"
+					onclick="confirmation.hide()" type="button" />
+			</h:form>
+		</p:confirmDialog>
+
+	</ui:define>
+
+</ui:composition>

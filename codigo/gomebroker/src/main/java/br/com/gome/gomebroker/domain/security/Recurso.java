@@ -31,16 +31,16 @@ public class Recurso implements Serializable, BaseEntity<Long> {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="RECURSO_ID_GENERATOR", sequenceName="SEC_RECURSO_ID_SEQ")
+	@SequenceGenerator(name="RECURSO_ID_GENERATOR", sequenceName="SEC_RECURSO_ID_SEQ", allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="RECURSO_ID_GENERATOR")
 	private Long id;
 
 	@Column(updatable=false)
 	@Temporal(TemporalType.TIMESTAMP)
-private Date dataCadastro;
+	private Date dataCadastro;
 
 	@Temporal(TemporalType.TIMESTAMP)
-private Date dataDesativacao;
+	private Date dataDesativacao;
 
 	private String descricao;
 
