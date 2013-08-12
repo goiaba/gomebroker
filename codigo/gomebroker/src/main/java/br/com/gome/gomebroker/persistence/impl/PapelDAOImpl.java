@@ -1,6 +1,5 @@
 package br.com.gome.gomebroker.persistence.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -21,13 +20,12 @@ public class PapelDAOImpl extends BaseDAOImpl<Papel, Long> implements PapelDAO {
 		String query = "SELECT papel " +
 						"FROM Usuario usuario JOIN usuario.usuarioPapel up JOIN up.papel papel " +
 						"WHERE usuario = :usuario " +
-						"AND up.dataDesativacao > :agora " +
-						"AND papel.dataDesativacao > :agora";
+						"AND (up.dataDesativacao IS NULL OR up.dataDesativacao > current_timestamp()) " +
+						"AND (papel.dataDesativacao IS NULL OR papel.dataDesativacao > current_timestamp())";
 		
 		return getEntityManager()
 					.createQuery(query, Papel.class)
 					.setParameter("usuario", usuario)
-					.setParameter("agora", new Date())
 					.getResultList();
 		
 	}
@@ -39,15 +37,14 @@ public class PapelDAOImpl extends BaseDAOImpl<Papel, Long> implements PapelDAO {
 						"FROM Usuario usuario JOIN usuario.usuarioPapel up JOIN up.papel papel " +
 						"WHERE usuario = :usuario " +
 						"AND up.padrao = true " +
-						"AND up.dataDesativacao > :agora " +
-						"AND papel.dataDesativacao > :agora";
+						"AND (up.dataDesativacao IS NULL OR up.dataDesativacao > current_timestamp()) " +
+						"AND (papel.dataDesativacao IS NULL OR papel.dataDesativacao > current_timestamp())";
 		
 		try {
 
 			return getEntityManager()
 					.createQuery(query, Papel.class)
 					.setParameter("usuario", usuario)
-					.setParameter("agora", new Date())
 					.getSingleResult();
 			
 		} catch (NoResultException e) {
