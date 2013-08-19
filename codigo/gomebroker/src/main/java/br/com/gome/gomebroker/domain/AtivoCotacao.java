@@ -1,14 +1,19 @@
 package br.com.gome.gomebroker.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
@@ -18,11 +23,13 @@ import org.hibernate.envers.RelationTargetAuditMode;
  * 
  */
 @Entity
-public class AtivoCotacoes implements Serializable, BaseEntity<AtivoCotacoesPK> {
+@Table(name="ativoCotacoes")
+public class AtivoCotacao implements Serializable, BaseEntity<AtivoCotacaoPK> {
+	
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	private AtivoCotacoesPK id;
+	private AtivoCotacaoPK id = new AtivoCotacaoPK();
 
 	private double abertura;
 
@@ -51,18 +58,25 @@ public class AtivoCotacoes implements Serializable, BaseEntity<AtivoCotacoesPK> 
 	private double volume;
 
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.LAZY, cascade={CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name="ativo_id", referencedColumnName="id", insertable=false, updatable=false)
 	private Ativo ativo;
 
-    public AtivoCotacoes() {
+    public AtivoCotacao() {
     }
 
-	public AtivoCotacoesPK getId() {
+    public AtivoCotacao(Ativo ativo, Date data) {
+    	this.id.setAtivo(ativo.getId());
+    	this.id.setData(data);
+    	
+    	ativo.addAtivoCotacao(this);
+    }
+    
+	public AtivoCotacaoPK getId() {
 		return this.id;
 	}
 
-	public void setId(AtivoCotacoesPK id) {
+	public void setId(AtivoCotacaoPK id) {
 		this.id = id;
 	}
 	
@@ -169,5 +183,57 @@ public class AtivoCotacoes implements Serializable, BaseEntity<AtivoCotacoesPK> 
 	public void setAtivo(Ativo ativo) {
 		this.ativo = ativo;
 	}
+	
+	public boolean equals(Object o) {
+
+		if ((null == o) || (o.getClass() != this.getClass())) {
+			return false;
+		}
+
+		if (o == this) {
+			return true;
+		}
+
+		AtivoCotacao that = (AtivoCotacao) o;
+
+		return new EqualsBuilder()
+				.append(this.id, that.id)
+				.append(this.abertura, that.abertura)
+				.append(this.intraDiario, that.intraDiario)
+				.append(this.maximo, that.maximo)
+				.append(this.medio, that.medio)
+				.append(this.melhorOfertaCompra, that.melhorOfertaCompra)
+				.append(this.melhorOfertaVenda, that.melhorOfertaVenda)
+				.append(this.minimo, that.minimo)
+				.append(this.quantidadeNegocios, that.quantidadeNegocios)
+				.append(this.quantidadePapeis, that.quantidadePapeis)
+				.append(this.ultimo, that.ultimo)
+				.append(this.variacao, that.variacao)
+				.append(this.volume, that.volume)
+				.isEquals();
+
+	}
+
+	public int hashCode() {
+
+		return new HashCodeBuilder(17, 31)
+				.append(this.id)
+				.append(this.abertura)
+				.append(this.intraDiario)
+				.append(this.maximo)
+				.append(this.medio)
+				.append(this.melhorOfertaCompra)
+				.append(this.melhorOfertaVenda)
+				.append(this.minimo)
+				.append(this.quantidadeNegocios)
+				.append(this.quantidadePapeis)
+				.append(this.ultimo)
+				.append(this.variacao)
+				.append(this.volume)
+				.toHashCode();
+
+	}
+	
+	
 	
 }
