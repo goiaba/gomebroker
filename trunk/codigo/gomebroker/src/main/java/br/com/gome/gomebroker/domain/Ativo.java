@@ -1,11 +1,15 @@
 package br.com.gome.gomebroker.domain;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,8 +20,12 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
+
+import br.com.gome.gomebroker.constant.TipoMercado;
 
 
 /**
@@ -32,10 +40,34 @@ public class Ativo implements BaseEntity<Long> {
 	@Id
 	@SequenceGenerator(name="ATIVO_ID_GENERATOR", sequenceName="ATIVO_ID_SEQ", allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="ATIVO_ID_GENERATOR")
-	@Column(updatable=false)
+	@Column(nullable=false, updatable=false)
 	private Long id;
 
 	private String codigo;
+
+	@Enumerated(EnumType.STRING)
+	private TipoMercado tipoMercado;
+
+	private Integer fatorCotacao;
+	
+	private String obs;
+
+	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+	private Empresa empresa;
+
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+	@OneToMany(mappedBy="ativo", fetch = FetchType.LAZY, targetEntity = AtivoCotacao.class)
+	private Set<AtivoCotacao> ativoCotacao = new HashSet<AtivoCotacao>();
+
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+	@OneToMany(mappedBy="ativo", fetch = FetchType.LAZY, targetEntity = AtivoCotacao.class, cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+	private Set<AtivoOfertas> ativoOfertas = new HashSet<AtivoOfertas>();
+
+	@OneToMany(mappedBy="ativo", fetch = FetchType.LAZY, targetEntity = AtivoCotacao.class, cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+	private Set<Ordem> ordens = new HashSet<Ordem>();
+
+	@OneToMany(mappedBy="ativo", fetch = FetchType.LAZY, targetEntity = AtivoCotacao.class, cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+	private Set<PortifolioAtivo> portifolioAtivos = new HashSet<PortifolioAtivo>();
 
 	@Column(updatable=false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -43,27 +75,6 @@ public class Ativo implements BaseEntity<Long> {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataDesativacao;
-
-	private String descricao;
-
-	private String obs;
-
-	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch=FetchType.LAZY)
-	private Empresa empresa;
-
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-	@OneToMany(mappedBy="ativo")
-	private Set<AtivoCotacoes> ativoCotacoes;
-
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-	@OneToMany(mappedBy="ativo")
-	private Set<AtivoOfertas> ativoOfertas;
-
-	@OneToMany(mappedBy="ativo")
-	private Set<Ordem> ordens;
-
-	@OneToMany(mappedBy="ativo")
-	private Set<PortifolioAtivo> portifolioAtivos;
 
     public Ativo() {
     }
@@ -100,12 +111,20 @@ public class Ativo implements BaseEntity<Long> {
 		this.dataDesativacao = dataDesativacao;
 	}
 
-	public String getDescricao() {
-		return this.descricao;
+	public TipoMercado getTipoMercado() {
+		return tipoMercado;
 	}
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setTipoMercado(TipoMercado tipoMercado) {
+		this.tipoMercado = tipoMercado;
+	}
+
+	public Integer getFatorCotacao() {
+		return fatorCotacao;
+	}
+
+	public void setFatorCotacao(Integer fatorCotacao) {
+		this.fatorCotacao = fatorCotacao;
 	}
 
 	public String getObs() {
@@ -124,12 +143,33 @@ public class Ativo implements BaseEntity<Long> {
 		this.empresa = empresa;
 	}
 	
-	public Set<AtivoCotacoes> getAtivoCotacoes() {
-		return this.ativoCotacoes;
+	public Set<AtivoCotacao> getAtivoCotacoes() {
+		return Collections.unmodifiableSet(this.ativoCotacao);
+	}
+	
+	public void addAtivoCotacao(AtivoCotacao ativoCotacao) {
+		
+		if (null == this.ativoCotacao) {
+			this.ativoCotacao = new HashSet<AtivoCotacao>();
+		}
+		
+		ativoCotacao.setAtivo(this);
+		this.ativoCotacao.add(ativoCotacao);
+		
+	}
+	
+	public void removeAtivoCotacao(AtivoCotacao ativoCotacao) {
+		
+		if (null != this.ativoCotacao) {
+			this.ativoCotacao.remove(ativoCotacao);
+		}
+		
+		ativoCotacao.setAtivo(null);
+		
 	}
 
-	public void setAtivoCotacoes(Set<AtivoCotacoes> ativoCotacoes) {
-		this.ativoCotacoes = ativoCotacoes;
+	public void setAtivoCotacoes(Set<AtivoCotacao> ativoCotacao) {
+		this.ativoCotacao = ativoCotacao;
 	}
 	
 	public Set<AtivoOfertas> getAtivoOfertas() {
@@ -154,6 +194,44 @@ public class Ativo implements BaseEntity<Long> {
 
 	public void setPortifolioAtivos(Set<PortifolioAtivo> portifolioAtivos) {
 		this.portifolioAtivos = portifolioAtivos;
+	}
+	
+	public boolean equals(Object o) {
+
+		if ((null == o) || (o.getClass() != this.getClass())) {
+			return false;
+		}
+
+		if (o == this) {
+			return true;
+		}
+
+		Ativo that = (Ativo) o;
+
+		return new EqualsBuilder()
+				.append(this.id, that.id)
+				.append(this.codigo, that.codigo)
+				.append(this.dataCadastro, that.dataCadastro)
+				.append(this.dataDesativacao, that.dataDesativacao)
+				.append(this.obs, that.obs)
+				.append(this.tipoMercado, that.tipoMercado)
+				.append(this.fatorCotacao, that.fatorCotacao)
+				.isEquals();
+
+	}
+
+	public int hashCode() {
+
+		return new HashCodeBuilder(17, 31)
+				.append(this.id)
+				.append(this.codigo)
+				.append(this.dataCadastro)
+				.append(this.dataDesativacao)
+				.append(this.obs)
+				.append(this.tipoMercado)
+				.append(this.fatorCotacao)
+				.toHashCode();
+
 	}
 	
 }

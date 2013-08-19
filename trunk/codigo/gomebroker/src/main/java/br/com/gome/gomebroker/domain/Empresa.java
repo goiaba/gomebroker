@@ -3,9 +3,13 @@ package br.com.gome.gomebroker.domain;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.envers.Audited;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -40,8 +44,7 @@ public class Empresa implements Serializable, BaseEntity<Long> {
 	private String url;
 
 	// bi-directional many-to-one association to Ativo
-	@OneToMany(mappedBy = "empresa", cascade = { CascadeType.PERSIST,
-			CascadeType.MERGE, CascadeType.REFRESH })
+	@OneToMany(mappedBy = "empresa", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH }, fetch=FetchType.LAZY)
 	private Set<Ativo> ativos;
 
 	public Empresa() {
@@ -112,11 +115,72 @@ public class Empresa implements Serializable, BaseEntity<Long> {
 	}
 
 	public Set<Ativo> getAtivos() {
-		return this.ativos;
+		return Collections.unmodifiableSet(this.ativos);
+	}
+	
+	public void addAtivo(Ativo ativo) {
+		
+		if (null == this.ativos) {
+			this.ativos = new HashSet<Ativo>();
+		}
+		
+		ativo.setEmpresa(this);
+		this.ativos.add(ativo);
+		
+	}
+	
+	public void removeAtivo(Ativo ativo) {
+		
+		if (null != this.ativos) {
+			this.ativos.remove(ativo);
+		}
+		
+		ativo.setEmpresa(null);
+		
 	}
 
 	public void setAtivos(Set<Ativo> ativos) {
 		this.ativos = ativos;
+	}
+	
+	public boolean equals(Object o) {
+
+		if ((null == o) || (o.getClass() != this.getClass())) {
+			return false;
+		}
+
+		if (o == this) {
+			return true;
+		}
+
+		Empresa that = (Empresa) o;
+
+		return new EqualsBuilder()
+				.append(this.id, that.id)
+				.append(this.cnpj, that.cnpj)
+				.append(this.dataCadastro, that.dataCadastro)
+				.append(this.dataDesativacao, that.dataDesativacao)
+				.append(this.obs, that.obs)
+				.append(this.nome, that.nome)
+				.append(this.nomeCompleto, that.nomeCompleto)
+				.append(this.url, that.url)
+				.isEquals();
+
+	}
+
+	public int hashCode() {
+
+		return new HashCodeBuilder(17, 31)
+				.append(this.id)
+				.append(this.cnpj)
+				.append(this.dataCadastro)
+				.append(this.dataDesativacao)
+				.append(this.obs)
+				.append(this.nome)
+				.append(this.nomeCompleto)
+				.append(this.url)
+				.toHashCode();
+
 	}
 
 }
