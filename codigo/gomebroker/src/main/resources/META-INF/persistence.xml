@@ -9,12 +9,13 @@
 		<jta-data-source>java:/jboss/datasources/gomebrokerDS</jta-data-source>
 		
 		<class>br.com.gome.gomebroker.domain.Ativo</class>
-		<class>br.com.gome.gomebroker.domain.AtivoCotacoes</class>
-		<class>br.com.gome.gomebroker.domain.AtivoCotacoesPK</class>
+		<class>br.com.gome.gomebroker.domain.AtivoCotacao</class>
+		<class>br.com.gome.gomebroker.domain.AtivoCotacaoPK</class>
 		<class>br.com.gome.gomebroker.domain.AtivoOfertas</class>
 		<class>br.com.gome.gomebroker.domain.AtivoOfertasPK</class>
 		<class>br.com.gome.gomebroker.domain.Conta</class>
 		<class>br.com.gome.gomebroker.domain.Corretora</class>
+		<class>br.com.gome.gomebroker.domain.FeriadoBovespa</class>
 		<class>br.com.gome.gomebroker.domain.Empresa</class>
 		<class>br.com.gome.gomebroker.domain.Incidencia</class>
 		<class>br.com.gome.gomebroker.domain.Movimento</class>
