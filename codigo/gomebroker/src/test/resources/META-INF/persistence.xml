@@ -6,13 +6,14 @@
 	<persistence-unit name="gomebroker-ds" transaction-type="RESOURCE_LOCAL">
 
 		<class>br.com.gome.gomebroker.domain.Ativo</class>
-		<class>br.com.gome.gomebroker.domain.AtivoCotacoes</class>
-		<class>br.com.gome.gomebroker.domain.AtivoCotacoesPK</class>
+		<class>br.com.gome.gomebroker.domain.AtivoCotacao</class>
+		<class>br.com.gome.gomebroker.domain.AtivoCotacaoPK</class>
 		<class>br.com.gome.gomebroker.domain.AtivoOfertas</class>
 		<class>br.com.gome.gomebroker.domain.AtivoOfertasPK</class>
 		<class>br.com.gome.gomebroker.domain.Conta</class>
 		<class>br.com.gome.gomebroker.domain.Corretora</class>
 		<class>br.com.gome.gomebroker.domain.Empresa</class>
+		<class>br.com.gome.gomebroker.domain.FeriadoBovespa</class>
 		<class>br.com.gome.gomebroker.domain.Log</class>
 		<class>br.com.gome.gomebroker.domain.LogDetalhe</class>
 		<class>br.com.gome.gomebroker.domain.Incidencia</class>
@@ -34,11 +35,10 @@
 			<property name="javax.persistence.jdbc.password" value="gomebroker" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/gomebroker" />
 
-			<property name="hibernate.ejb.interceptor" value="br.com.gome.gomebroker.util.LoggingInterceptor"/>
-
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.format_sql" value="false" />
 			<property name="hibernate.hbm2ddl.auto" value="none" />
+			
 		</properties>
 
 	</persistence-unit>
