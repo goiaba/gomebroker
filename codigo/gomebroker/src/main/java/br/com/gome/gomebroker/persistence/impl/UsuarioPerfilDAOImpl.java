@@ -4,7 +4,6 @@ import br.com.gome.gomebroker.domain.Usuario;
 import br.com.gome.gomebroker.domain.security.UsuarioPapel;
 import br.com.gome.gomebroker.persistence.UsuarioPerfilDAO;
 import br.gov.frameworkdemoiselle.stereotype.PersistenceController;
-import br.gov.frameworkdemoiselle.transaction.Transactional;
 
 @PersistenceController
 public class UsuarioPerfilDAOImpl extends BaseDAOImpl<UsuarioPapel, Long> implements UsuarioPerfilDAO {
@@ -33,7 +32,6 @@ public class UsuarioPerfilDAOImpl extends BaseDAOImpl<UsuarioPapel, Long> implem
 	}
 
 	@Override
-	@Transactional
 	public void setUsuarioPerfilPadrao(UsuarioPapel usuarioPapel) {
 
 		Usuario usuario = usuarioPapel.getUsuario();
