@@ -7,7 +7,6 @@ import br.com.gome.gomebroker.domain.security.Recurso;
 import br.gov.frameworkdemoiselle.annotation.PreviousView;
 import br.gov.frameworkdemoiselle.stereotype.ViewController;
 import br.gov.frameworkdemoiselle.template.AbstractEditPageBean;
-import br.gov.frameworkdemoiselle.transaction.Transactional;
 
 @ViewController
 @PreviousView("./list.xhtml")
@@ -28,14 +27,12 @@ public class RecursoEditMB extends AbstractEditPageBean<Recurso, Long> {
 	}
 	
 	@Override
-	@Transactional
 	public String insert() {
 		this.recursoBC.persist(getBean());
 		return getPreviousView();
 	}
 
 	@Override
-	@Transactional
 	public String update() {
 		this.recursoBC.merge(getBean());
 		return getPreviousView();
