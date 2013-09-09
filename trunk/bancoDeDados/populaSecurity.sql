@@ -5,8 +5,14 @@ insert into sec_recurso values (1, 'faces resources', '', 'public_starts_with_ur
 insert into sec_recurso values (2, 'login page', '', 'public_url','/login.jsf', now(), current_timestamp + 365 * interval '1 day');
 insert into sec_recurso values (3, 'main page', '', 'private_url','/index.jsf', now(), current_timestamp + 365 * interval '1 day');
 insert into sec_recurso values (4, 'css resources', '', 'public_starts_with_url','/css/', now(), current_timestamp + 365 * interval '1 day');
+insert into sec_recurso values (5, 'RD Recursos', 'Recuperação/Remoção de Recursos do Sistema', 'private_url', '/pages/security/recurso/list.jsf', '2013-08-08 20:15:26.872291', '2014-07-31 19:03:33.830351');
+insert into sec_recurso values (6, 'CU Recursos', 'Criação/Edição de Recursos do Sistema', 'private_url', '/pages/security/recurso/edit.jsf', '2013-08-08 23:30:57.659858', '2014-07-31 19:03:33.830351');
+
 
 insert into sec_relusuariopapel values (1, 1, 1, true, now(), current_timestamp + 365 * interval '1 day');
 insert into sec_relpapelrecurso values (1, 1, 1);
 insert into sec_relpapelrecurso values (2, 1, 2);
 insert into sec_relpapelrecurso values (3, 1, 3);
+insert into sec_relpapelrecurso values (4, 1, 4);
+insert into sec_relpapelrecurso values (5, 1, 5);
+insert into sec_relpapelrecurso values (6, 1, 6);
