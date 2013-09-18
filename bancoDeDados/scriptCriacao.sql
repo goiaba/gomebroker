@@ -1,4 +1,18 @@
 
+CREATE SEQUENCE core.feriadobovespa_id_seq;
+
+CREATE TABLE core.feriadoBovespa (
+                id INTEGER NOT NULL DEFAULT nextval('core.feriadobovespa_id_seq'),
+                descricao VARCHAR NOT NULL,
+                data DATE NOT NULL,
+                CONSTRAINT feriadobovespa_pk PRIMARY KEY (id)
+);
+COMMENT ON COLUMN core.feriadoBovespa.descricao IS 'Descrição do feriado';
+COMMENT ON COLUMN core.feriadoBovespa.data IS 'Data em que não haverá negociação (ou que haverá horário especial - a ser implementado)';
+
+
+ALTER SEQUENCE core.feriadobovespa_id_seq OWNED BY core.feriadoBovespa.id;
+
 CREATE SEQUENCE core.sec_itemmenu_id_seq;
 
 CREATE TABLE core.sec_itemMenu (
@@ -79,40 +93,25 @@ CREATE UNIQUE INDEX papel_idx
  ON core.sec_papel
  ( nome );
 
-CREATE SEQUENCE core.sec_relpapelitemmenu_id_seq;
-
 CREATE TABLE core.sec_relPapelItemMenu (
-                id INTEGER NOT NULL DEFAULT nextval('core.sec_relpapelitemmenu_id_seq'),
                 itemMenu_id INTEGER NOT NULL,
                 papel_id INTEGER NOT NULL,
-                CONSTRAINT sec_relpapelitemmenu_pk PRIMARY KEY (id)
+                CONSTRAINT sec_relpapelitemmenu_pk PRIMARY KEY (itemMenu_id, papel_id)
 );
 COMMENT ON TABLE core.sec_relPapelItemMenu IS 'Relação entre os papeis disponiveis no sistema e os itens de menu que deve ser exibidos na interface com o usuário.';
 COMMENT ON COLUMN core.sec_relPapelItemMenu.itemMenu_id IS 'Código do item de menu';
 COMMENT ON COLUMN core.sec_relPapelItemMenu.papel_id IS 'Código do papel';
 
 
-ALTER SEQUENCE core.sec_relpapelitemmenu_id_seq OWNED BY core.sec_relPapelItemMenu.id;
-
-CREATE SEQUENCE core.sec_relpapelrecurso_id_seq;
-
 CREATE TABLE core.sec_relPapelRecurso (
-                id INTEGER NOT NULL DEFAULT nextval('core.sec_relpapelrecurso_id_seq'),
                 papel_id INTEGER NOT NULL,
                 recurso_id INTEGER NOT NULL,
-                CONSTRAINT sec_relpapelrecurso_pk PRIMARY KEY (id)
+                CONSTRAINT sec_relpapelrecurso_pk PRIMARY KEY (papel_id, recurso_id)
 );
 COMMENT ON TABLE core.sec_relPapelRecurso IS 'Relacionamento entre os papeis disponiveis no sistema e os recursos (páginas).';
-COMMENT ON COLUMN core.sec_relPapelRecurso.id IS 'Código da relação entre papel e seus recursos';
 COMMENT ON COLUMN core.sec_relPapelRecurso.papel_id IS 'Código do papel';
 COMMENT ON COLUMN core.sec_relPapelRecurso.recurso_id IS 'Código do recurso';
 
-
-ALTER SEQUENCE core.sec_relpapelrecurso_id_seq OWNED BY core.sec_relPapelRecurso.id;
-
-CREATE UNIQUE INDEX relpapelrecurso_idx
- ON core.sec_relPapelRecurso
- ( papel_id, recurso_id );
 
 CREATE SEQUENCE core.usuario_id_seq;
 
@@ -377,7 +376,8 @@ CREATE TABLE core.ativo (
                 id INTEGER NOT NULL DEFAULT nextval('core.ativo_id_seq'),
                 empresa_id INTEGER NOT NULL,
                 codigo VARCHAR(15) NOT NULL,
-                descricao VARCHAR(255) DEFAULT ''::character varying,
+                tipoMercado VARCHAR NOT NULL,
+                fatorCotacao INTEGER NOT NULL,
                 obs TEXT DEFAULT ''::text,
                 dataCadastro TIMESTAMP DEFAULT now() NOT NULL,
                 dataDesativacao TIMESTAMP DEFAULT NULL::timestamp without time zone,
@@ -387,13 +387,28 @@ COMMENT ON TABLE core.ativo IS 'Ativos a serem movimentados';
 COMMENT ON COLUMN core.ativo.id IS 'Código do Ativo';
 COMMENT ON COLUMN core.ativo.empresa_id IS 'Código da Empresa do Ativo';
 COMMENT ON COLUMN core.ativo.codigo IS 'Código do ativo, utilizado para envio da Ordem.';
-COMMENT ON COLUMN core.ativo.descricao IS 'Descrição do Ativo';
+COMMENT ON COLUMN core.ativo.tipoMercado IS 'Tipo de mercado no qual o ativo é negociado (
+    VISTA(10),
+    EXERCICIO_OPCOES_COMPRA(12),
+    EXERCICIO_OPCOES_VENDA(13),
+    LEILAO(17),
+    FRACIONARIO(20),
+    TERMO(30),
+    FUTURO_COM_RETENCAO_DE_GANHO(50),
+    FUTURO_COM_MOVIMENTACAO_CONTINUA(60),
+    OPCOES_COMPRA(70),
+    OPCOES_VENDA(80));';
+COMMENT ON COLUMN core.ativo.fatorCotacao IS 'Fator de cotação do ativo (1, 1000, etc)';
 COMMENT ON COLUMN core.ativo.obs IS 'Observação para o Ativo';
 COMMENT ON COLUMN core.ativo.dataCadastro IS 'Data de Cadastro do Ativo';
 COMMENT ON COLUMN core.ativo.dataDesativacao IS 'Data de Desativação do Ativo';
 
 
 ALTER SEQUENCE core.ativo_id_seq OWNED BY core.ativo.id;
+
+CREATE UNIQUE INDEX ativo_idx
+ ON core.ativo
+ ( codigo );
 
 CREATE SEQUENCE core.relportifolioativo_id_seq;
 
