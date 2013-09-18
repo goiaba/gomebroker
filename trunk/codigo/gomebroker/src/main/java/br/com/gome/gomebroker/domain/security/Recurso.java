@@ -1,20 +1,24 @@
 package br.com.gome.gomebroker.domain.security;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.envers.Audited;
 
 import br.com.gome.gomebroker.domain.BaseEntity;
@@ -50,12 +54,44 @@ public class Recurso implements Serializable, BaseEntity<Long> {
 	
 	private String tipo;
 	
-	@OneToMany(mappedBy="recurso")
-	private List<PapelRecurso> papelRecurso;
+	@ManyToMany(mappedBy="recursos", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
+	private List<Papel> papeis = new ArrayList<Papel>();
 
     public Recurso() {
     }
 
+    public void addPapel(Papel papel) {
+    	
+    	if (!papeis.contains(papel)) {
+    		this.internalAddPapel(papel);
+    	}
+    	
+    	if (!papel.getRecursos().contains(this)) {
+    		papel.addRecurso(this);
+    	}
+    	
+	}
+	
+	public void removePapel(Papel papel) {
+		
+		if (papeis.contains(papel)) {
+			papel.internalRemoveRecurso(this);
+		}
+		
+		if (papel.getRecursos().contains(this)) {
+			papel.removeRecurso(this);
+		}
+		
+	}
+
+	protected void internalAddPapel(Papel papel) {
+		papeis.add(papel);
+	}
+
+	protected void internalRemovePapel(Papel papel) {
+		papeis.remove(papel);
+	}
+    
 	public Long getId() {
 		return this.id;
 	}
@@ -112,12 +148,49 @@ public class Recurso implements Serializable, BaseEntity<Long> {
 		this.tipo = tipo;
 	}
 
-	public List<PapelRecurso> getPapelRecurso() {
-		return this.papelRecurso;
+	public List<Papel> getPapeis() {
+		return this.papeis;
 	}
 
-	public void setPapelRecurso(List<PapelRecurso> papelRecurso) {
-		this.papelRecurso = papelRecurso;
+	public void setPapeis(List<Papel> papeis) {
+		this.papeis = papeis;
+	}
+	
+	public boolean equals(Object o) {
+
+		if ((null == o) || (o.getClass() != this.getClass())) {
+			return false;
+		}
+
+		if (o == this) {
+			return true;
+		}
+
+		Recurso that = (Recurso) o;
+
+		return new EqualsBuilder().append(this.id, that.id)
+				.append(this.nome, that.nome)
+				.append(this.dataCadastro, that.dataCadastro)
+				.append(this.dataDesativacao, that.dataDesativacao)
+				.append(this.descricao, that.descricao)
+				.append(this.tipo, that.tipo)
+				.append(this.valor, that.valor)
+				.isEquals();
+
+	}
+
+	public int hashCode() {
+
+		return new HashCodeBuilder(17, 31)
+				.append(this.id)
+				.append(this.nome)
+				.append(this.dataCadastro)
+				.append(this.dataDesativacao)
+				.append(this.descricao)
+				.append(this.tipo)
+				.append(this.valor)
+				.toHashCode();
+
 	}
 	
 }

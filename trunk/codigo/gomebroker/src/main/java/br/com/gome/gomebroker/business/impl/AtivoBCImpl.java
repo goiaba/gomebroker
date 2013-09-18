@@ -1,6 +1,8 @@
 package br.com.gome.gomebroker.business.impl;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
@@ -23,6 +25,7 @@ public class AtivoBCImpl extends BaseBCImpl<Ativo, Long, AtivoDAO> implements At
 	@Inject AtivoDAO ativoDao;
 	
 	@Override
+	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public Ativo findByCodigoNegociacao(String codigoNegociacao) {
 
 		return ativoDao.findByCodigoNegociacao(codigoNegociacao);

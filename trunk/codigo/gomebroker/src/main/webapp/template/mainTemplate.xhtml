@@ -32,7 +32,7 @@
 	
 		<h:body style="background-color:#f1f1f1">
 	
-			<p:growl id="messages" globalOnly="true" />
+			<p:growl id="growl" globalOnly="true" />
 	
 			<p:layout fullPage="true">
 	
@@ -49,8 +49,7 @@
 				</p:layoutUnit>
 	
 				<p:layoutUnit id="left" position="west" resizable="true"
-					closable="false" collapsible="true" header="Necessário???"
-					minSize="200">
+					closable="false" collapsible="true" minSize="200">
 	
 					<ui:insert name="leftContainer" />
 	
@@ -59,6 +58,7 @@
 				<p:layoutUnit id="center" position="center">
 	
 					<ui:insert name="mainContainer" />
+					<p:messages id="messages" severity="error" closable="true" />
 	
 				</p:layoutUnit>
 	

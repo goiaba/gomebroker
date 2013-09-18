@@ -6,6 +6,7 @@ import javax.persistence.NoResultException;
 
 import br.com.gome.gomebroker.domain.Usuario;
 import br.com.gome.gomebroker.domain.security.Papel;
+import br.com.gome.gomebroker.domain.security.Recurso;
 import br.com.gome.gomebroker.persistence.PapelDAO;
 import br.gov.frameworkdemoiselle.stereotype.PersistenceController;
 
@@ -53,6 +54,73 @@ public class PapelDAOImpl extends BaseDAOImpl<Papel, Long> implements PapelDAO {
 			
 		}
 		
+	}
+
+	@Override
+	public List<Papel> findPapeisAtivosComAcessoAoRecurso(Recurso recurso) {
+
+		String query = "SELECT papel " +
+						"FROM Recurso recurso JOIN recurso.papeis papel " +
+						"WHERE recurso = :recurso " +
+						"AND (papel.dataDesativacao IS NULL OR papel.dataDesativacao > current_timestamp())";
+		
+		try {
+
+			return getEntityManager()
+					.createQuery(query, Papel.class)
+					.setParameter("recurso", recurso)
+					.getResultList();
+			
+		} catch (NoResultException e) {
+			
+			return null;
+			
+		}
+		
+	}
+
+	@Override
+	public List<Papel> findPapeisAtivosSemAcessoAoRecurso(Recurso recurso) {
+
+		String query = "SELECT papel " +
+						" FROM Papel papel " +
+						"WHERE :recurso not in papel.recursos " +
+						"  AND (papel.dataDesativacao IS NULL OR papel.dataDesativacao > current_timestamp())";
+
+		try {
+		
+			return getEntityManager()
+					.createQuery(query, Papel.class)
+					.setParameter("recurso", recurso)
+					.getResultList();
+			
+		} catch (NoResultException e) {
+			
+			return null;
+			
+		}
+
+	}
+
+	@Override
+	public List<Papel> findPapeisAtivos() {
+
+		String query = "SELECT papel " +
+						" FROM Papel papel " +
+						"WHERE papel.dataDesativacao IS NULL OR papel.dataDesativacao > current_timestamp()";
+		
+		try {
+			
+			return getEntityManager()
+					.createQuery(query, Papel.class)
+					.getResultList();
+			
+		} catch (NoResultException e) {
+			
+			return null;
+			
+		}
+
 	}
 
 }

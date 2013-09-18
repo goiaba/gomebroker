@@ -6,6 +6,6 @@ import br.com.gome.gomebroker.domain.FeriadoBovespa;
 
 public interface FeriadoBovespaDAO extends BaseDAO<FeriadoBovespa, Long> {
 
-	boolean verificaSeEhFeriado(Date date);
+	boolean ehFeriadoBovespa(Date date);
 
 }

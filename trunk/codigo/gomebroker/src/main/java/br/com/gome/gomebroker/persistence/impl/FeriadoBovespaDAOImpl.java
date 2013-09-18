@@ -13,7 +13,7 @@ public class FeriadoBovespaDAOImpl extends BaseDAOImpl<FeriadoBovespa, Long> imp
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public boolean verificaSeEhFeriado(Date date) {
+	public boolean ehFeriadoBovespa(Date date) {
 
 		String query = "SELECT feriado " +
 						"FROM FeriadoBovespa feriado " +

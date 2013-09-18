@@ -47,6 +47,21 @@ public class MenuMB implements Serializable {
 
 		MenuModel model = new DefaultMenuModel();
 
+		Submenu importacao = new Submenu();
+		importacao.setId("importacao-submenu");
+		importacao.setLabel(bundle.getString("view.menu.submenu.importacao"));
+		
+		MenuItem importacaoBovespa = new MenuItem();
+		importacaoBovespa.setId("importacao-bovespa-menuitem");
+		importacaoBovespa.setValue(bundle.getString("view.menu.submenu.importacao.bovespa"));
+		importacaoBovespa.setUrl("/pages/importacaodados/bovespa.jsf");
+		
+		importacao.getChildren().add(importacaoBovespa);
+		
+		model.addSubmenu(importacao);
+
+//		===========================================================================================================
+		
 		Submenu config = new Submenu();
 		config.setId("config-submenu");
 		config.setLabel(bundle.getString("view.menu.submenu.config"));
@@ -62,7 +77,10 @@ public class MenuMB implements Serializable {
 
 		seguranca.getChildren().add(recurso);
 		config.getChildren().add(seguranca);
+		
 		model.addSubmenu(config);
+
+//		===========================================================================================================
 		
 		MenuItem logout = new MenuItem();
 		logout.setId("logout-menuitem");
@@ -70,6 +88,8 @@ public class MenuMB implements Serializable {
 		logout.setActionExpression(createMethodExpression(ViewConstants.METHOD_EXPRESSION_LOGOUT, null));
 		
 		model.addMenuItem(logout);
+
+//		===========================================================================================================
 		
 		return model;
 

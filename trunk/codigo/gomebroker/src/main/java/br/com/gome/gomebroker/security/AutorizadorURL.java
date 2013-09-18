@@ -81,13 +81,13 @@ public class AutorizadorURL implements Filter {
 		
 		if (recursosPublicos.isPublicUrl(url)) {
 			//FIXME: Utilizar o ResourceBundle para recuperar mensagem
-			info("Acesso permitido por " + SecurityConstants.PUBLIC_URL, url);
+			trace("Acesso permitido por " + SecurityConstants.PUBLIC_URL, url);
 			return true;
 		}
 		
 		if (recursosPublicos.isPublicStartsWithUrl(url)) {
 			//FIXME: Utilizar o ResourceBundle para recuperar mensagem
-			info("Acesso permitido por " + SecurityConstants.PUBLIC_STARTS_WITH_URL, url);
+			trace("Acesso permitido por " + SecurityConstants.PUBLIC_STARTS_WITH_URL, url);
 			return true;
 		}
 			
@@ -99,24 +99,24 @@ public class AutorizadorURL implements Filter {
 
 		if (!securityContext.isLoggedIn()) {
 			//FIXME: Utilizar o ResourceBundle para recuperar mensagem
-			info("Acesso negado por usuário não logado", url);
+			trace("Acesso negado por usuário não logado", url);
 			return false;
 		}
 		
 		if (securityContext.hasPermission(SecurityConstants.PRIVATE_URL, url)) {
 			//FIXME: Utilizar o ResourceBundle para recuperar mensagem
-			info("Acesso permitido por " + SecurityConstants.PRIVATE_URL, url);
+			trace("Acesso permitido por " + SecurityConstants.PRIVATE_URL, url);
 			return true;
 		}
 
 		if (securityContext.hasPermission(SecurityConstants.PRIVATE_STARTS_WITH_URL, url)) {
 			//FIXME: Utilizar o ResourceBundle para recuperar mensagem
-			info("Acesso permitido por " + SecurityConstants.PRIVATE_STARTS_WITH_URL, url);
+			trace("Acesso permitido por " + SecurityConstants.PRIVATE_STARTS_WITH_URL, url);
 			return true;
 		}
 		
 		//FIXME: Utilizar o ResourceBundle para recuperar mensagem
-		info("Acesso negado", url);
+		trace("Acesso negado", url);
 		return false;
 		
 	}
@@ -128,9 +128,9 @@ public class AutorizadorURL implements Filter {
 		
 	}
 
-	private void info(String message, String url) {
+	private void trace(String message, String url) {
 		
-		logger.info(message + ": " + getUsername() + "@" + getSource() + getContext() + url);
+		logger.trace(message + ": " + getUsername() + "@" + getSource() + getContext() + url);
 		
 	}
 

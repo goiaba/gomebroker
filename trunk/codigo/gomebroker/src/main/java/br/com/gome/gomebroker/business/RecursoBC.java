@@ -17,4 +17,8 @@ public interface RecursoBC extends BaseBC<Recurso, Long, RecursoDAO> {
 
 	List<Recurso> find(String searchString);
 
+	void merge(Recurso recurso, List<Papel> listaDePapeisAtivosComAcessoAoRecurso);
+
+	void persist(Recurso recurso, List<Papel> listaDePapeisAtivosComAcessoAoRecurso);
+
 }
