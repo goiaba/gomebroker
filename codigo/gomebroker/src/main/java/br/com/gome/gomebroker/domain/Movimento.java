@@ -23,10 +23,10 @@ public class Movimento implements Serializable, BaseEntity<Long> {
 	private Long id;
 
 	@Temporal(TemporalType.TIMESTAMP)
-private Date data;
+	private Date data;
 
 	@Temporal(TemporalType.TIMESTAMP)
-private Date dataExecucao;
+	private Date dataExecucao;
 
 	private String descricao;
 

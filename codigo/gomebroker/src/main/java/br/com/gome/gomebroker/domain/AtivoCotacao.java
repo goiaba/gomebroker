@@ -3,7 +3,6 @@ package br.com.gome.gomebroker.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -14,8 +13,8 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
+
+import br.com.gome.gomebroker.util.StringConverter;
 
 
 /**
@@ -24,7 +23,7 @@ import org.hibernate.envers.RelationTargetAuditMode;
  */
 @Entity
 @Table(name="ativoCotacoes")
-public class AtivoCotacao implements Serializable, BaseEntity<AtivoCotacaoPK> {
+public class AtivoCotacao implements Serializable, BaseEntity<AtivoCotacaoPK>, Comparable<AtivoCotacao> {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -57,8 +56,7 @@ public class AtivoCotacao implements Serializable, BaseEntity<AtivoCotacaoPK> {
 
 	private double volume;
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-	@ManyToOne(fetch=FetchType.LAZY, cascade={CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="ativo_id", referencedColumnName="id", insertable=false, updatable=false)
 	private Ativo ativo;
 
@@ -66,10 +64,12 @@ public class AtivoCotacao implements Serializable, BaseEntity<AtivoCotacaoPK> {
     }
 
     public AtivoCotacao(Ativo ativo, Date data) {
+    	
     	this.id.setAtivo(ativo.getId());
     	this.id.setData(data);
     	
-    	ativo.addAtivoCotacao(this);
+    	setAtivo(ativo);
+    	
     }
     
 	public AtivoCotacaoPK getId() {
@@ -87,6 +87,10 @@ public class AtivoCotacao implements Serializable, BaseEntity<AtivoCotacaoPK> {
 	public void setAbertura(double abertura) {
 		this.abertura = abertura;
 	}
+	
+	public void setAbertura(String abertura) {
+		setAbertura(StringConverter.convert(abertura, Double.class));
+	}
 
 	public Boolean getIntraDiario() {
 		return this.intraDiario;
@@ -103,6 +107,10 @@ public class AtivoCotacao implements Serializable, BaseEntity<AtivoCotacaoPK> {
 	public void setMaximo(double maximo) {
 		this.maximo = maximo;
 	}
+	
+	public void setMaximo(String maximo) {
+		setMaximo(StringConverter.convert(maximo, Double.class));
+	}
 
 	public double getMedio() {
 		return this.medio;
@@ -110,6 +118,10 @@ public class AtivoCotacao implements Serializable, BaseEntity<AtivoCotacaoPK> {
 
 	public void setMedio(double medio) {
 		this.medio = medio;
+	}
+	
+	public void setMedio(String medio) {
+		setMedio(StringConverter.convert(medio, Double.class));
 	}
 
 	public double getMelhorOfertaCompra() {
@@ -119,6 +131,10 @@ public class AtivoCotacao implements Serializable, BaseEntity<AtivoCotacaoPK> {
 	public void setMelhorOfertaCompra(double melhorOfertaCompra) {
 		this.melhorOfertaCompra = melhorOfertaCompra;
 	}
+	
+	public void setMelhorOfertaCompra(String melhorOfertaCompra) {
+		setMelhorOfertaCompra(StringConverter.convert(melhorOfertaCompra, Double.class));
+	}
 
 	public double getMelhorOfertaVenda() {
 		return this.melhorOfertaVenda;
@@ -126,6 +142,10 @@ public class AtivoCotacao implements Serializable, BaseEntity<AtivoCotacaoPK> {
 
 	public void setMelhorOfertaVenda(double melhorOfertaVenda) {
 		this.melhorOfertaVenda = melhorOfertaVenda;
+	}
+	
+	public void setMelhorOfertaVenda(String melhorOfertaVenda) {
+		setMelhorOfertaVenda(StringConverter.convert(melhorOfertaVenda, Double.class));
 	}
 
 	public double getMinimo() {
@@ -135,6 +155,10 @@ public class AtivoCotacao implements Serializable, BaseEntity<AtivoCotacaoPK> {
 	public void setMinimo(double minimo) {
 		this.minimo = minimo;
 	}
+	
+	public void setMinimo(String minimo) {
+		setMinimo(StringConverter.convert(minimo, Double.class));
+	}
 
 	public Integer getQuantidadeNegocios() {
 		return this.quantidadeNegocios;
@@ -142,6 +166,10 @@ public class AtivoCotacao implements Serializable, BaseEntity<AtivoCotacaoPK> {
 
 	public void setQuantidadeNegocios(Integer quantidadeNegocios) {
 		this.quantidadeNegocios = quantidadeNegocios;
+	}
+	
+	public void setQuantidadeNegocios(String quantidadeNegocios) {
+		setQuantidadeNegocios(StringConverter.convert(quantidadeNegocios, Integer.class));
 	}
 
 	public Integer getQuantidadePapeis() {
@@ -151,6 +179,10 @@ public class AtivoCotacao implements Serializable, BaseEntity<AtivoCotacaoPK> {
 	public void setQuantidadePapeis(Integer quantidadePapeis) {
 		this.quantidadePapeis = quantidadePapeis;
 	}
+	
+	public void setQuantidadePapeis(String quantidadePapeis) {
+		setQuantidadePapeis(StringConverter.convert(quantidadePapeis, Integer.class));
+	}
 
 	public double getUltimo() {
 		return this.ultimo;
@@ -158,6 +190,10 @@ public class AtivoCotacao implements Serializable, BaseEntity<AtivoCotacaoPK> {
 
 	public void setUltimo(double ultimo) {
 		this.ultimo = ultimo;
+	}
+	
+	public void setUltimo(String ultimo) {
+		setUltimo(StringConverter.convert(ultimo, Double.class));
 	}
 
 	public double getVariacao() {
@@ -167,6 +203,10 @@ public class AtivoCotacao implements Serializable, BaseEntity<AtivoCotacaoPK> {
 	public void setVariacao(double variacao) {
 		this.variacao = variacao;
 	}
+	
+	public void setVariacao(String variacao) {
+		setVariacao(StringConverter.convert(variacao, Double.class));
+	}
 
 	public double getVolume() {
 		return this.volume;
@@ -175,15 +215,29 @@ public class AtivoCotacao implements Serializable, BaseEntity<AtivoCotacaoPK> {
 	public void setVolume(double volume) {
 		this.volume = volume;
 	}
+	
+	public void setVolume(String volume) {
+		setVolume(StringConverter.convert(volume, Double.class));
+	}
 
 	public Ativo getAtivo() {
 		return this.ativo;
 	}
 
 	public void setAtivo(Ativo ativo) {
+
+		//Remove this da lista de cotacoes do ativo
+		if (this.ativo != null)
+			this.ativo.internalRemoveCotacao(this);
+		
 		this.ativo = ativo;
-	}
+		
+		//Adiciona this à lista de cotacoes do ativo
+		if (ativo != null)
+			ativo.internalAddCotacao(this);
 	
+	}	
+
 	public boolean equals(Object o) {
 
 		if ((null == o) || (o.getClass() != this.getClass())) {
@@ -232,6 +286,19 @@ public class AtivoCotacao implements Serializable, BaseEntity<AtivoCotacaoPK> {
 				.append(this.volume)
 				.toHashCode();
 
+	}
+
+	@Override
+	public int compareTo(AtivoCotacao o) {
+		
+		if (this.getId().getData().before(o.getId().getData()))
+			return -1;
+	
+		if (this.getId().getData().after(o.getId().getData()))
+			return 1;
+	
+		return 0;
+		
 	}
 	
 	

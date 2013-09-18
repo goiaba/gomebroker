@@ -29,7 +29,6 @@
 		<class>br.com.gome.gomebroker.domain.security.UsuarioPapel</class>
 		<class>br.com.gome.gomebroker.domain.security.Papel</class>
 		<class>br.com.gome.gomebroker.domain.security.Recurso</class>
-		<class>br.com.gome.gomebroker.domain.security.PapelRecurso</class>
 		<class>br.com.gome.gomebroker.domain.security.ItemMenu</class>
 
 		<class>br.com.gome.gomebroker.util.envers.entity.CustomEntity</class>

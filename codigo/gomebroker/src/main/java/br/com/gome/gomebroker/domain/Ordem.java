@@ -24,13 +24,13 @@ public class Ordem implements Serializable, BaseEntity<Long> {
 	private Long id;
 
 	@Temporal(TemporalType.TIMESTAMP)
-private Date data;
+	private Date data;
 
 	@Temporal(TemporalType.TIMESTAMP)
-private Date dataCorretora;
+	private Date dataCorretora;
 
 	@Temporal(TemporalType.TIMESTAMP)
-private Date dataValidade;
+	private Date dataValidade;
 
 	private String idCorretora;
 
@@ -52,23 +52,18 @@ private Date dataValidade;
 
 	private double valor;
 
-	//bi-directional many-to-one association to Movimento
 	@OneToMany(mappedBy="ordem")
 	private Set<Movimento> movimentos;
 
-	//bi-directional many-to-one association to Ativo
 	@ManyToOne(fetch=FetchType.LAZY)
 	private Ativo ativo;
 
-	//bi-directional many-to-one association to Operador
 	@ManyToOne(fetch=FetchType.LAZY)
 	private Operador operador;
 
-	//bi-directional many-to-one association to Portfolio
 	@ManyToOne(fetch=FetchType.LAZY)
 	private Portfolio portfolio;
 
-	//bi-directional many-to-one association to OrdemSolicitacoes
 	@OneToMany(mappedBy="ordem")
 	private Set<OrdemSolicitacoes> ordemSolicitacoes;
 

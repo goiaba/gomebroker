@@ -11,6 +11,7 @@
 			<p:toolbar>
 
 				<p:toolbarGroup align="left">
+
 					<p:commandButton value="#{messages['button.save']}"
 						action="#{recursoEditMB.insert}"
 						rendered="#{!recursoEditMB.updateMode}" ajax="false" />
@@ -34,58 +35,72 @@
 
 			<br />
 
-			<p:fieldset legend="#{messages['view.security.recurso.label']}"
-				toggleable="false">
+			<h:panelGrid columns="3">
+	
+				<p:fieldset legend="#{messages['view.security.recurso.label']}"
+					toggleable="false" style="height:250px">
+	
+					<h:panelGrid id="fields" columns="2">
+	
+						<h:outputLabel
+							value="#{messages['view.security.recurso.label.id']}: " for="id"
+							styleClass="text-input" rendered="#{recursoEditMB.updateMode}" />
+						<h:outputText id="id" value="#{recursoEditMB.bean.id}" styleClass="text-input"
+							rendered="#{recursoEditMB.updateMode}" />
+	
+						<h:outputLabel
+							value="#{messages['view.security.recurso.label.nome']}: "
+							for="nome" styleClass="text-input" />
+						<h:inputText id="nome" value="#{recursoEditMB.bean.nome}" styleClass="text-input"
+							title="#{messages['view.security.recurso.alt.nome']}" required="true" />
+	
+						<h:outputLabel
+							value="#{messages['view.security.recurso.label.descricao']}: "
+							for="descricao" styleClass="text-input" />
+						<h:inputText id="descricao" value="#{recursoEditMB.bean.descricao}" styleClass="text-input"
+							title="#{messages['view.security.recurso.alt.descricao']}" required="true" />
+	
+						<h:outputLabel
+							value="#{messages['view.security.recurso.label.tipo']}: "
+							for="tipo" styleClass="text-input" />
+						<h:inputText id="tipo" value="#{recursoEditMB.bean.tipo}" styleClass="text-input"
+							title="#{messages['view.security.recurso.alt.tipo']}" required="true" />
+	
+						<h:outputLabel
+							value="#{messages['view.security.recurso.label.valor']}: "
+							for="valor" styleClass="text-input" />
+						<h:inputText id="valor" value="#{recursoEditMB.bean.valor}" styleClass="text-input"
+							title="#{messages['view.security.recurso.alt.valor']}" required="true" />
+	
+						<h:outputLabel
+							value="#{messages['view.security.recurso.label.dataDesativacao']}: "
+							for="dataDesativacao" styleClass="text-input" />
+						<p:calendar id="dataDesativacao" pattern="dd/mm/yyyy"
+							converter="dateConverter"
+							value="#{recursoEditMB.bean.dataDesativacao}"
+							title="#{messages['view.security.recurso.alt.dataDesativacao']}" 
+							styleClass="text-input"/>
+	
+					</h:panelGrid>
+	
+				</p:fieldset>
+				<div>
+				<br/>
+				</div>
+				<p:fieldset
+					legend="#{messages['view.security.recurso.label.papeis-com-permissao']}"
+					toggleable="false" style="width:285; height:250px">
 
-				<h:panelGrid id="fields" columns="3">
+					<p:selectManyMenu id="scroll" converter="papelConverter" value="#{recursoEditMB.listaDePapeisAtivosComAcessoAoRecurso}" var="p" showCheckbox="yes" style="width:278px; height:210px" styleClass="text-input">
+						<f:selectItems value="#{recursoEditMB.listaDePapeisAtivos}" />
+						<p:column>  
+			                #{p.nome}  
+			            </p:column> 
+					</p:selectManyMenu>
 
-					<h:outputLabel
-						value="#{messages['view.security.recurso.label.id']}: " for="id"
-						styleClass="text-input" rendered="#{recursoEditMB.updateMode}" />
-					<h:outputText id="id" value="#{recursoEditMB.bean.id}"
-						rendered="#{recursoEditMB.updateMode}" />
-					<p:message for="id" />
-
-					<h:outputLabel
-						value="#{messages['view.security.recurso.label.nome']}: "
-						for="nome" styleClass="text-input" />
-					<h:inputText id="nome" value="#{recursoEditMB.bean.nome}"
-						title="#{messages['view.security.recurso.alt.id']}" />
-					<p:message for="nome" />
-
-					<h:outputLabel
-						value="#{messages['view.security.recurso.label.descricao']}: "
-						for="descricao" styleClass="text-input" />
-					<h:inputText id="descricao" value="#{recursoEditMB.bean.descricao}"
-						title="#{messages['view.security.recurso.alt.descricao']}" />
-					<p:message for="descricao" />
-
-					<h:outputLabel
-						value="#{messages['view.security.recurso.label.tipo']}: "
-						for="tipo" styleClass="text-input" />
-					<h:inputText id="tipo" value="#{recursoEditMB.bean.tipo}"
-						title="#{messages['view.security.recurso.alt.tipo']}" />
-					<p:message for="tipo" />
-
-					<h:outputLabel
-						value="#{messages['view.security.recurso.label.valor']}: "
-						for="valor" styleClass="text-input" />
-					<h:inputText id="valor" value="#{recursoEditMB.bean.valor}"
-						title="#{messages['view.security.recurso.alt.valor']}" />
-					<p:message for="valor" />
-
-					<h:outputLabel
-						value="#{messages['view.security.recurso.label.dataDesativacao']}: "
-						for="dataDesativacao" styleClass="text-input" />
-					<p:calendar id="dataDesativacao" pattern="dd/mm/yyyy"
-						converter="dateConverter"
-						value="#{recursoEditMB.bean.dataDesativacao}"
-						title="#{messages['view.security.recurso.alt.dataDesativacao']}" />
-					<p:message for="dataDesativacao" />
-
-				</h:panelGrid>
-
-			</p:fieldset>
+				</p:fieldset>
+			
+			</h:panelGrid>
 
 		</h:form>
 

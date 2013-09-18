@@ -1,7 +1,10 @@
 package br.com.gome.gomebroker.domain.security;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -57,16 +60,52 @@ public class Papel implements Serializable, BaseEntity<Long> {
 	private String obs;
 
 	@OneToMany(mappedBy = "papel")
-	private Set<UsuarioPapel> listaUsuarioPapel;
+	private Set<UsuarioPapel> listaUsuarioPapel = new HashSet<UsuarioPapel>();
 
-	@OneToMany(mappedBy = "papel", cascade = { CascadeType.PERSIST,
-			CascadeType.MERGE, CascadeType.REFRESH })
-	private List<PapelRecurso> papelRecurso;
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
+	@JoinTable(name = "sec_relPapelRecurso", 
+			   joinColumns = @JoinColumn(name = "papel_id", referencedColumnName = "id"),
+			   inverseJoinColumns = @JoinColumn(name = "recurso_id", referencedColumnName = "id"))
+	private List<Recurso> recursos = new ArrayList<Recurso>();
 
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "sec_relPapelItemMenu", joinColumns = { @JoinColumn(name = "itemMenu_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "papel_id", referencedColumnName = "id") })
-	private List<ItemMenu> itensDeMenu;
+	@JoinTable(name = "sec_relPapelItemMenu", 
+			   joinColumns = { @JoinColumn(name = "papel_id", referencedColumnName = "id") }, 
+			   inverseJoinColumns = { @JoinColumn(name = "itemMenu_id", referencedColumnName = "id") })
+	private List<ItemMenu> itensDeMenu = new ArrayList<ItemMenu>();
 
+	public void addRecurso(Recurso recurso) {
+		
+		if (!recursos.contains(recurso)) {
+			this.internalAddRecurso(recurso);
+		}
+		
+		if (!recurso.getPapeis().contains(this)) {
+			recurso.addPapel(this);
+		}
+		
+	}
+	
+	public void removeRecurso(Recurso recurso) {
+		
+		if (recursos.contains(recurso)) {
+			this.internalRemoveRecurso(recurso);
+		}
+		
+		if (recurso.getPapeis().contains(this)) {
+			recurso.removePapel(this);
+		}
+		
+	}
+
+	protected void internalAddRecurso(Recurso recurso) {
+		recursos.add(recurso);
+	}
+
+	protected void internalRemoveRecurso(Recurso recurso) {
+		recursos.remove(recurso);
+	}
+	
 	public Papel() {
 	}
 
@@ -126,16 +165,16 @@ public class Papel implements Serializable, BaseEntity<Long> {
 		this.listaUsuarioPapel = listaUsuarioPapel;
 	}
 
-	public List<PapelRecurso> getPapelRecurso() {
-		return this.papelRecurso;
+	public List<Recurso> getRecursos() {
+		return Collections.unmodifiableList(this.recursos);
 	}
 
-	public void setPapelRecurso(List<PapelRecurso> papelRecurso) {
-		this.papelRecurso = papelRecurso;
+	public void setRecursos(List<Recurso> recursos) {
+		this.recursos = recursos;
 	}
 
 	public List<ItemMenu> getItensDeMenu() {
-		return itensDeMenu;
+		return Collections.unmodifiableList(itensDeMenu);
 	}
 
 	public void setItensDeMenu(List<ItemMenu> itensDeMenu) {

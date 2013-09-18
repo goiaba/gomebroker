@@ -20,7 +20,7 @@ public class RecursoDAOImpl extends BaseDAOImpl<Recurso, Long> implements Recurs
 	public List<Recurso> findRecursosDisponiveis(Papel papel) {
 
 		String query = "SELECT recurso " +
-						"FROM Papel papel JOIN papel.papelRecurso pr JOIN pr.recurso recurso " +
+						"FROM Papel papel JOIN papel.recursos recurso " +
 						"WHERE (papel.dataDesativacao IS NULL OR papel.dataDesativacao > current_timestamp()) " +
 						"AND (recurso.dataDesativacao IS NULL OR recurso.dataDesativacao > current_timestamp()) " +
 						"AND papel = :papel";

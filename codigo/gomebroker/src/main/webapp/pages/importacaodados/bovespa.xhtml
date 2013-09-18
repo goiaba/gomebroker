@@ -1,0 +1,108 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/template/mainTemplate.xhtml">
+
+	<ui:define name="mainContainer">
+
+		<h:form id="form-importacao-bovespa">
+
+			<br />
+			
+			<h:panelGrid columns="2">
+			
+				<p:fieldset
+					legend="#{messages['view.importacao.bovespa.label']}"
+					toggleable="false" style="height:150px">
+	
+					<h:panelGrid id="fields" columns="2">
+					
+						<h:outputLabel value="#{messages['view.importacao.bovespa.label.tipo']}"
+							for="tipoArquivo" />
+						<h:selectOneMenu id="tipoArquivo" required="true" styleClass="text-input;"
+							requiredMessage="#{messages['view.importacao.bovespa.validacao.tipo']}"
+							value="#{importadorBovespaMB.tipoArquivoSelecionado}">
+							<f:selectItem
+								itemLabel="#{messages['view.importacao.bovespa.label.selecione-tipo']}"
+								noSelectionOption="true" />
+							<f:selectItems value="#{importadorBovespaMB.tiposArquivoBovespa}" />
+							<p:ajax update="dataImportacao" />
+						</h:selectOneMenu>
+		
+						<h:outputLabel value="#{messages['view.importacao.bovespa.label.data']}"
+							for="dataImportacao" />
+						<p:calendar id="dataImportacao" pattern="dd/mm/yyyy" navigator="true" 
+							showButtonPanel="true" converter="dateConverter" styleClass="text-input;"
+							required="true" requiredMessage="#{messages['view.importacao.bovespa.validacao.data']}"
+							value="#{importadorBovespaMB.dataImportacao}"
+							title="#{messages['view.importacao.bovespa.label.data']}" />
+						
+					</h:panelGrid>
+					
+					<br />
+					
+					<p:commandButton id="btn-importar"
+						value="#{messages['view.importacao.bovespa.label.importar']}"
+						action="#{importadorBovespaMB.importar()}"
+						onclick="poll.start();" update=":growl :messages :form-importacao-bovespa:list-jobs-importacao" />
+						
+				</p:fieldset>
+				
+				<p:dataTable id="list-jobs-importacao" var="job"
+					value="#{importadorBovespaMB.historicoJobsImportacao}">
+	
+					<f:facet name="header">#{messages['view.importacao.bovespa.title.table.recentes']}</f:facet>
+	
+					<p:column sortBy="#{job.dataDeInicio}">
+						<f:facet name="header">#{messages['view.importacao.bovespa.label.data-inicio']}</f:facet>
+						<h:outputText value="#{job.dataDeInicio}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column sortBy="#{job.tipoArquivoBovespa}">
+						<f:facet name="header">#{messages['view.importacao.bovespa.label.tipo-arquivo']}</f:facet>
+						<h:outputText value="#{job.tipoArquivoBovespa}" />
+					</p:column>
+					
+					<p:column sortBy="#{job.dataArquivoBovespa}">
+						<f:facet name="header">#{messages['view.importacao.bovespa.label.data-arquivo-bovespa']}</f:facet>
+						<h:outputText value="#{job.dataArquivoBovespa}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column sortBy="#{job.status()}">
+						<f:facet name="header">#{messages['view.importacao.bovespa.label.status']}</f:facet>
+						<h:outputText value="#{job.status()}" />
+					</p:column>
+					
+					<p:column>
+		                <p:commandLink onclick="confirmaCancelamento.show();" title="#{messages['view.importacao.bovespa.label.cancelar']}">
+		                    <p:graphicImage styleClass="ui-icon ui-icon-circle-close" style="border-width: 0px;"/>
+		                    <f:setPropertyActionListener value="#{job}" target="#{importadorBovespaMB.jobSelecionado}" />
+		                </p:commandLink>
+	            	</p:column>
+				
+				</p:dataTable>
+				
+			</h:panelGrid>
+
+			<p:poll interval="60" update=":form-importacao-bovespa:list-jobs-importacao" autoStart="true" widgetVar="poll" />			
+
+		</h:form>
+		
+		<p:confirmDialog message="#{messages['view.importacao.bovespa.message.confirma-cancelamento']}" 
+			header="#{messages['view.importacao.bovespa.header.confirma-cancelamento']}" 
+			severity="Alert" widgetVar="confirmaCancelamento">
+            <h:form>
+                <p:commandButton ajax="true" value="#{messages['view.label.sim']}" update=":growl :form-importacao-bovespa:list-jobs-importacao" oncomplete="confirmaCancelamento.hide();" actionListener="#{importadorBovespaMB.cancelar()}" />
+                <p:commandButton value="#{messages['view.label.nao']}" onclick="confirmaCancelamento.hide();" />
+            </h:form>
+        </p:confirmDialog>
+
+	</ui:define>
+
+</ui:composition>

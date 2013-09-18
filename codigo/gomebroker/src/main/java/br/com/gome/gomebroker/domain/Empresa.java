@@ -43,9 +43,8 @@ public class Empresa implements Serializable, BaseEntity<Long> {
 
 	private String url;
 
-	// bi-directional many-to-one association to Ativo
-	@OneToMany(mappedBy = "empresa", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH }, fetch=FetchType.LAZY)
-	private Set<Ativo> ativos;
+	@OneToMany(mappedBy = "empresa", fetch=FetchType.LAZY)
+	private Set<Ativo> ativos = new HashSet<Ativo>();
 
 	public Empresa() {
 	}
@@ -117,32 +116,23 @@ public class Empresa implements Serializable, BaseEntity<Long> {
 	public Set<Ativo> getAtivos() {
 		return Collections.unmodifiableSet(this.ativos);
 	}
-	
+
 	public void addAtivo(Ativo ativo) {
-		
-		if (null == this.ativos) {
-			this.ativos = new HashSet<Ativo>();
-		}
-		
 		ativo.setEmpresa(this);
-		this.ativos.add(ativo);
-		
-	}
-	
-	public void removeAtivo(Ativo ativo) {
-		
-		if (null != this.ativos) {
-			this.ativos.remove(ativo);
-		}
-		
-		ativo.setEmpresa(null);
-		
 	}
 
-	public void setAtivos(Set<Ativo> ativos) {
-		this.ativos = ativos;
+	public void removeAtivo(Ativo ativo) {
+		ativo.setEmpresa(null);
 	}
-	
+
+	protected void internalAddAtivo(Ativo ativo) {
+		ativos.add(ativo);
+	}
+
+	protected void internalRemoveAtivo(Ativo ativo) {
+		ativos.remove(ativo);
+	}	
+
 	public boolean equals(Object o) {
 
 		if ((null == o) || (o.getClass() != this.getClass())) {

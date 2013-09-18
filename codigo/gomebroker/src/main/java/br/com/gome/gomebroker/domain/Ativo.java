@@ -23,7 +23,7 @@ import javax.persistence.TemporalType;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
+import org.hibernate.envers.NotAudited;
 
 import br.com.gome.gomebroker.constant.TipoMercado;
 
@@ -35,6 +35,7 @@ import br.com.gome.gomebroker.constant.TipoMercado;
 @Entity
 @Audited
 public class Ativo implements BaseEntity<Long> {
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -52,23 +53,25 @@ public class Ativo implements BaseEntity<Long> {
 	
 	private String obs;
 
-	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE})
 	private Empresa empresa;
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-	@OneToMany(mappedBy="ativo", fetch = FetchType.LAZY, targetEntity = AtivoCotacao.class)
+	@OneToMany(mappedBy="ativo", fetch = FetchType.LAZY)
+	@NotAudited
 	private Set<AtivoCotacao> ativoCotacao = new HashSet<AtivoCotacao>();
 
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	@OneToMany(mappedBy="ativo", fetch = FetchType.LAZY, targetEntity = AtivoCotacao.class, cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+	@NotAudited
 	private Set<AtivoOfertas> ativoOfertas = new HashSet<AtivoOfertas>();
 
 	@OneToMany(mappedBy="ativo", fetch = FetchType.LAZY, targetEntity = AtivoCotacao.class, cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-	private Set<Ordem> ordens = new HashSet<Ordem>();
-
-	@OneToMany(mappedBy="ativo", fetch = FetchType.LAZY, targetEntity = AtivoCotacao.class, cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+	@NotAudited
 	private Set<PortifolioAtivo> portifolioAtivos = new HashSet<PortifolioAtivo>();
 
+	@NotAudited
+	@OneToMany(mappedBy="ativo", fetch = FetchType.LAZY, targetEntity = AtivoCotacao.class, cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+	private Set<Ordem> ordens = new HashSet<Ordem>();
+	
 	@Column(updatable=false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataCadastro;
@@ -140,36 +143,37 @@ public class Ativo implements BaseEntity<Long> {
 	}
 
 	public void setEmpresa(Empresa empresa) {
+
+		//Remove this da lista de ativos da empresa
+		if (this.empresa != null)
+			this.empresa.internalRemoveAtivo(this);
+
 		this.empresa = empresa;
-	}
-	
+
+		//Adiciona this à lista de ativos da empresa
+		if (empresa != null)
+			empresa.internalAddAtivo(this);
+
+	}	
+
 	public Set<AtivoCotacao> getAtivoCotacoes() {
 		return Collections.unmodifiableSet(this.ativoCotacao);
 	}
-	
-	public void addAtivoCotacao(AtivoCotacao ativoCotacao) {
-		
-		if (null == this.ativoCotacao) {
-			this.ativoCotacao = new HashSet<AtivoCotacao>();
-		}
-		
-		ativoCotacao.setAtivo(this);
-		this.ativoCotacao.add(ativoCotacao);
-		
-	}
-	
-	public void removeAtivoCotacao(AtivoCotacao ativoCotacao) {
-		
-		if (null != this.ativoCotacao) {
-			this.ativoCotacao.remove(ativoCotacao);
-		}
-		
-		ativoCotacao.setAtivo(null);
-		
+
+	public void addCotacao(AtivoCotacao cotacao) {
+		cotacao.setAtivo(this);
 	}
 
-	public void setAtivoCotacoes(Set<AtivoCotacao> ativoCotacao) {
-		this.ativoCotacao = ativoCotacao;
+	public void removeCotacao(AtivoCotacao cotacao) {
+		cotacao.setAtivo(null);
+	}
+
+	protected void internalAddCotacao(AtivoCotacao cotacao) {
+		ativoCotacao.add(cotacao);
+	}
+
+	protected void internalRemoveCotacao(AtivoCotacao cotacao) {
+		ativoCotacao.remove(cotacao);
 	}
 	
 	public Set<AtivoOfertas> getAtivoOfertas() {
