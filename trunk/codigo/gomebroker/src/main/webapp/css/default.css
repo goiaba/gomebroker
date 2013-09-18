@@ -104,6 +104,7 @@ img.right {
 }
 
 /* Content */
+
 #content {
 	width: 70%;
     float:left;
@@ -111,6 +112,11 @@ img.right {
 
 .post {
 	padding-bottom: 15px;
+}
+
+.text-input {
+	font-size: small;
+	width: 250px;
 }
 
 .post h1 {
