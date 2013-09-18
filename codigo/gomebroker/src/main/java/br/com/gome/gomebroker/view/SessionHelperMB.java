@@ -6,10 +6,12 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
+import javax.inject.Named;
 
 import br.com.gome.gomebroker.constant.ViewConstants;
 import br.gov.frameworkdemoiselle.stereotype.ViewController;
 
+@Named
 @ViewController
 @SessionScoped
 public class SessionHelperMB implements Serializable {
@@ -31,5 +33,5 @@ public class SessionHelperMB implements Serializable {
 		}
 		
 	}
-
+	
 }
