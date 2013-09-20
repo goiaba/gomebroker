@@ -42,47 +42,53 @@
 					</h:panelGrid>
 					
 					<br />
-					
+
 					<p:commandButton id="btn-importar"
 						value="#{messages['view.importacao.bovespa.label.importar']}"
 						action="#{importadorBovespaMB.importar()}"
-						onclick="poll.start();" update=":growl :messages :form-importacao-bovespa:list-jobs-importacao" />
+						onclick="poll.start();" update=":growl :messages :form-importacao-bovespa:list-tasks-importacao" />
 						
 				</p:fieldset>
 				
-				<p:dataTable id="list-jobs-importacao" var="job"
-					value="#{importadorBovespaMB.historicoJobsImportacao}">
+				<p:dataTable id="list-tasks-importacao" var="task"
+					value="#{importadorBovespaCore.historicoTasksImportacao}">
 	
 					<f:facet name="header">#{messages['view.importacao.bovespa.title.table.recentes']}</f:facet>
 	
-					<p:column sortBy="#{job.dataDeInicio}">
+					<p:column sortBy="#{task.dataDeInicio}">
 						<f:facet name="header">#{messages['view.importacao.bovespa.label.data-inicio']}</f:facet>
-						<h:outputText value="#{job.dataDeInicio}">
+						<h:outputText value="#{task.dataDeInicio}">
 							<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
 						</h:outputText>
 					</p:column>
 					
-					<p:column sortBy="#{job.tipoArquivoBovespa}">
-						<f:facet name="header">#{messages['view.importacao.bovespa.label.tipo-arquivo']}</f:facet>
-						<h:outputText value="#{job.tipoArquivoBovespa}" />
+					<p:column>
+						<f:facet name="header">#{messages['view.importacao.bovespa.label.responsavel']}</f:facet>
+						<h:outputText value="#{task.responsavel.nome}" rendered="#{task.responsavel != null}" />
+						<h:outputText value="#{messages['view.importacao.bovespa.text.responsavel-quartz']}" rendered="#{task.responsavel == null}" />
 					</p:column>
 					
-					<p:column sortBy="#{job.dataArquivoBovespa}">
+					<p:column sortBy="#{task.tipoArquivoBovespa}">
+						<f:facet name="header">#{messages['view.importacao.bovespa.label.tipo-arquivo']}</f:facet>
+						<h:outputText value="#{task.tipoArquivoBovespa}" />
+					</p:column>
+					
+					<p:column sortBy="#{task.dataArquivoBovespa}">
 						<f:facet name="header">#{messages['view.importacao.bovespa.label.data-arquivo-bovespa']}</f:facet>
-						<h:outputText value="#{job.dataArquivoBovespa}">
+						<h:outputText value="#{task.dataArquivoBovespa}">
 							<f:convertDateTime pattern="dd/MM/yyyy" />
 						</h:outputText>
 					</p:column>
 					
-					<p:column sortBy="#{job.status()}">
+					<p:column sortBy="#{task.status()}">
 						<f:facet name="header">#{messages['view.importacao.bovespa.label.status']}</f:facet>
-						<h:outputText value="#{job.status()}" />
+						<h:outputText value="#{task.status()}" />
 					</p:column>
 					
 					<p:column>
 		                <p:commandLink onclick="confirmaCancelamento.show();" title="#{messages['view.importacao.bovespa.label.cancelar']}">
 		                    <p:graphicImage styleClass="ui-icon ui-icon-circle-close" style="border-width: 0px;"/>
-		                    <f:setPropertyActionListener value="#{job}" target="#{importadorBovespaMB.jobSelecionado}" />
+		                    <f:setPropertyActionListener value="#{task}" target="#{importadorBovespaMB.taskSelecionada}" />
 		                </p:commandLink>
 	            	</p:column>
 				
@@ -90,19 +96,19 @@
 				
 			</h:panelGrid>
 
-			<p:poll interval="60" update=":form-importacao-bovespa:list-jobs-importacao" autoStart="true" widgetVar="poll" />			
+			<p:poll interval="60" update=":form-importacao-bovespa:list-tasks-importacao" autoStart="true" widgetVar="poll" />			
 
 		</h:form>
-		
+
 		<p:confirmDialog message="#{messages['view.importacao.bovespa.message.confirma-cancelamento']}" 
 			header="#{messages['view.importacao.bovespa.header.confirma-cancelamento']}" 
-			severity="Alert" widgetVar="confirmaCancelamento">
+			severity="Alert" widgetVar="confirmaCancelamento" appendToBody="true">
             <h:form>
-                <p:commandButton ajax="true" value="#{messages['view.label.sim']}" update=":growl :form-importacao-bovespa:list-jobs-importacao" oncomplete="confirmaCancelamento.hide();" actionListener="#{importadorBovespaMB.cancelar()}" />
+                <p:commandButton ajax="true" value="#{messages['view.label.sim']}" update=":growl :form-importacao-bovespa:list-tasks-importacao" oncomplete="confirmaCancelamento.hide();" actionListener="#{importadorBovespaMB.cancelar()}" />
                 <p:commandButton value="#{messages['view.label.nao']}" onclick="confirmaCancelamento.hide();" />
             </h:form>
         </p:confirmDialog>
-
+		
 	</ui:define>
 
 </ui:composition>
