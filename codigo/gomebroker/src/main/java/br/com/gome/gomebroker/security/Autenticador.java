@@ -83,7 +83,43 @@ public class Autenticador implements Authenticator {
 		return authenticated;
 		
 	}
+	
+	public void atualizaPapeisERecursosDoUsuarioDaSessao() {
+		
+		Usuario usuario = (Usuario) usuarioSistema.getAttribute(SecurityConstants.USUARIO_SESSAO_KEY);
+		
+		if (null != usuario) {
+		
+			List<Papel> papeisUsuario = papelBC.getPapeisValidosDoUsuario(usuario);
 
+			if (!papeisUsuario.isEmpty()) {
+				
+				Papel papel = papelBC.getPapelPadrao(usuario);
+				
+				usuarioSistema.setAttribute(SecurityConstants.PAPEIS_DISPONIVEIS_KEY, toPapeisStringList(papeisUsuario));
+				usuarioSistema.setAttribute(SecurityConstants.RECURSOS_DISPONIVEIS_KEY, toRecursosStringList(recursoBC.getRecursosDisponiveis(papel)));
+				
+			}
+			
+		}
+		
+	}
+
+	@Override
+	public void unAuthenticate() {
+
+		usuarioSistema = null;
+		credencial.clear();
+		
+	}
+
+	@Override
+	public User getUser() {
+
+		return usuarioSistema;
+		
+	}
+	
 	private Map<String, String> toRecursosStringList(List<Recurso> recursosDisponiveis) {
 		
 		Map<String, String> recursos = new HashMap<String, String>();
@@ -109,21 +145,6 @@ public class Autenticador implements Authenticator {
 		}
 		
 		return papeis;
-		
-	}
-
-	@Override
-	public void unAuthenticate() {
-
-		usuarioSistema = null;
-		credencial.clear();
-		
-	}
-
-	@Override
-	public User getUser() {
-
-		return usuarioSistema;
 		
 	}
 
