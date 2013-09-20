@@ -73,10 +73,10 @@ public class ImportadorDadosDiariosBovespaImpl implements ImportadorDadosDiarios
 	private static final String FS = System.getProperty("file.separator");
 	private static final String PATH_ARQUIVO_LOCAL = FS + "tmp" + FS;
 	
-	@Resource UserTransaction uTx;
-	@Resource SessionContext sCtx;
-	@Inject ResourceBundle bundle;
-	@Inject Logger logger;
+	@Resource private UserTransaction userTtransaction;
+	@Resource private SessionContext sessionContext;
+	@Inject private ResourceBundle bundle;
+	@Inject private Logger logger;
 	
 	@Inject private AtivoBC	ativoBC;
 	@Inject private AtivoCotacaoBC ativoCotacaoBC;
@@ -194,15 +194,79 @@ public class ImportadorDadosDiariosBovespaImpl implements ImportadorDadosDiarios
 	
 	private void importarRegistrosDoArquivoDeCotacoesBovespaParaBD(TipoArquivoBovespa tipo, String nomeArquivo, Date data) throws IOException, InterruptedException, ParseException {
 
+		int count = 0;
+		String line = null;
 		File file = new File(nomeArquivo);
+		Map<String, Ativo> ativos = new HashMap<String, Ativo>();
+    	Map<String, Empresa> empresas = new HashMap<String, Empresa>();
         BufferedReader reader = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(file))));
-        String line = reader.readLine();
         
-        consomeHeader(line);
+        try {
 
-		line = consomeCotacoes(reader);
+        	while ((line = reader.readLine()) != null) {
 
-		consomeTrailer(line);
+        		if(sessionContext.wasCancelCalled()) {
+					throw new InterruptedException("Importação Bovespa cancelada pelo usuário.");
+				}
+        		
+				String tipoRegistro = getStringValue(line, LayoutArquivoBovespa.TipoDoRegistro);
+				
+				if (TIPO_REGISTRO_COTACAO.equals(tipoRegistro)) {
+	
+					if (count == 0) {
+						userTtransaction.begin();
+					}
+	
+					consomeCotacao(line, ativos, empresas);
+					count++;
+					
+					if (count == BATCH_SIZE) {
+						userTtransaction.commit();
+						count = 0;
+						empresas.clear();
+						ativos.clear();
+					}
+	
+				} else if (TIPO_REGISTRO_HEADER.equals(tipoRegistro)) {
+					
+					consomeHeader(line);
+					
+				} else if (TIPO_REGISTRO_TRAILER.equals(tipoRegistro)) {
+			
+					consomeTrailer(line);
+					
+					if (userTtransaction.getStatus() != Status.STATUS_COMMITTED) {
+						userTtransaction.commit();
+					}
+					
+				}
+				
+	        }
+        	
+		} catch (InterruptedException e) {
+					
+			try {
+				if (userTtransaction.getStatus() != Status.STATUS_NO_TRANSACTION)
+					userTtransaction.rollback();
+			} catch (Exception ex) {
+				throw new RuntimeException(ex);
+			}
+
+			throw e;
+
+		} catch (Exception e) {
+
+			try {
+				if (userTtransaction.getStatus() != Status.STATUS_NO_TRANSACTION)
+					userTtransaction.rollback();
+			} catch (Exception ex) {
+				throw new RuntimeException(ex);
+			}
+
+			throw new RuntimeException(e);
+
+		}
+
 
 	}
 	
@@ -236,6 +300,7 @@ public class ImportadorDadosDiariosBovespaImpl implements ImportadorDadosDiarios
 
     }
 	
+	@SuppressWarnings("unused")
 	private String consomeCotacoes(BufferedReader reader) throws InterruptedException {
 
 		String line;
@@ -253,11 +318,11 @@ public class ImportadorDadosDiariosBovespaImpl implements ImportadorDadosDiarios
 
 					if (count == 0) {
 
-						if(sCtx.wasCancelCalled()) {
+						if(sessionContext.wasCancelCalled()) {
 							throw new InterruptedException("Importação Bovespa cancelada pelo usuário.");
 						}
 						
-						uTx.begin();
+						userTtransaction.begin();
 						
 					}
 
@@ -265,7 +330,7 @@ public class ImportadorDadosDiariosBovespaImpl implements ImportadorDadosDiarios
 					count++;
 					
 					if (count == BATCH_SIZE) {
-						uTx.commit();
+						userTtransaction.commit();
 						count = 0;
 						empresas.clear();
 						ativos.clear();
@@ -273,8 +338,8 @@ public class ImportadorDadosDiariosBovespaImpl implements ImportadorDadosDiarios
 
 				} else {
 					
-					if (uTx.getStatus() != Status.STATUS_COMMITTED) {
-						uTx.commit();
+					if (userTtransaction.getStatus() != Status.STATUS_COMMITTED) {
+						userTtransaction.commit();
 					}
 					
 					break;
@@ -288,8 +353,8 @@ public class ImportadorDadosDiariosBovespaImpl implements ImportadorDadosDiarios
 		} catch (InterruptedException e) {
 			
 			try {
-				if (uTx.getStatus() != 6)
-					uTx.rollback();
+				if (userTtransaction.getStatus() != 6)
+					userTtransaction.rollback();
 			} catch (Exception ex) {
 				throw new RuntimeException(ex);
 			}
@@ -299,7 +364,7 @@ public class ImportadorDadosDiariosBovespaImpl implements ImportadorDadosDiarios
 		} catch (Exception e) {
 
 			try {
-				uTx.rollback();
+				userTtransaction.rollback();
 			} catch (Exception ex) {
 				throw new RuntimeException(ex);
 			}
