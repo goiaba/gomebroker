@@ -38,6 +38,8 @@ CREATE TABLE ativo_aud (
     verrev bigint NOT NULL,
     revtype smallint,
     codigo character varying(255),
+    fatorcotacao integer,
+    tipomercado character varying(30),
     datacadastro timestamp without time zone,
     datadesativacao timestamp without time zone,
     descricao character varying(255),
@@ -410,7 +412,6 @@ ALTER TABLE audit.sec_relpapelitemmenu_aud OWNER TO gomebroker;
 --
 
 CREATE TABLE sec_relpapelrecurso_aud (
-    id bigint NOT NULL,
     verrev bigint NOT NULL,
     revtype smallint,
     papel_id bigint,

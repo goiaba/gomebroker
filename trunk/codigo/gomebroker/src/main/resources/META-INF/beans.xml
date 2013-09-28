@@ -6,8 +6,6 @@
 		<class>br.gov.frameworkdemoiselle.internal.interceptor.RequiredPermissionInterceptor</class>
 		<class>br.gov.frameworkdemoiselle.internal.interceptor.RequiredRoleInterceptor</class>
 		<class>br.gov.frameworkdemoiselle.internal.interceptor.TransactionalInterceptor</class>
-		<class>br.com.gome.gomebroker.security.Autorizador</class>
-		<class>br.com.gome.gomebroker.security.Autenticador</class>
 	</interceptors>
 
 </beans>
