@@ -561,7 +561,7 @@ COMMENT ON COLUMN core.ativoOfertas.quantidade IS 'Quantidade da Oferta';
 CREATE TABLE core.ativoCotacoes (
                 ativo_id INTEGER NOT NULL,
                 data TIMESTAMP NOT NULL,
-                intraDiario BIT DEFAULT '1' NOT NULL,
+                intraDiario BOOLEAN DEFAULT TRUE NOT NULL,
                 abertura DOUBLE PRECISION DEFAULT 0,
                 maximo DOUBLE PRECISION DEFAULT 0,
                 minimo DOUBLE PRECISION DEFAULT 0,
